@@ -14,7 +14,6 @@ Batch download all rbcL (ribulose-1,5-bisphosphate carboxylase) GenBank records 
 ```bash
 sbatch edirect_genbank_fetch.sh
 ```
-=
 
 **Notes**
 - 3-second delay between batches to respect NCBI rate limits
