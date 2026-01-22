@@ -31,7 +31,7 @@ def parse_taxonomy(header: str) -> dict:
     # Initialize result with empty values
     result = {
         'accession': '',
-        'cluster': '',
+        'OTU_ID': '',
         'kingdom': '',
         'phylum': '',
         'class': '',
@@ -51,7 +51,7 @@ def parse_taxonomy(header: str) -> dict:
     result['accession'] = parts[1]
     
     # Cluster is the third section (index 2)
-    result['cluster'] = parts[2]
+    result['OTU_ID'] = parts[2]
     
     # Taxonomy string is the last section (index 4)
     taxonomy_str = parts[4]
@@ -98,7 +98,7 @@ def process_fasta(input_file: Path, output_file: Path, verbose: bool = False) ->
     Returns:
         Number of sequences processed
     """
-    columns = ['accession', 'cluster', 'kingdom', 'phylum', 'class', 'order', 
+    columns = ['accession', 'OTU_ID', 'kingdom', 'phylum', 'class', 'order', 
                'family', 'genus', 'species', 'sequence']
     
     count = 0

@@ -119,7 +119,7 @@ def validate_sequence(sequence: str, min_length: int = 100) -> Tuple[bool, str]:
     return True, cleaned
 
 
-def process_input_file(input_path: Path, accession_col: str,
+def process_input_file(input_path: Path, accession_cols: List[str],
                        sequence_cols: List[str], min_length: int,
                        verbose: bool = False
                        ) -> Tuple[List[str], List[List[str]], Dict[str, str], int, int, int]:
@@ -128,7 +128,7 @@ def process_input_file(input_path: Path, accession_col: str,
     
     Args:
         input_path: Path to input TSV file
-        accession_col: Name of accession column
+        accession_cols: List of possible accession column names (tried in order)
         sequence_cols: List of possible sequence column names
         min_length: Minimum sequence length
         verbose: Print progress information
@@ -147,11 +147,17 @@ def process_input_file(input_path: Path, accession_col: str,
         header_line = f.readline().rstrip('\n\r')
         headers = header_line.split('\t')
         
-        # Find accession column index
-        try:
-            acc_idx = headers.index(accession_col)
-        except ValueError:
-            raise ValueError(f"Accession column '{accession_col}' not found in header. "
+        # Find accession column index (try multiple possible names)
+        acc_idx = None
+        acc_col_found = None
+        for col in accession_cols:
+            if col in headers:
+                acc_idx = headers.index(col)
+                acc_col_found = col
+                break
+        
+        if acc_idx is None:
+            raise ValueError(f"No accession column found. Tried: {', '.join(accession_cols)}. "
                            f"Available columns: {', '.join(headers)}")
         
         # Find sequence column index
@@ -168,7 +174,7 @@ def process_input_file(input_path: Path, accession_col: str,
                            f"Available columns: {', '.join(headers)}")
         
         if verbose:
-            log_message('INFO', f"Using accession column: '{accession_col}' (index {acc_idx})")
+            log_message('INFO', f"Using accession column: '{acc_col_found}' (index {acc_idx})")
             log_message('INFO', f"Using sequence column: '{seq_col_found}' (index {seq_idx})")
         
         # Read data rows
@@ -428,7 +434,7 @@ Examples:
 
 Input Format:
   Tab-separated file with at minimum an accession column and a sequence column.
-  Default accession column: 'accession'
+  Default accession columns (tried in order): 'accession', 'processid'
   Default sequence columns (tried in order): 'sequence', 'nucleotide_sequence', 'nuc'
 
 Output Format:
@@ -454,8 +460,8 @@ Output Format:
                         help='Minimum sequence length to include (default: 100)')
     
     # Column specification
-    parser.add_argument('--accession-col', type=str, default='accession',
-                        help='Name of accession column (default: accession)')
+    parser.add_argument('--accession-col', type=str, action='append',
+                        help='Name of accession column (can specify multiple, tried in order)')
     parser.add_argument('--sequence-col', type=str, action='append',
                         help='Name of sequence column (can specify multiple, tried in order)')
     
@@ -479,6 +485,12 @@ Output Format:
         sequence_cols = ['sequence', 'nucleotide_sequence', 'nuc']
     else:
         sequence_cols = args.sequence_col
+    
+    # Set default accession columns if not specified
+    if args.accession_col is None:
+        accession_cols = ['accession', 'processid']
+    else:
+        accession_cols = args.accession_col
     
     # Handle stdin
     if args.input == '-':
@@ -519,7 +531,7 @@ Output Format:
             log_message('INFO', "Reading input TSV file...")
         
         headers, all_rows, valid_sequences, acc_idx, seq_idx, valid_count = process_input_file(
-            input_path, args.accession_col, sequence_cols, args.min_length, args.verbose
+            input_path, accession_cols, sequence_cols, args.min_length, args.verbose
         )
         
         # Handle case with no valid sequences

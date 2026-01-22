@@ -54,7 +54,7 @@ Tab-separated file with the following columns:
 | Column    | Description                                           | Example                              |
 |-----------|-------------------------------------------------------|--------------------------------------|
 | accession | UNITE database accession (UDB ID)                     | UDB02393310                          |
-| cluster   | Species Hypothesis (SH) cluster code                  | SH0000001.10FU                       |
+| OTU_ID    | Species Hypothesis (SH) cluster code                  | SH0000001.10FU                       |
 | kingdom   | Taxonomic kingdom                                     | Alveolata                            |
 | phylum    | Taxonomic phylum                                      | Ciliophora                           |
 | class     | Taxonomic class                                       | Spirotrichea                         |
