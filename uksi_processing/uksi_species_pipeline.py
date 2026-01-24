@@ -1,21 +1,34 @@
 """
-UKSI Species Extraction Pipeline
-================================
+UKSI Species Extraction Pipeline v2
+====================================
 Extracts valid species names from UKSI TAXA and NAMES tables,
 with higher taxonomy and synonyms.
 
 Author: Claude (for Ben Price, NHM)
 Date: 2026-01-24
+Version: 2.0
+
+Changes in v2:
+- Exclude synonyms identical to the valid name (logged)
+- Fix broken lines in authority field (handle embedded newlines)
+- Strip whitespace from synonym list, use semicolon without space
+- Filter invalid species (sp., cf., aff., etc.) to separate output
+- Add subgenus-derived synonyms for names like Genus (Subgenus) species
+- Check for names that are both valid and synonym (logged for DB fix)
 """
 
 import csv
 import sys
+import re
 from collections import defaultdict
+from datetime import datetime
 
 # Configuration
 TAXA_FILE = r'C:\_claude_files\projects\ukbol_gaplist\uksi\uksi_20251203a_input_taxa.tsv'
 NAMES_FILE = r'C:\_claude_files\projects\ukbol_gaplist\uksi\uksi_20251203a_input_names.tsv'
 OUTPUT_FILE = r'C:\_claude_files\projects\ukbol_gaplist\uksi\uksi_valid_species_output.tsv'
+INVALID_OUTPUT_FILE = r'C:\_claude_files\projects\ukbol_gaplist\uksi\uksi_invalid_species_output.tsv'
+LOG_FILE = r'C:\_claude_files\projects\ukbol_gaplist\uksi\uksi_pipeline_log.txt'
 
 # Kingdoms to include
 TARGET_KINGDOMS = {'Animalia', 'Plantae', 'Fungi', 'Chromista'}
@@ -58,54 +71,211 @@ SYNONYM_RANKS = {
 # Higher taxonomy ranks we want to extract (in order of hierarchy)
 HIGHER_RANKS = ['Kingdom', 'Phylum', 'Division', 'Class', 'Order', 'Family', 'Genus']
 
+# Patterns that indicate an invalid/indeterminate species name
+# Note: Any name containing a period (.) is considered invalid, as this typically
+# indicates abbreviations like sp., spp., cf., aff., n. sp, etc.
+INVALID_NAME_PATTERNS = [
+    r'\.',                  # Any period in name (catches sp., spp., cf., aff., n. sp, etc.)
+    r'\?',                  # ?
+    r'\(Other\)',           # (Other)
+    r'"',                   # "
+    r'\(unidentified\)',    # (unidentified)
+    r'\bindet\b',           # indet (indeterminate)
+]
 
-def load_taxa_index():
-    """Load TAXA table and index by ORGANISM_KEY for hierarchy traversal."""
-    print("Loading TAXA table...")
+# Compile into single regex
+INVALID_NAME_REGEX = re.compile('|'.join(INVALID_NAME_PATTERNS), re.IGNORECASE)
+
+# Regex to detect subgenus pattern: Genus (Subgenus) species [subspecies...]
+SUBGENUS_PATTERN = re.compile(r'^(\w+)\s+\((\w+)\)\s+(.+)$')
+
+
+class PipelineLogger:
+    """Logger for pipeline events."""
+    
+    def __init__(self, log_path):
+        self.log_path = log_path
+        self.log_entries = []
+        self.excluded_identical_synonyms = []
+        self.valid_as_synonym_conflicts = []
+        self.invalid_species = []
+        
+    def log(self, message):
+        """Add a log message."""
+        self.log_entries.append(message)
+        print(message)
+    
+    def log_excluded_identical_synonym(self, species_name, tvk, synonym_name, synonym_tvk):
+        """Log when a synonym is excluded because it matches the valid name."""
+        self.excluded_identical_synonyms.append({
+            'species': species_name,
+            'species_tvk': tvk,
+            'synonym': synonym_name,
+            'synonym_tvk': synonym_tvk,
+        })
+    
+    def log_valid_as_synonym_conflict(self, valid_name, valid_tvk, synonym_tvk, rec_tvk):
+        """Log when a name appears as both valid and synonym."""
+        self.valid_as_synonym_conflicts.append({
+            'valid_name': valid_name,
+            'valid_tvk': valid_tvk,
+            'synonym_tvk': synonym_tvk,
+            'recommended_tvk': rec_tvk,
+        })
+    
+    def log_invalid_species(self, species_name, tvk, reason):
+        """Log when a species is filtered as invalid."""
+        self.invalid_species.append({
+            'species': species_name,
+            'tvk': tvk,
+            'reason': reason,
+        })
+    
+    def write_log(self):
+        """Write all log entries to file."""
+        with open(self.log_path, 'w', encoding='utf-8') as f:
+            f.write("UKSI Species Extraction Pipeline Log\n")
+            f.write(f"Generated: {datetime.now().isoformat()}\n")
+            f.write("=" * 80 + "\n\n")
+            
+            # General log entries
+            f.write("PROCESSING LOG\n")
+            f.write("-" * 40 + "\n")
+            for entry in self.log_entries:
+                f.write(entry + "\n")
+            f.write("\n")
+            
+            # Excluded identical synonyms
+            f.write("=" * 80 + "\n")
+            f.write(f"EXCLUDED IDENTICAL SYNONYMS ({len(self.excluded_identical_synonyms)} entries)\n")
+            f.write("-" * 40 + "\n")
+            f.write("These synonyms were excluded because the name matches the valid species name.\n\n")
+            for entry in self.excluded_identical_synonyms[:100]:  # Limit to first 100
+                f.write(f"Species: {entry['species']} (TVK: {entry['species_tvk']})\n")
+                f.write(f"  Excluded synonym: {entry['synonym']} (TVK: {entry['synonym_tvk']})\n")
+            if len(self.excluded_identical_synonyms) > 100:
+                f.write(f"\n... and {len(self.excluded_identical_synonyms) - 100} more\n")
+            f.write("\n")
+            
+            # Valid as synonym conflicts
+            f.write("=" * 80 + "\n")
+            f.write(f"VALID NAME ALSO LISTED AS SYNONYM ({len(self.valid_as_synonym_conflicts)} entries)\n")
+            f.write("-" * 40 + "\n")
+            f.write("These names appear as both a valid species AND as a synonym pointing to another taxon.\n")
+            f.write("The valid form is kept, and the synonym reference is removed.\n")
+            f.write("This may indicate a database issue that needs manual review.\n\n")
+            for entry in self.valid_as_synonym_conflicts:
+                f.write(f"Valid name: {entry['valid_name']}\n")
+                f.write(f"  Valid TVK: {entry['valid_tvk']}\n")
+                f.write(f"  Also appears as synonym TVK: {entry['synonym_tvk']}\n")
+                f.write(f"  Points to recommended TVK: {entry['recommended_tvk']}\n")
+                f.write("\n")
+            
+            # Invalid species summary
+            f.write("=" * 80 + "\n")
+            f.write(f"INVALID SPECIES FILTERED ({len(self.invalid_species)} entries)\n")
+            f.write("-" * 40 + "\n")
+            f.write("These species were moved to the invalid output file due to indeterminate names.\n\n")
+            # Group by reason
+            by_reason = defaultdict(list)
+            for entry in self.invalid_species:
+                by_reason[entry['reason']].append(entry['species'])
+            for reason, species_list in sorted(by_reason.items()):
+                f.write(f"Reason: {reason} ({len(species_list)} species)\n")
+                for sp in species_list[:10]:
+                    f.write(f"  - {sp}\n")
+                if len(species_list) > 10:
+                    f.write(f"  ... and {len(species_list) - 10} more\n")
+                f.write("\n")
+
+
+def clean_field(value):
+    """Clean a field value - remove embedded newlines and strip whitespace."""
+    if value:
+        # Replace newlines with spaces
+        value = value.replace('\n', ' ').replace('\r', ' ')
+        # Collapse multiple spaces
+        value = ' '.join(value.split())
+        return value.strip()
+    return value
+
+
+def load_taxa_with_clean_fields(filepath):
+    """
+    Load TAXA table with field cleaning to handle embedded newlines.
+    Returns dicts indexed by ORGANISM_KEY and TAXON_VERSION_KEY.
+    """
     taxa_by_org_key = {}
     taxa_by_tvk = {}
     
-    with open(TAXA_FILE, encoding='utf-8') as f:
+    with open(filepath, encoding='utf-8') as f:
         reader = csv.DictReader(f, delimiter='\t')
         for row in reader:
-            taxa_by_org_key[row['ORGANISM_KEY']] = row
-            taxa_by_tvk[row['TAXON_VERSION_KEY']] = row
+            # Clean all fields
+            cleaned_row = {k: clean_field(v) for k, v in row.items()}
+            taxa_by_org_key[cleaned_row['ORGANISM_KEY']] = cleaned_row
+            taxa_by_tvk[cleaned_row['TAXON_VERSION_KEY']] = cleaned_row
     
-    print(f"  Loaded {len(taxa_by_org_key)} taxa records")
     return taxa_by_org_key, taxa_by_tvk
 
 
-def load_synonyms_index():
+def load_synonyms_index(filepath, valid_species_tvks, logger):
     """
     Load NAMES table and build index of synonyms by RECOMMENDED_TAXON_VERSION_KEY.
     
-    Includes all names where:
-    - DEPRECATED_DATE is empty (not deprecated)
-    - LANGUAGE = 'la' (scientific names only)
-    - TAXON_VERSION_KEY != RECOMMENDED_TAXON_VERSION_KEY (excludes the valid name itself)
-    - RANK is species-level or infraspecific
+    Also builds a set of valid species names (from TAXA) to check for conflicts.
+    
+    Returns:
+        synonyms_by_rec_tvk: dict mapping rec_tvk -> list of synonym names
+        valid_name_tvks: set of TVKs that are valid species names
     """
-    print("Loading NAMES table for synonyms...")
     synonyms_by_rec_tvk = defaultdict(list)
     
-    with open(NAMES_FILE, encoding='utf-8') as f:
+    # First pass: collect all name entries
+    all_name_entries = []
+    with open(filepath, encoding='utf-8') as f:
         reader = csv.DictReader(f, delimiter='\t')
         for row in reader:
-            # Filter criteria
-            if row['DEPRECATED_DATE'] != '':
-                continue  # Skip deprecated names
-            if row['LANGUAGE'] != 'la':
-                continue  # Skip non-scientific names
-            if row['RANK'] not in SYNONYM_RANKS:
-                continue  # Skip non-species/infraspecific ranks
-            if row['TAXON_VERSION_KEY'] == row['RECOMMENDED_TAXON_VERSION_KEY']:
-                continue  # Skip the valid name itself
-            
-            rec_tvk = row['RECOMMENDED_TAXON_VERSION_KEY']
-            if rec_tvk:
-                synonyms_by_rec_tvk[rec_tvk].append(row['TAXON_NAME'])
+            # Clean fields
+            cleaned_row = {k: clean_field(v) for k, v in row.items()}
+            all_name_entries.append(cleaned_row)
     
-    print(f"  Built synonym index for {len(synonyms_by_rec_tvk)} valid taxa")
+    # Build set of valid TVKs (from TAXA table)
+    valid_tvk_set = set(valid_species_tvks.keys())
+    
+    # Check for conflicts: names that are both valid AND appear as synonyms elsewhere
+    for row in all_name_entries:
+        tvk = row['TAXON_VERSION_KEY']
+        rec_tvk = row['RECOMMENDED_TAXON_VERSION_KEY']
+        
+        # If this TVK is a valid species but points to a different recommended TVK
+        if tvk in valid_tvk_set and rec_tvk and tvk != rec_tvk:
+            valid_name = valid_species_tvks[tvk]['TAXON_NAME']
+            logger.log_valid_as_synonym_conflict(valid_name, tvk, tvk, rec_tvk)
+    
+    # Second pass: build synonym index
+    for row in all_name_entries:
+        # Filter criteria
+        if row['DEPRECATED_DATE'] != '':
+            continue  # Skip deprecated names
+        if row['LANGUAGE'] != 'la':
+            continue  # Skip non-scientific names
+        if row['RANK'] not in SYNONYM_RANKS:
+            continue  # Skip non-species/infraspecific ranks
+        if row['TAXON_VERSION_KEY'] == row['RECOMMENDED_TAXON_VERSION_KEY']:
+            continue  # Skip the valid name's own entry
+        
+        # Skip if this TVK is itself a valid species (conflict case)
+        if row['TAXON_VERSION_KEY'] in valid_tvk_set:
+            continue
+        
+        rec_tvk = row['RECOMMENDED_TAXON_VERSION_KEY']
+        if rec_tvk:
+            synonyms_by_rec_tvk[rec_tvk].append({
+                'name': row['TAXON_NAME'],
+                'tvk': row['TAXON_VERSION_KEY'],
+            })
+    
     return synonyms_by_rec_tvk
 
 
@@ -134,12 +304,68 @@ def get_higher_taxonomy(species_row, taxa_by_org_key):
     return hierarchy
 
 
+def is_invalid_species_name(name):
+    """
+    Check if a species name contains patterns indicating it's indeterminate.
+    Returns (is_invalid, reason) tuple.
+    """
+    if INVALID_NAME_REGEX.search(name):
+        match = INVALID_NAME_REGEX.search(name)
+        return True, f"Contains '{match.group()}'"
+    return False, None
+
+
+def extract_subgenus_synonyms(species_name):
+    """
+    For names like "Genus (Subgenus) species", extract additional synonyms:
+    - "Subgenus species" 
+    - "Genus species"
+    
+    Returns list of additional synonym strings, or empty list if not applicable.
+    """
+    match = SUBGENUS_PATTERN.match(species_name)
+    if match:
+        genus = match.group(1)
+        subgenus = match.group(2)
+        epithet = match.group(3)  # May include subspecies etc.
+        
+        additional = [
+            f"{subgenus} {epithet}",   # Subgenus species
+            f"{genus} {epithet}",       # Genus species
+        ]
+        return additional
+    return []
+
+
 def process_species():
     """Main processing function."""
     
-    # Load data
-    taxa_by_org_key, taxa_by_tvk = load_taxa_index()
-    synonyms_by_rec_tvk = load_synonyms_index()
+    logger = PipelineLogger(LOG_FILE)
+    logger.log(f"Pipeline started: {datetime.now().isoformat()}")
+    logger.log(f"Input TAXA: {TAXA_FILE}")
+    logger.log(f"Input NAMES: {NAMES_FILE}")
+    logger.log(f"Output valid: {OUTPUT_FILE}")
+    logger.log(f"Output invalid: {INVALID_OUTPUT_FILE}")
+    logger.log("")
+    
+    # Load TAXA data
+    logger.log("Loading TAXA table...")
+    taxa_by_org_key, taxa_by_tvk = load_taxa_with_clean_fields(TAXA_FILE)
+    logger.log(f"  Loaded {len(taxa_by_org_key)} taxa records")
+    
+    # First pass: identify all valid species (for conflict checking)
+    logger.log("Identifying valid species for conflict checking...")
+    valid_species_tvks = {}
+    for org_key, taxon in taxa_by_org_key.items():
+        if taxon['REDUNDANT_FLAG'] == '' and taxon['RANK'] == SPECIES_RANK:
+            valid_species_tvks[taxon['TAXON_VERSION_KEY']] = taxon
+    logger.log(f"  Found {len(valid_species_tvks)} valid species in TAXA")
+    
+    # Load NAMES and build synonym index
+    logger.log("Loading NAMES table for synonyms...")
+    synonyms_by_rec_tvk = load_synonyms_index(NAMES_FILE, valid_species_tvks, logger)
+    logger.log(f"  Built synonym index for {len(synonyms_by_rec_tvk)} valid taxa")
+    logger.log("")
     
     # Output columns
     output_columns = [
@@ -160,16 +386,23 @@ def process_species():
         'marine_flag',
     ]
     
-    print(f"Processing species and writing to {OUTPUT_FILE}...")
+    logger.log(f"Processing species...")
     
     species_count = 0
+    invalid_count = 0
     skipped_redundant = 0
     skipped_rank = 0
     skipped_kingdom = 0
+    excluded_identical_count = 0
     
-    with open(OUTPUT_FILE, 'w', encoding='utf-8', newline='') as outfile:
+    with open(OUTPUT_FILE, 'w', encoding='utf-8', newline='') as outfile, \
+         open(INVALID_OUTPUT_FILE, 'w', encoding='utf-8', newline='') as invalidfile:
+        
         writer = csv.DictWriter(outfile, fieldnames=output_columns, delimiter='\t')
         writer.writeheader()
+        
+        invalid_writer = csv.DictWriter(invalidfile, fieldnames=output_columns, delimiter='\t')
+        invalid_writer.writeheader()
         
         for org_key, taxon in taxa_by_org_key.items():
             # Filter: not redundant
@@ -190,12 +423,38 @@ def process_species():
                 skipped_kingdom += 1
                 continue
             
-            # Get synonyms
+            # Get valid species name
+            species_name = taxon['TAXON_NAME']
             tvk = taxon['TAXON_VERSION_KEY']
-            synonym_list = synonyms_by_rec_tvk.get(tvk, [])
+            
+            # Check if name is invalid/indeterminate
+            is_invalid, reason = is_invalid_species_name(species_name)
+            
+            # Get synonyms
+            synonym_entries = synonyms_by_rec_tvk.get(tvk, [])
+            
+            # Filter synonyms: exclude those identical to valid name
+            filtered_synonyms = []
+            for syn_entry in synonym_entries:
+                syn_name = syn_entry['name']
+                if syn_name == species_name:
+                    # Log and exclude
+                    logger.log_excluded_identical_synonym(species_name, tvk, syn_name, syn_entry['tvk'])
+                    excluded_identical_count += 1
+                else:
+                    filtered_synonyms.append(syn_name)
+            
+            # Add subgenus-derived synonyms if applicable
+            subgenus_synonyms = extract_subgenus_synonyms(species_name)
+            for sub_syn in subgenus_synonyms:
+                if sub_syn not in filtered_synonyms and sub_syn != species_name:
+                    filtered_synonyms.append(sub_syn)
+            
             # Remove duplicates and sort
-            synonym_list = sorted(set(synonym_list))
-            synonyms_str = '; '.join(synonym_list)
+            filtered_synonyms = sorted(set(filtered_synonyms))
+            
+            # Format synonyms: semicolon-delimited, no spaces around semicolon
+            synonyms_str = ';'.join(filtered_synonyms)
             
             # Combine Phylum/Division
             phylum_division = hierarchy['Phylum'] if hierarchy['Phylum'] else hierarchy['Division']
@@ -210,7 +469,7 @@ def process_species():
                 'order': hierarchy['Order'],
                 'family': hierarchy['Family'],
                 'genus': hierarchy['Genus'],
-                'species': taxon['TAXON_NAME'],
+                'species': species_name,
                 'synonyms': synonyms_str,
                 'recommended_name_authority': taxon['TAXON_AUTHORITY'],
                 'non_native_flag': taxon['NON_NATIVE_FLAG'],
@@ -219,21 +478,35 @@ def process_species():
                 'marine_flag': taxon['MARINE_FLAG'],
             }
             
-            writer.writerow(output_row)
-            species_count += 1
+            if is_invalid:
+                invalid_writer.writerow(output_row)
+                invalid_count += 1
+                logger.log_invalid_species(species_name, tvk, reason)
+            else:
+                writer.writerow(output_row)
+                species_count += 1
             
-            if species_count % 10000 == 0:
-                print(f"  Processed {species_count} species...")
+            if (species_count + invalid_count) % 10000 == 0:
+                logger.log(f"  Processed {species_count + invalid_count} species...")
     
-    print()
-    print("=" * 60)
-    print("PROCESSING COMPLETE")
-    print("=" * 60)
-    print(f"Valid species written: {species_count}")
-    print(f"Skipped (redundant): {skipped_redundant}")
-    print(f"Skipped (not species rank): {skipped_rank}")
-    print(f"Skipped (not target kingdom): {skipped_kingdom}")
-    print(f"Output file: {OUTPUT_FILE}")
+    logger.log("")
+    logger.log("=" * 60)
+    logger.log("PROCESSING COMPLETE")
+    logger.log("=" * 60)
+    logger.log(f"Valid species written: {species_count}")
+    logger.log(f"Invalid species written: {invalid_count}")
+    logger.log(f"Skipped (redundant): {skipped_redundant}")
+    logger.log(f"Skipped (not species rank): {skipped_rank}")
+    logger.log(f"Skipped (not target kingdom): {skipped_kingdom}")
+    logger.log(f"Excluded identical synonyms: {excluded_identical_count}")
+    logger.log(f"Valid-as-synonym conflicts: {len(logger.valid_as_synonym_conflicts)}")
+    logger.log(f"Output valid file: {OUTPUT_FILE}")
+    logger.log(f"Output invalid file: {INVALID_OUTPUT_FILE}")
+    logger.log(f"Log file: {LOG_FILE}")
+    
+    # Write log file
+    logger.write_log()
+    print(f"\nLog written to: {LOG_FILE}")
 
 
 if __name__ == '__main__':
