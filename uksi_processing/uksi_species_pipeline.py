@@ -353,6 +353,19 @@ def process_species():
     taxa_by_org_key, taxa_by_tvk = load_taxa_with_clean_fields(TAXA_FILE)
     logger.log(f"  Loaded {len(taxa_by_org_key)} taxa records")
     
+    # Build index of child taxa by PARENT_TVK (for subspecies/varieties/forms)
+    logger.log("Building child taxa index by PARENT_TVK...")
+    children_by_parent_tvk = defaultdict(list)
+    for org_key, taxon in taxa_by_org_key.items():
+        parent_tvk = taxon.get('PARENT_TVK', '')
+        if parent_tvk and taxon['REDUNDANT_FLAG'] == '':
+            children_by_parent_tvk[parent_tvk].append({
+                'name': taxon['TAXON_NAME'],
+                'tvk': taxon['TAXON_VERSION_KEY'],
+                'rank': taxon['RANK'],
+            })
+    logger.log(f"  Built child index for {len(children_by_parent_tvk)} parent taxa")
+    
     # First pass: identify all valid species (for conflict checking)
     logger.log("Identifying valid species for conflict checking...")
     valid_species_tvks = {}
@@ -431,7 +444,7 @@ def process_species():
             # Check if name is invalid/indeterminate
             is_invalid, reason = is_invalid_species_name(species_name)
             
-            # Get synonyms
+            # Get synonyms from NAMES table
             synonym_entries = synonyms_by_rec_tvk.get(tvk, [])
             
             # Filter synonyms: exclude those identical to valid name
@@ -446,6 +459,17 @@ def process_species():
                     excluded_identical_count += 1
                 else:
                     filtered_synonyms.append((syn_name, syn_tvk))
+            
+            # Add child taxa from TAXA hierarchy (subspecies, varieties, forms, etc.)
+            # These are linked via PARENT_TVK in the TAXA table
+            child_taxa = children_by_parent_tvk.get(tvk, [])
+            for child in child_taxa:
+                child_name = child['name']
+                child_tvk = child['tvk']
+                # Don't add if name is identical to species or already in list
+                existing_names = [s[0] for s in filtered_synonyms]
+                if child_name != species_name and child_name not in existing_names:
+                    filtered_synonyms.append((child_name, child_tvk))
             
             # Add subgenus-derived synonyms if applicable (these have no TVK)
             subgenus_synonyms = extract_subgenus_synonyms(species_name)
