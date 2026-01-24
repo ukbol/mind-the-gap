@@ -223,6 +223,8 @@ def load_synonyms_index(filepath, valid_species_tvks, logger):
     """
     Load NAMES table and build index of synonyms by RECOMMENDED_TAXON_VERSION_KEY.
     
+    Includes ALL Latin names linking to species, regardless of deprecation status.
+    
     Also builds a set of valid species names (from TAXA) to check for conflicts.
     
     Returns:
@@ -256,8 +258,7 @@ def load_synonyms_index(filepath, valid_species_tvks, logger):
     # Second pass: build synonym index
     for row in all_name_entries:
         # Filter criteria
-        if row['DEPRECATED_DATE'] != '':
-            continue  # Skip deprecated names
+        # NOTE: DEPRECATED_DATE filter removed - include all names regardless of deprecation
         if row['LANGUAGE'] != 'la':
             continue  # Skip non-scientific names
         if row['RANK'] not in SYNONYM_RANKS:
@@ -412,6 +413,7 @@ def process_species():
     skipped_rank = 0
     skipped_kingdom = 0
     excluded_identical_count = 0
+    identical_tvks_captured = 0  # TVKs from identical-name synonyms
     
     with open(OUTPUT_FILE, 'w', encoding='utf-8', newline='') as outfile, \
          open(INVALID_OUTPUT_FILE, 'w', encoding='utf-8', newline='') as invalidfile:
@@ -446,16 +448,22 @@ def process_species():
             # Get synonyms from NAMES table
             synonym_entries = synonyms_by_rec_tvk.get(tvk, [])
             
-            # Filter synonyms: exclude those identical to valid name
+            # Process synonyms: 
+            # - Names different from valid name go to synonyms list
+            # - Names identical to valid name: capture their TVKs separately
             # Store as list of (name, tvk) tuples
             filtered_synonyms = []
+            identical_name_tvks = []  # TVKs for names identical to valid species name
+            
             for syn_entry in synonym_entries:
                 syn_name = syn_entry['name']
                 syn_tvk = syn_entry['tvk']
                 if syn_name == species_name:
-                    # Log and exclude
+                    # Name is identical - don't add to synonyms list but capture the TVK
                     logger.log_excluded_identical_synonym(species_name, tvk, syn_name, syn_tvk)
                     excluded_identical_count += 1
+                    if syn_tvk:  # Only add if TVK exists
+                        identical_name_tvks.append(syn_tvk)
                 else:
                     filtered_synonyms.append((syn_name, syn_tvk))
             
@@ -491,7 +499,12 @@ def process_species():
             
             # Format synonyms: semicolon-delimited, no spaces around semicolon
             synonyms_str = ';'.join(s[0] for s in unique_synonyms)
-            synonym_tvks_str = ';'.join(s[1] for s in unique_synonyms)
+            
+            # Build TVK list: include synonym TVKs + identical-name TVKs
+            # The identical-name TVKs are added at the end (they have no corresponding synonym name)
+            all_tvks = [s[1] for s in unique_synonyms] + identical_name_tvks
+            synonym_tvks_str = ';'.join(all_tvks)
+            identical_tvks_captured += len(identical_name_tvks)
             
             # Combine Phylum/Division
             phylum_division = hierarchy['Phylum'] if hierarchy['Phylum'] else hierarchy['Division']
@@ -535,7 +548,8 @@ def process_species():
     logger.log(f"Invalid species written: {invalid_count}")
     logger.log(f"Skipped (not species rank): {skipped_rank}")
     logger.log(f"Skipped (not target kingdom): {skipped_kingdom}")
-    logger.log(f"Excluded identical synonyms: {excluded_identical_count}")
+    logger.log(f"Identical-name synonyms (name excluded, TVK captured): {excluded_identical_count}")
+    logger.log(f"Identical-name TVKs added to synonym_tvk_list: {identical_tvks_captured}")
     logger.log(f"Valid-as-synonym conflicts: {len(logger.valid_as_synonym_conflicts)}")
     logger.log(f"Output valid file: {OUTPUT_FILE}")
     logger.log(f"Output invalid file: {INVALID_OUTPUT_FILE}")

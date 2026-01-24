@@ -1,19 +1,25 @@
-UKSI Pipeline Log - 2026-01-24T19:30:03.642071
+UKSI Species Extraction Pipeline Log
+Generated: 2026-01-24T22:36:56.709491
 ================================================================================
-
-DEBUG TRACES
-----------------------------------------
-[DEBUG TRACE] BMSSYS0000013986: Found in NAMES. Rank: 'Species', Rec_TVK: 'BMSSYS0000728643'
-[DEBUG TRACE] BMSSYS0000013986: ACCEPTED: Added as synonym for BMSSYS0000728643
 
 PROCESSING LOG
 ----------------------------------------
-Pipeline started: 2026-01-24T19:29:58.202541 (v2.2)
+Pipeline started: 2026-01-24T22:36:46.228471
+Input TAXA: C:\_claude_files\projects\ukbol_gaplist\uksi\uksi_20251203a_input_taxa.tsv
+Input NAMES: C:\_claude_files\projects\ukbol_gaplist\uksi\uksi_20251203a_input_names.tsv
+Output valid: C:\_claude_files\projects\ukbol_gaplist\uksi\uksi_valid_species_output.tsv
+Output invalid: C:\_claude_files\projects\ukbol_gaplist\uksi\uksi_invalid_species_output.tsv
+
 Loading TAXA table...
-Building child taxa index...
-  Found 79522 valid species
-Loading NAMES table...
-  Scanning names for valid-as-synonym conflicts...
+  Loaded 124397 taxa records
+Building child taxa index by PARENT_TVK...
+  Built child index for 32536 parent taxa
+Identifying valid species for conflict checking...
+  Found 79522 valid species in TAXA
+Loading NAMES table for synonyms...
+  Built synonym index for 54110 valid taxa
+
+Processing species...
   Processed 10000 species...
   Processed 20000 species...
   Processed 30000 species...
@@ -21,110 +27,300 @@ Loading NAMES table...
   Processed 50000 species...
   Processed 60000 species...
   Processed 70000 species...
+
+============================================================
 PROCESSING COMPLETE
+============================================================
+Valid species written: 78046
+Invalid species written: 389
+Skipped (not species rank): 44875
+Skipped (not target kingdom): 1087
+Identical-name synonyms (name excluded, TVK captured): 24860
+Identical-name TVKs added to synonym_tvk_list: 24860
+Valid-as-synonym conflicts: 0
+Output valid file: C:\_claude_files\projects\ukbol_gaplist\uksi\uksi_valid_species_output.tsv
+Output invalid file: C:\_claude_files\projects\ukbol_gaplist\uksi\uksi_invalid_species_output.tsv
+Log file: C:\_claude_files\projects\ukbol_gaplist\uksi\uksi_pipeline_log.txt
 
 ================================================================================
-EXCLUDED IDENTICAL SYNONYMS (24866)
-Dina lineata <- Dina lineata (NBNSYS0000022375)
-Erpobdella testacea <- Erpobdella testacea (NBNSYS0000022373)
-Trocheta bykowskii <- Trocheta bykowskii (NBNSYS0000022377)
-Helobdella stagnalis <- Helobdella stagnalis (NBNSYS0000013208)
-Hemiclepsis marginata <- Hemiclepsis marginata (NHMSYS0000068875)
-Hemiclepsis marginata <- Hemiclepsis marginata (NBNSYS0000013203)
-Placobdella costata <- Placobdella costata (NBNSYS0000013201)
-Theromyzon tessulatum <- Theromyzon tessulatum (NBNSYS0000013202)
-Caspiobdella tuberculata <- Caspiobdella tuberculata (NHMSYS0000560528)
-Piscicola geometra <- Piscicola geometra (NBNSYS0000185708)
-Trachelobdella lubrica <- Trachelobdella lubrica (NBNSYS0000187917)
-Hemibdella soleae <- Hemibdella soleae (NBNSYS0000182660)
-Heptacyclus myoxocephali <- Heptacyclus myoxocephali (NBNSYS0000182704)
-Oceanobdella blennii <- Oceanobdella blennii (NBNSYS0000184775)
-Oceanobdella microstoma <- Oceanobdella microstoma (NBNSYS0000184776)
-Oceanobdella sexoculata <- Oceanobdella sexoculata (NBNSYS0000184777)
-Platybdella anarrhichae <- Platybdella anarrhichae (NBNSYS0000185740)
-Pterobdella jenseni <- Pterobdella jenseni (NHMSYS0000068870)
-Pontobdella vosmaeri <- Pontobdella vosmaeri (NBNSYS0000185944)
-Branchellion torpedinis <- Branchellion torpedinis (NBNSYS0000179915)
-Brumptiana lineata <- Brumptiana lineata (NBNSYS0000179937)
-Calliobdella lophii <- Calliobdella lophii (NBNSYS0000180035)
-Calliobdella nodulifera <- Calliobdella nodulifera (NBNSYS0000180036)
-Aporrectodea icterica <- Aporrectodea icterica (NHMSYS0020475482)
-Aporrectodea longa <- Aporrectodea longa (NHMSYS0020475483)
-Aporrectodea rosea <- Aporrectodea rosea (NHMSYS0020475484)
-Dendrobaena attemsi <- Dendrobaena attemsi (NHMSYS0020475517)
-Dendrobaena octaedra <- Dendrobaena octaedra (NHMSYS0020475518)
-Eisenia andrei <- Eisenia andrei (NHMSYS0020467909)
-Eisenia andrei <- Eisenia andrei (NBNSYS0000022347)
-Lumbricus castaneus <- Lumbricus castaneus (NHMSYS0020475546)
-Lumbricus festivus <- Lumbricus festivus (NHMSYS0020475547)
-Octolasion lacteum <- Octolasion lacteum (NBNSYS0000102482)
-Eukerria eiseniana <- Eukerria eiseniana (NBNSYS0000147095)
-Enchytraeus buchholzi <- Enchytraeus buchholzi (NBNSYS0000181627)
-Enchytraeus capitatus <- Enchytraeus capitatus (NBNSYS0000181628)
-Fridericia perrieri <- Fridericia perrieri (NBNSYS0000182123)
-Henlea ventriculosa <- Henlea ventriculosa (NBNSYS0000182700)
-Lumbricillus buelowi <- Lumbricillus buelowi (NBNSYS0000183786)
-Lumbricillus enteromorphae <- Lumbricillus enteromorphae (NBNSYS0000183788)
-Lumbricillus helgolandicus <- Lumbricillus helgolandicus (NBNSYS0000183789)
-Lumbricillus lineatus <- Lumbricillus lineatus (NBNSYS0000176264)
-Lumbricillus lineatus <- Lumbricillus lineatus (NHMSYS0020703587)
-Lumbricillus rivalis <- Lumbricillus rivalis (NBNSYS0000183795)
-Lumbricillus viridis <- Lumbricillus viridis (NBNSYS0000183796)
-Marionina achaeta <- Marionina achaeta (NBNSYS0000183925)
-Marionina glandulifera <- Marionina glandulifera (NBNSYS0000183930)
-Branchiura sowerbyi <- Branchiura sowerbyi (NBNSYS0100009740)
-Chaetogaster crystallinus <- Chaetogaster crystallinus (NBNSYS0000180313)
-Chaetogaster limnaei <- Chaetogaster limnaei (NBNSYS0000180316)
+EXCLUDED IDENTICAL SYNONYMS (24860 entries)
+----------------------------------------
+These synonyms were excluded because the name matches the valid species name.
+
+Species: Dina lineata (TVK: NHMSYS0000068878)
+  Excluded synonym: Dina lineata (TVK: NBNSYS0000022375)
+Species: Erpobdella testacea (TVK: NHMSYS0000068879)
+  Excluded synonym: Erpobdella testacea (TVK: NBNSYS0000022373)
+Species: Trocheta bykowskii (TVK: NHMSYS0021048739)
+  Excluded synonym: Trocheta bykowskii (TVK: NBNSYS0000022377)
+Species: Helobdella stagnalis (TVK: NHMSYS0021048744)
+  Excluded synonym: Helobdella stagnalis (TVK: NBNSYS0000013208)
+Species: Hemiclepsis marginata (TVK: NHMSYS0021048745)
+  Excluded synonym: Hemiclepsis marginata (TVK: NHMSYS0000068875)
+Species: Hemiclepsis marginata (TVK: NHMSYS0021048745)
+  Excluded synonym: Hemiclepsis marginata (TVK: NBNSYS0000013203)
+Species: Placobdella costata (TVK: NHMSYS0000068876)
+  Excluded synonym: Placobdella costata (TVK: NBNSYS0000013201)
+Species: Theromyzon tessulatum (TVK: NHMSYS0000068877)
+  Excluded synonym: Theromyzon tessulatum (TVK: NBNSYS0000013202)
+Species: Caspiobdella tuberculata (TVK: NHMSYS0021048754)
+  Excluded synonym: Caspiobdella tuberculata (TVK: NHMSYS0000560528)
+Species: Piscicola geometra (TVK: NHMSYS0000068867)
+  Excluded synonym: Piscicola geometra (TVK: NBNSYS0000185708)
+Species: Trachelobdella lubrica (TVK: NHMSYS0000068871)
+  Excluded synonym: Trachelobdella lubrica (TVK: NBNSYS0000187917)
+Species: Hemibdella soleae (TVK: NHMSYS0021048761)
+  Excluded synonym: Hemibdella soleae (TVK: NBNSYS0000182660)
+Species: Heptacyclus myoxocephali (TVK: NHMSYS0021048765)
+  Excluded synonym: Heptacyclus myoxocephali (TVK: NBNSYS0000182704)
+Species: Oceanobdella blennii (TVK: NHMSYS0000068863)
+  Excluded synonym: Oceanobdella blennii (TVK: NBNSYS0000184775)
+Species: Oceanobdella microstoma (TVK: NHMSYS0000068864)
+  Excluded synonym: Oceanobdella microstoma (TVK: NBNSYS0000184776)
+Species: Oceanobdella sexoculata (TVK: NHMSYS0000068865)
+  Excluded synonym: Oceanobdella sexoculata (TVK: NBNSYS0000184777)
+Species: Platybdella anarrhichae (TVK: NHMSYS0000068868)
+  Excluded synonym: Platybdella anarrhichae (TVK: NBNSYS0000185740)
+Species: Pterobdella jenseni (TVK: NHMSYS0021048415)
+  Excluded synonym: Pterobdella jenseni (TVK: NHMSYS0000068870)
+Species: Pontobdella vosmaeri (TVK: NHMSYS0021048418)
+  Excluded synonym: Pontobdella vosmaeri (TVK: NBNSYS0000185944)
+Species: Branchellion torpedinis (TVK: NHMSYS0000068857)
+  Excluded synonym: Branchellion torpedinis (TVK: NBNSYS0000179915)
+Species: Brumptiana lineata (TVK: NHMSYS0000068858)
+  Excluded synonym: Brumptiana lineata (TVK: NBNSYS0000179937)
+Species: Calliobdella lophii (TVK: NHMSYS0021048748)
+  Excluded synonym: Calliobdella lophii (TVK: NBNSYS0000180035)
+Species: Calliobdella nodulifera (TVK: NHMSYS0000068859)
+  Excluded synonym: Calliobdella nodulifera (TVK: NBNSYS0000180036)
+Species: Aporrectodea icterica (TVK: NBNSYS0000022339)
+  Excluded synonym: Aporrectodea icterica (TVK: NHMSYS0020475482)
+Species: Aporrectodea longa (TVK: NBNSYS0000022341)
+  Excluded synonym: Aporrectodea longa (TVK: NHMSYS0020475483)
+Species: Aporrectodea rosea (TVK: NBNSYS0000022342)
+  Excluded synonym: Aporrectodea rosea (TVK: NHMSYS0020475484)
+Species: Dendrobaena attemsi (TVK: NBNSYS0000022343)
+  Excluded synonym: Dendrobaena attemsi (TVK: NHMSYS0020475517)
+Species: Dendrobaena octaedra (TVK: NBNSYS0000022344)
+  Excluded synonym: Dendrobaena octaedra (TVK: NHMSYS0020475518)
+Species: Eisenia andrei (TVK: NHMSYS0020475524)
+  Excluded synonym: Eisenia andrei (TVK: NHMSYS0020467909)
+Species: Eisenia andrei (TVK: NHMSYS0020475524)
+  Excluded synonym: Eisenia andrei (TVK: NBNSYS0000022347)
+Species: Lumbricus castaneus (TVK: NBNSYS0000022353)
+  Excluded synonym: Lumbricus castaneus (TVK: NHMSYS0020475546)
+Species: Lumbricus festivus (TVK: NBNSYS0000022355)
+  Excluded synonym: Lumbricus festivus (TVK: NHMSYS0020475547)
+Species: Octolasion lacteum (TVK: NHMSYS0021013459)
+  Excluded synonym: Octolasion lacteum (TVK: NBNSYS0000102482)
+Species: Eukerria eiseniana (TVK: NHMSYS0020821914)
+  Excluded synonym: Eukerria eiseniana (TVK: NBNSYS0000147095)
+Species: Enchytraeus buchholzi (TVK: NHMSYS0021048422)
+  Excluded synonym: Enchytraeus buchholzi (TVK: NBNSYS0000181627)
+Species: Enchytraeus capitatus (TVK: NHMSYS0021048423)
+  Excluded synonym: Enchytraeus capitatus (TVK: NBNSYS0000181628)
+Species: Fridericia perrieri (TVK: NHMSYS0021048427)
+  Excluded synonym: Fridericia perrieri (TVK: NBNSYS0000182123)
+Species: Henlea ventriculosa (TVK: NHMSYS0021048429)
+  Excluded synonym: Henlea ventriculosa (TVK: NBNSYS0000182700)
+Species: Lumbricillus buelowi (TVK: NHMSYS0021048431)
+  Excluded synonym: Lumbricillus buelowi (TVK: NBNSYS0000183786)
+Species: Lumbricillus enteromorphae (TVK: NHMSYS0021048434)
+  Excluded synonym: Lumbricillus enteromorphae (TVK: NBNSYS0000183788)
+Species: Lumbricillus helgolandicus (TVK: NHMSYS0021048435)
+  Excluded synonym: Lumbricillus helgolandicus (TVK: NBNSYS0000183789)
+Species: Lumbricillus lineatus (TVK: NHMSYS0021048437)
+  Excluded synonym: Lumbricillus lineatus (TVK: NBNSYS0000176264)
+Species: Lumbricillus lineatus (TVK: NHMSYS0021048437)
+  Excluded synonym: Lumbricillus lineatus (TVK: NHMSYS0020703587)
+Species: Lumbricillus rivalis (TVK: NHMSYS0021048439)
+  Excluded synonym: Lumbricillus rivalis (TVK: NBNSYS0000183795)
+Species: Lumbricillus viridis (TVK: NHMSYS0021048441)
+  Excluded synonym: Lumbricillus viridis (TVK: NBNSYS0000183796)
+Species: Marionina achaeta (TVK: NHMSYS0021048443)
+  Excluded synonym: Marionina achaeta (TVK: NBNSYS0000183925)
+Species: Marionina glandulifera (TVK: NHMSYS0021048444)
+  Excluded synonym: Marionina glandulifera (TVK: NBNSYS0000183930)
+Species: Branchiura sowerbyi (TVK: NHMSYS0020461052)
+  Excluded synonym: Branchiura sowerbyi (TVK: NBNSYS0100009740)
+Species: Chaetogaster crystallinus (TVK: NHMSYS0021048453)
+  Excluded synonym: Chaetogaster crystallinus (TVK: NBNSYS0000180313)
+Species: Chaetogaster limnaei (TVK: NHMSYS0021048454)
+  Excluded synonym: Chaetogaster limnaei (TVK: NBNSYS0000180316)
+Species: Nais elinguis (TVK: NHMSYS0021048456)
+  Excluded synonym: Nais elinguis (TVK: NBNSYS0000188457)
+Species: Nais elinguis (TVK: NHMSYS0021048456)
+  Excluded synonym: Nais elinguis (TVK: NHMSYS0020703602)
+Species: Nais pseudobtusa (TVK: NHMSYS0021048457)
+  Excluded synonym: Nais pseudobtusa (TVK: NBNSYS0000022330)
+Species: Nais pseudobtusa (TVK: NHMSYS0021048457)
+  Excluded synonym: Nais pseudobtusa (TVK: NHMSYS0020461065)
+Species: Ophidonais serpentina (TVK: NHMSYS0020461068)
+  Excluded synonym: Ophidonais serpentina (TVK: NBNSYS0000022329)
+Species: Paranais litoralis (TVK: NHMSYS0021048458)
+  Excluded synonym: Paranais litoralis (TVK: NBNSYS0000176986)
+Species: Paranais litoralis (TVK: NHMSYS0021048458)
+  Excluded synonym: Paranais litoralis (TVK: NHMSYS0020703614)
+Species: Slavina appendiculata (TVK: NHMSYS0020461078)
+  Excluded synonym: Slavina appendiculata (TVK: NBNSYS0000022331)
+Species: Uncinais uncinata (TVK: NHMSYS0021048460)
+  Excluded synonym: Uncinais uncinata (TVK: NBNSYS0000188175)
+Species: Pectinodrilus rectisetosus (TVK: NHMSYS0021048465)
+  Excluded synonym: Pectinodrilus rectisetosus (TVK: NBNSYS0000185437)
+Species: Clitellio arenarius (TVK: NHMSYS0021048477)
+  Excluded synonym: Clitellio arenarius (TVK: NBNSYS0000174636)
+Species: Clitellio arenarius (TVK: NHMSYS0021048477)
+  Excluded synonym: Clitellio arenarius (TVK: NHMSYS0020703557)
+Species: Limnodrilus cervix (TVK: NHMSYS0021048479)
+  Excluded synonym: Limnodrilus cervix (TVK: NBNSYS0100012816)
+Species: Limnodrilus claparedeianus (TVK: NHMSYS0020969693)
+  Excluded synonym: Limnodrilus claparedeianus (TVK: NBNSYS0100012817)
+Species: Limnodrilus profundicola (TVK: NHMSYS0020703585)
+  Excluded synonym: Limnodrilus profundicola (TVK: NBNSYS0000037175)
+Species: Limnodrilus udekemianus (TVK: NHMSYS0020703586)
+  Excluded synonym: Limnodrilus udekemianus (TVK: NBNSYS0000051118)
+Species: Potamothrix bavaricus (TVK: NHMSYS0021048481)
+  Excluded synonym: Potamothrix bavaricus (TVK: NBNSYS0100014751)
+Species: Potamothrix hammoniensis (TVK: NHMSYS0021048484)
+  Excluded synonym: Potamothrix hammoniensis (TVK: NBNSYS0100014752)
+Species: Potamothrix moldaviensis (TVK: NHMSYS0021048485)
+  Excluded synonym: Potamothrix moldaviensis (TVK: NBNSYS0000037220)
+Species: Potamothrix moldaviensis (TVK: NHMSYS0021048485)
+  Excluded synonym: Potamothrix moldaviensis (TVK: NHMSYS0020703624)
+Species: Psammoryctides barbatus (TVK: NHMSYS0020461074)
+  Excluded synonym: Psammoryctides barbatus (TVK: NBNSYS0000037079)
+Species: Psammoryctides barbatus (TVK: NHMSYS0020461074)
+  Excluded synonym: Psammoryctides barbatus (TVK: NHMSYS0020703630)
+Species: Tubifex ignotus (TVK: NHMSYS0020703652)
+  Excluded synonym: Tubifex ignotus (TVK: NBNSYS0000022334)
+Species: Tubifex tubifex (TVK: NHMSYS0021048488)
+  Excluded synonym: Tubifex tubifex (TVK: NBNSYS0000037053)
+Species: Tubifex tubifex (TVK: NHMSYS0021048488)
+  Excluded synonym: Tubifex tubifex (TVK: NHMSYS0020703653)
+Species: Tubificoides aculeatus (TVK: NHMSYS0021048489)
+  Excluded synonym: Tubificoides aculeatus (TVK: NBNSYS0000188071)
+Species: Tubificoides galiciensis (TVK: NHMSYS0020461292)
+  Excluded synonym: Tubificoides galiciensis (TVK: NHMSYS0000562245)
+Species: Tubificoides insularis (TVK: NHMSYS0021048490)
+  Excluded synonym: Tubificoides insularis (TVK: NBNSYS0000178481)
+Species: Arcteonais lomondi (TVK: NHMSYS0020703550)
+  Excluded synonym: Arcteonais lomondi (TVK: NBNSYS0000022332)
+Species: Aulodrilus pluriseta (TVK: NHMSYS0020703553)
+  Excluded synonym: Aulodrilus pluriseta (TVK: NBNSYS0000037336)
+Species: Homochaeta naidina (TVK: NHMSYS0020703580)
+  Excluded synonym: Homochaeta naidina (TVK: NBNSYS0000033069)
+Species: Rhyacodrilus coccineus (TVK: NHMSYS0020703632)
+  Excluded synonym: Rhyacodrilus coccineus (TVK: NBNSYS0000042329)
+Species: Lumbriculus variegatus (TVK: NHMSYS0020703591)
+  Excluded synonym: Lumbriculus variegatus (TVK: NBNSYS0000037014)
+Species: Stylodrilus cernosvitovi (TVK: NHMSYS0021048492)
+  Excluded synonym: Stylodrilus cernosvitovi (TVK: NHMSYS0000562109)
+Species: Stylodrilus heringianus (TVK: NHMSYS0020703649)
+  Excluded synonym: Stylodrilus heringianus (TVK: NBNSYS0000037072)
+Species: Stylodrilus parvus (TVK: NHMSYS0021048493)
+  Excluded synonym: Stylodrilus parvus (TVK: NBNSYS0100015946)
+Species: Pareurythoe borealis (TVK: NHMSYS0020703615)
+  Excluded synonym: Pareurythoe borealis (TVK: NBNSYS0000177013)
+Species: Euphrosine armadillo (TVK: NHMSYS0021048507)
+  Excluded synonym: Euphrosine armadillo (TVK: NBNSYS0000181962)
+Species: Euphrosine armadillo (TVK: NHMSYS0021048507)
+  Excluded synonym: Euphrosine armadillo (TVK: NHMSYS0020703570)
+Species: Euphrosine borealis (TVK: NHMSYS0021048508)
+  Excluded synonym: Euphrosine borealis (TVK: NBNSYS0000181963)
+Species: Euphrosine cirrata (TVK: NHMSYS0021048768)
+  Excluded synonym: Euphrosine cirrata (TVK: NBNSYS0000181964)
+Species: Euphrosine cirrata (TVK: NHMSYS0021048768)
+  Excluded synonym: Euphrosine cirrata (TVK: NHMSYS0020703571)
+Species: Euphrosine myrtosa (TVK: NHMSYS0021048769)
+  Excluded synonym: Euphrosine myrtosa (TVK: NHMSYS0001697243)
+Species: Arenotrocha minuta (TVK: NHMSYS0021048772)
+  Excluded synonym: Arenotrocha minuta (TVK: NBNSYS0000173939)
+Species: Ophryotrocha geryonicola (TVK: NHMSYS0021048773)
+  Excluded synonym: Ophryotrocha geryonicola (TVK: NBNSYS0000184984)
+Species: Ophryotrocha gracilis (TVK: NHMSYS0021048774)
+  Excluded synonym: Ophryotrocha gracilis (TVK: NBNSYS0000176887)
+Species: Ophryotrocha maculata (TVK: NHMSYS0021048775)
+  Excluded synonym: Ophryotrocha maculata (TVK: NBNSYS0000184987)
+Species: Ophryotrocha puerilis (TVK: NHMSYS0021048777)
+  Excluded synonym: Ophryotrocha puerilis (TVK: NBNSYS0000184988)
+Species: Schistomeringos rudolphi (TVK: NHMSYS0021048784)
+  Excluded synonym: Schistomeringos rudolphi (TVK: NBNSYS0000177823)
+Species: Eunice pennata (TVK: NHMSYS0021048787)
+  Excluded synonym: Eunice pennata (TVK: NBNSYS0000175270)
+
+... and 24760 more
 
 ================================================================================
-INVALID SPECIES (389)
-Parougia spp. (Contains '.')
-Schistomeringos spp. (Contains '.')
-Goniadella ? gracilis (Contains '?')
-Kefersteinia sp. (Contains '.')
-Neanthes cf. flavipes (Contains '.')
-Syllides spp. (Contains '.')
-Opisthodonta "species A" (Contains '"')
-Opisthodonta n. sp. (Contains '.')
-Sphaerosyllis n. sp. (Contains '.')
-Syllis "species A" (Contains '"')
-Syllis "species D" (Contains '"')
-Syllis "species E" (Contains '"')
-Syllis "species F" (Contains '"')
-Syllis "species G" (Contains '"')
-Syllis "species H" (Contains '"')
-Ehlersia "species A" (Contains '"')
-Ehlersia sp. (Contains '.')
-Nephtys n. sp. (Contains '.')
-Eulalia n. sp. (Contains '.')
-Notophyllum cf. americanum (Contains '.')
-Fabriciola cf. berkeleyi (Contains '.')
-Pseudofabricia sp. (Contains '.')
-Galathowenia n. sp. (Contains '.')
-Neodexiospira n. sp. (Contains '.')
-Bushiella n. sp. (Contains '.')
-Aberranta "species A" (Contains '"')
-Aberranta sp. (Contains '.')
-Boccardia cf. polybranchia (Contains '.')
-Parascolelepis cf. gilchristi (Contains '.')
-Minuspio cf. multibranchiata (Contains '.')
-Pseudopolydora cf. paucibranchiata (Contains '.')
-Scolelepis sp. (Contains '.')
-Aphelochaeta "species A" (Contains '"')
-Aphelochaeta "species B" (Contains '"')
-Aphelochaeta "species C" (Contains '"')
-Caulleriella "species A" (Contains '"')
-Caulleriella "species B" (Contains '"')
-Caulleriella "species C" (Contains '"')
-Chaetozone "species C" (Contains '"')
-Chaetozone "species D" (Contains '"')
-Tharyx "species A" (Contains '"')
-Tharyx sp. (Contains '.')
-Diplocirrus "species A" (Contains '"')
-Diplocirrus n. sp (Contains '.')
-Eclysippe cf. vanelli (Contains '.')
-Polycirrus n. sp. (Contains '.')
-Loimia sp. (Contains '.')
-Pista sp. (Contains '.')
-Notomastus spp. (Contains '.')
-Cossura sp. (Contains '.')
+VALID NAME ALSO LISTED AS SYNONYM (0 entries)
+----------------------------------------
+These names appear as both a valid species AND as a synonym pointing to another taxon.
+The valid form is kept, and the synonym reference is removed.
+This may indicate a database issue that needs manual review.
+
+================================================================================
+INVALID SPECIES FILTERED (389 entries)
+----------------------------------------
+These species were moved to the invalid output file due to indeterminate names.
+
+Reason: Contains '"' (21 species)
+  - Opisthodonta "species A"
+  - Syllis "species A"
+  - Syllis "species D"
+  - Syllis "species E"
+  - Syllis "species F"
+  - Syllis "species G"
+  - Syllis "species H"
+  - Ehlersia "species A"
+  - Aberranta "species A"
+  - Aphelochaeta "species A"
+  ... and 11 more
+
+Reason: Contains '(Other)' (19 species)
+  - Chironomus (Other)
+  - Cladotanytarsus (Other)
+  - Conchapelopia (Other)
+  - Paratrichocladius (Other)
+  - Dicrotendipes (Other)
+  - Eukiefferiella (Other)
+  - Micropsectra (Other)
+  - Nanocladius (Other)
+  - Neozavrelia (Other)
+  - Orthocladius (Orthocladius) (Other)
+  ... and 9 more
+
+Reason: Contains '(unidentified)' (2 species)
+  - Lichen (unidentified)
+  - Fungus (unidentified)
+
+Reason: Contains '.' (314 species)
+  - Parougia spp.
+  - Schistomeringos spp.
+  - Kefersteinia sp.
+  - Neanthes cf. flavipes
+  - Syllides spp.
+  - Opisthodonta n. sp.
+  - Sphaerosyllis n. sp.
+  - Ehlersia sp.
+  - Nephtys n. sp.
+  - Eulalia n. sp.
+  ... and 304 more
+
+Reason: Contains '?' (29 species)
+  - Goniadella ? gracilis
+  - Amerobelba ?decedens
+  - Apseudes ? vicinus
+  - Pseudotanais ? lilljeborgi
+  - Aphodius (Nialus) ?varians
+  - Aphodius (Subrinus) ?sturmi
+  - Euryhapsis ? fuscipropes
+  - Musca ?? osiris
+  - Platygaster ?anopediana
+  - Platygaster ?leucanthemi
+  ... and 19 more
+
+Reason: Contains 'indet' (4 species)
+  - Anastrepha species indet
+  - Trachysiphonella indet.
+  - Pachycerianthus indet.
+  - Maerl indet
+
