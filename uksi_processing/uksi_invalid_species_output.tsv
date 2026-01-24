@@ -5,8 +5,16 @@ NBNORG0000035445	NBNSYS0000182303	Animalia	Annelida	Polychaeta	Phyllodocida	Goni
 NBNORG0000036071	NBNSYS0000183139	Animalia	Annelida	Polychaeta	Phyllodocida	Hesionidae	Kefersteinia	Kefersteinia sp.							Y
 NBNORG0000037220	NBNSYS0000184515	Animalia	Annelida	Polychaeta	Phyllodocida	Nereididae	Neanthes	Neanthes cf. flavipes			Ehlers, 1868				Y
 NBNORG0000039582	NBNSYS0000187494	Animalia	Annelida	Polychaeta	Phyllodocida	Syllidae	Syllides	Syllides spp.							Y
+NBNORG0000094001	NHMSYS0020233996	Animalia	Annelida	Polychaeta	Phyllodocida	Syllidae	Opisthodonta	"Opisthodonta ""species A"""			NMBAQC				Y
 NBNORG0000037628	NBNSYS0000184992	Animalia	Annelida	Polychaeta	Phyllodocida	Syllidae	Opisthodonta	Opisthodonta n. sp.							Y
 NBNORG0000039382	NBNSYS0000187214	Animalia	Annelida	Polychaeta	Phyllodocida	Syllidae	Sphaerosyllis	Sphaerosyllis n. sp.							Y
+NBNORG0000094060	NHMSYS0020234057	Animalia	Annelida	Polychaeta	Phyllodocida	Syllidae	Syllis	"Syllis ""species A"""			NMBAQC				Y
+NBNORG0000094061	NHMSYS0020234058	Animalia	Annelida	Polychaeta	Phyllodocida	Syllidae	Syllis	"Syllis ""species D"""			NMBAQC				Y
+NBNORG0000094062	NHMSYS0020234059	Animalia	Annelida	Polychaeta	Phyllodocida	Syllidae	Syllis	"Syllis ""species E"""			NMBAQC				Y
+NBNORG0000094063	NHMSYS0020234060	Animalia	Annelida	Polychaeta	Phyllodocida	Syllidae	Syllis	"Syllis ""species F"""			NMBAQC				Y
+NBNORG0000094064	NHMSYS0020234061	Animalia	Annelida	Polychaeta	Phyllodocida	Syllidae	Syllis	"Syllis ""species G"""			NMBAQC				Y
+NBNORG0000094065	NHMSYS0020234062	Animalia	Annelida	Polychaeta	Phyllodocida	Syllidae	Syllis	"Syllis ""species H"""			NMBAQC				Y
+NBNORG0000093938	NHMSYS0020233919	Animalia	Annelida	Polychaeta	Phyllodocida	Syllidae	Ehlersia	"Ehlersia ""species A"""			NMBAQC				Y
 NBNORG0000034826	NBNSYS0000181564	Animalia	Annelida	Polychaeta	Phyllodocida	Syllidae	Ehlersia	Ehlersia sp.							Y
 NBNORG0000037321	NBNSYS0000184635	Animalia	Annelida	Polychaeta	Phyllodocida	Nephtyidae	Nephtys	Nephtys n. sp.							Y
 NBNORG0000035137	NBNSYS0000181924	Animalia	Annelida	Polychaeta	Phyllodocida	Phyllodocidae	Eulalia	Eulalia n. sp.							Y
@@ -16,13 +24,24 @@ NBNORG0000038653	NBNSYS0000186272	Animalia	Annelida	Polychaeta	Sabellida	Fabrici
 NBNORG0000035326	NBNSYS0000182169	Animalia	Annelida	Polychaeta	Sabellida	Oweniidae	Galathowenia	Galathowenia n. sp.							Y
 NBNORG0000037282	NBNSYS0000184592	Animalia	Annelida	Polychaeta	Sabellida	Serpulidae	Neodexiospira	Neodexiospira n. sp.							Y
 NBNORG0000033513	NBNSYS0000179971	Animalia	Annelida	Polychaeta	Sabellida	Serpulidae	Bushiella	Bushiella n. sp.							Y
+NBNORG0000096412	NHMSYS0020475465	Animalia	Annelida	Polychaeta	Spionida	Aberrantidae	Aberranta	"Aberranta ""species A"""							Y
 NBNORG0000032486	NBNSYS0000178721	Animalia	Annelida	Polychaeta	Spionida	Aberrantidae	Aberranta	Aberranta sp.							Y
 NBNORG0000033366	NBNSYS0000179785	Animalia	Annelida	Polychaeta	Spionida	Spionidae	Boccardia	Boccardia cf. polybranchia			(Haswell, 1885)				Y
 NBNORG0000096175	NHMSYS0020467837	Animalia	Annelida	Polychaeta	Spionida	Spionidae	Parascolelepis	Parascolelepis cf. gilchristi							Y
 NBNORG0000037015	NBNSYS0000184272	Animalia	Annelida	Polychaeta	Spionida	Spionidae	Prionospio	Minuspio cf. multibranchiata	Minuspio cfMultibranchiata	NBNSYS0000176491	(Berkeley, 1927)				Y
 NBNORG0000038669	NBNSYS0000186306	Animalia	Annelida	Polychaeta	Spionida	Spionidae	Pseudopolydora	Pseudopolydora cf. paucibranchiata	Pseudopolydora cf. pauchibranchiata;Pseudopolydora cfPaucibranchiata	NBNSYS0000177560;NBNSYS0000177561	(Okuda, 1937)				Y
 NBNORG0000039144	NBNSYS0000186929	Animalia	Annelida	Polychaeta	Spionida	Spionidae	Scolelepis	Scolelepis sp.							Y
+NBNORG0000093875	NHMSYS0020233843	Animalia	Annelida	Polychaeta	Terebellida	Cirratulidae	Aphelochaeta	"Aphelochaeta ""species A"""			NMBAQC				Y
+NBNORG0000093876	NHMSYS0020233844	Animalia	Annelida	Polychaeta	Terebellida	Cirratulidae	Aphelochaeta	"Aphelochaeta ""species B"""			NMBAQC				Y
+NBNORG0000093877	NHMSYS0020233845	Animalia	Annelida	Polychaeta	Terebellida	Cirratulidae	Aphelochaeta	"Aphelochaeta ""species C"""			NMBAQC				Y
+NBNORG0000093902	NHMSYS0020233872	Animalia	Annelida	Polychaeta	Terebellida	Cirratulidae	Caulleriella	"Caulleriella ""species A"""			NMBAQC				Y
+NBNORG0000093903	NHMSYS0020233873	Animalia	Annelida	Polychaeta	Terebellida	Cirratulidae	Caulleriella	"Caulleriella ""species B"""			NMBAQC				Y
+NBNORG0000093904	NHMSYS0020233874	Animalia	Annelida	Polychaeta	Terebellida	Cirratulidae	Caulleriella	"Caulleriella ""species C"""			NMBAQC				Y
+NBNORG0000093908	NHMSYS0020233878	Animalia	Annelida	Polychaeta	Terebellida	Cirratulidae	Chaetozone	"Chaetozone ""species C"""			NMBAQC				Y
+NBNORG0000093909	NHMSYS0020233879	Animalia	Annelida	Polychaeta	Terebellida	Cirratulidae	Chaetozone	"Chaetozone ""species D"""			NMBAQC				Y
+NBNORG0000094076	NHMSYS0020234074	Animalia	Annelida	Polychaeta	Terebellida	Cirratulidae	Tharyx	"Tharyx ""species A"""	Tharyx sp. A	NHMSYS0001388918	NMBAQC				Y
 NBNORG0000039780	NBNSYS0000187738	Animalia	Annelida	Polychaeta	Terebellida	Cirratulidae	Tharyx	Tharyx sp.							Y
+NBNORG0000093932	NHMSYS0020233912	Animalia	Annelida	Polychaeta	Terebellida	Flabelligeridae	Diplocirrus	"Diplocirrus ""species A"""			NMBAQC				Y
 NBNORG0000034653	NBNSYS0000181352	Animalia	Annelida	Polychaeta	Terebellida	Flabelligeridae	Diplocirrus	Diplocirrus n. sp							Y
 NBNORG0000034814	NBNSYS0000181537	Animalia	Annelida	Polychaeta	Terebellida	Ampharetidae	Eclysippe	Eclysippe cf. vanelli	Eclysippe cfVanelli	NBNSYS0000175075	(Fauvel, 1936)				Y
 NBNORG0000038357	NBNSYS0000185874	Animalia	Annelida	Polychaeta	Terebellida	Terebellidae	Polycirrus	Polycirrus n. sp.							Y
@@ -30,6 +49,7 @@ NBNORG0000036502	NBNSYS0000183666	Animalia	Annelida	Polychaeta	Terebellida	Tereb
 NBNORG0000038223	NBNSYS0000185711	Animalia	Annelida	Polychaeta	Terebellida	Terebellidae	Pista	Pista sp.							Y
 NBNORG0000037396	NBNSYS0000184727	Animalia	Annelida	Polychaeta		Capitellidae	Notomastus	Notomastus spp.							Y
 NBNORG0000034206	NBNSYS0000180813	Animalia	Annelida	Polychaeta		Cossuridae	Cossura	Cossura sp.							Y
+NBNORG0000093940	NHMSYS0020233921	Animalia	Annelida	Polychaeta		Maldanidae	Euclymene	"Euclymene ""species A"""			NMBAQC				Y
 NBNORG0000035108	NBNSYS0000181887	Animalia	Annelida	Polychaeta		Maldanidae	Euclymene	Euclymene sp.							Y
 NBNORG0000037406	NBNSYS0000184737	Animalia	Annelida	Polychaeta		Maldanidae	Notoproctus	Notoproctus sp.							Y
 NBNORG0000039145	NBNSYS0000186930	Animalia	Annelida	Polychaeta		Orbiniidae	Scoloplos	Scoloplos sp.							Y
@@ -73,16 +93,39 @@ NBNORG0000129918	NHMSYS0021241562	Animalia	Arthropoda	Collembola	Symphypleona	Ka
 NBNORG0000116569	NHMSYS0021125521	Animalia	Arthropoda	Collembola	Symphypleona	Katiannidae	Katianna	Katianna sp3.				Y	Y		
 NBNORG0000135078	NHMSYS0021723403	Animalia	Arthropoda	Collembola	Symphypleona	Katiannidae		Katiannidae gen.nov.1 sp.nov.1				Y	Y		
 NBNORG0000136229	NHMSYS0021808406	Animalia	Arthropoda	Collembola	Symphypleona	Katiannidae		Katiannidae gen.nov.1 sp.nov.2				Y	Y		
+NBNORG0000087401	NHMSYS0001716946	Animalia	Arthropoda	Insecta	Coleoptera	Scarabaeidae		Aphodius (Nialus) ?varians	Aphodius ?punctulatus;Aphodius ?varians;Aphodius bimaculatus;Aphodius varians;Nialus ?varians	NHMSYS0001716970;;NBNSYS0000141986;NBNSYS0000011510;	Duftschmid, 1805		Y		
+NBNORG0000087416	NHMSYS0001716962	Animalia	Arthropoda	Insecta	Coleoptera	Scarabaeidae		Aphodius (Subrinus) ?sturmi	Aphodius ?sturmi;Aphodius sturmi;Subrinus ?sturmi	;NBNSYS0000011507;	Harold, 1870		Y		
 NBNORG0000087742	NHMSYS0001717484	Animalia	Arthropoda	Insecta	Coleoptera	Cantharidae	Cantharis	Cantharis flavilabris (=nigra auctt.)	Cantharis fulvicollis;Cantharis nigra (=flavilabris);Telophorus flavilabris	NBNSYS0000143643;NHMSYS0001717488;NBNSYS0000157758	Fallén, 1807		Y		
 NBNORG0000092018	NHMSYS0021486737	Animalia	Arthropoda	Insecta	Coleoptera	Curculionidae	Ceutorhynchus	Ceutorhynchus obstrictus (=assimilis auctt.)	Ceutorhynchus assimilis;Ceutorhynchus obstrictus	NHMSYS0020151648;NHMSYS0020151659	(Marsham, 1802)		Y		
 NBNORG0000012072	NHMSYS0021578108	Animalia	Arthropoda	Insecta	Diptera	Mycetophilidae	Brevicornu	Brevicornu sp. near arcticum	Brachycampta arctica;Brevicornu arcticum	NBNSYS0100017719;NBNSYS0000011925			Y		
 NBNORG0000024057	NBNSYS0000036976	Animalia	Arthropoda	Insecta	Diptera	Mycetophilidae	Cordyla	Cordyla sp. nov. near murina	Cordyla pseudomurina	NHMSYS0020526971			Y		
+NBNORG0000011878	NBNSYS0000011711	Animalia	Arthropoda	Insecta	Diptera	Mycetophilidae	Mycomya	Mycomya sp. A					Y		
+NBNORG0000012151	NBNSYS0000012009	Animalia	Arthropoda	Insecta	Diptera	Mycetophilidae	Phronia	Phronia sp. nov.					Y		
 NBNORG0000096358	NHMSYS0020470427	Animalia	Arthropoda	Insecta	Diptera	Cecidomyiidae	Ozirhincus	Ozirhincus sp.					Y		
 NBNORG0000096435	NHMSYS0020475494	Animalia	Arthropoda	Insecta	Diptera	Chironomidae	Chironomus	Chironomus (Other)					Y	Y	
+NBNORG0000096440	NHMSYS0020475499	Animalia	Arthropoda	Insecta	Diptera	Chironomidae	Cladotanytarsus	Cladotanytarsus (Other)					Y		
+NBNORG0000062451	NHMSYS0000551644	Animalia	Arthropoda	Insecta	Diptera	Chironomidae	Cladotanytarsus	Cladotanytarsus nov. sp			Langton		Y	Y	
+NBNORG0000096442	NHMSYS0020475501	Animalia	Arthropoda	Insecta	Diptera	Chironomidae	Conchapelopia	Conchapelopia (Other)					Y	Y	
+NBNORG0000096491	NHMSYS0020475567	Animalia	Arthropoda	Insecta	Diptera	Chironomidae	Cricotopus	Paratrichocladius (Other)					Y		
+NBNORG0000052199	NHMSYS0000352623	Animalia	Arthropoda	Insecta	Diptera	Chironomidae	Cricotopus	Cricotopus (Cricotopus) sp. nov. near flavocinctus	Cricotopus sp. nov. near flavocinctus		(Langton)		Y	Y	
+NBNORG0000096457	NHMSYS0020475520	Animalia	Arthropoda	Insecta	Diptera	Chironomidae	Dicrotendipes	Dicrotendipes (Other)					Y	Y	
+NBNORG0000096462	NHMSYS0020475526	Animalia	Arthropoda	Insecta	Diptera	Chironomidae	Eukiefferiella	Eukiefferiella (Other)					Y		
 NBNORG0000041992	NBNSYS0100003165	Animalia	Arthropoda	Insecta	Diptera	Chironomidae	Euryhapsis	Euryhapsis ? fuscipropes	Euryhapsis fuscipropes	NBNSYS0100020159	Saether & Wang, 1992		Y		
 NBNORG0000018859	NBNSYS0000027506	Animalia	Arthropoda	Insecta	Diptera	Chironomidae	Limnophyes	Limnophyes sp. near globifer			Brundin		Y		
 NBNORG0000130208	NHMSYS0021262075	Animalia	Arthropoda	Insecta	Diptera	Chironomidae	Macropelopia	Macropelopia spec. Norwegen			sensu Fittkau 1962		Y		
+NBNORG0000096477	NHMSYS0020475549	Animalia	Arthropoda	Insecta	Diptera	Chironomidae	Micropsectra	Micropsectra (Other)					Y		
+NBNORG0000096478	NHMSYS0020475550	Animalia	Arthropoda	Insecta	Diptera	Chironomidae	Nanocladius	Nanocladius (Other)					Y		
+NBNORG0000096481	NHMSYS0020475554	Animalia	Arthropoda	Insecta	Diptera	Chironomidae	Neozavrelia	Neozavrelia (Other)					Y		
+NBNORG0000096486	NHMSYS0020475561	Animalia	Arthropoda	Insecta	Diptera	Chironomidae	Orthocladius	Orthocladius (Orthocladius) (Other)	Orthocladius (Other)				Y	Y	
 NBNORG0000018804	NBNSYS0000027440	Animalia	Arthropoda	Insecta	Diptera	Chironomidae	Orthocladius	Orthocladius species A.					Y	Y	
+NBNORG0000096487	NHMSYS0020475562	Animalia	Arthropoda	Insecta	Diptera	Chironomidae	Parachironomus	Parachironomus (Other)					Y	Y	
+NBNORG0000096489	NHMSYS0020475565	Animalia	Arthropoda	Insecta	Diptera	Chironomidae	Parakiefferiella	Parakiefferiella (Other)					Y		
+NBNORG0000096490	NHMSYS0020475566	Animalia	Arthropoda	Insecta	Diptera	Chironomidae	Paratanytarsus	Paratanytarsus (Other)					Y		
+NBNORG0000096498	NHMSYS0020475576	Animalia	Arthropoda	Insecta	Diptera	Chironomidae	Polypedilum	Polypedilum (Other)					Y	Y	
+NBNORG0000096505	NHMSYS0020475583	Animalia	Arthropoda	Insecta	Diptera	Chironomidae	Psectrocladius	Psectrocladius (Other)					Y	Y	
+NBNORG0000096515	NHMSYS0020475596	Animalia	Arthropoda	Insecta	Diptera	Chironomidae	Tanypus	Tanypus (Other)					Y		
+NBNORG0000103039	NHMSYS0020734199	Animalia	Arthropoda	Insecta	Diptera	Tabanidae	Haematopota	Haematopota sp. A					Y		
+NBNORG0000103040	NHMSYS0020734200	Animalia	Arthropoda	Insecta	Diptera	Tabanidae	Haematopota	Haematopota sp. B					Y		
 NBNORG0000115838	NHMSYS0021109896	Animalia	Arthropoda	Insecta	Diptera	Tephritidae	Anastrepha	Anastrepha species indet				Y	Y		
 NBNORG0000012945	NBNSYS0000012927	Animalia	Arthropoda	Insecta	Diptera	Tephritidae	Tephritis	Tephritis sp. nov.					Y		
 NBNORG0000019994	NBNSYS0000029022	Animalia	Arthropoda	Insecta	Diptera	Lauxaniidae	Lyciella	Lyciella sp. nov.					Y		
@@ -99,7 +142,10 @@ NBNORG0000096364	NHMSYS0020470456	Animalia	Arthropoda	Insecta	Hemiptera	Phylloxe
 NBNORG0000127766	NHMSYS0021220547	Animalia	Arthropoda	Insecta	Hymenoptera	Trichogrammatidae	Megaphragma	Megaphragma sp. indet.					Y		
 NBNORG0000126551	NHMSYS0021207191	Animalia	Arthropoda	Insecta	Hymenoptera	Figitidae	Trichoplasta	Trichoplasta sp.			indet. A		Y		
 NBNORG0000127805	NHMSYS0021220924	Animalia	Arthropoda	Insecta	Hymenoptera	Ichneumonidae	Agrypon	Agrypon sp. H					Y		
+NBNORG0000073039	NHMSYS0000897342	Animalia	Arthropoda	Insecta	Hymenoptera	Ichneumonidae	Aclastus	Aclastus sp.A			Horstman, in prep.		Y		
+NBNORG0000073040	NHMSYS0000897343	Animalia	Arthropoda	Insecta	Hymenoptera	Ichneumonidae	Aclastus	Aclastus sp.B			Horstman, in prep.		Y		
 NBNORG0000127952	NHMSYS0021221806	Animalia	Arthropoda	Insecta	Hymenoptera	Ichneumonidae	Odontoneura	Odontoneura sp. A					Y		
+NBNORG0000074689	NHMSYS0000900563	Animalia	Arthropoda	Insecta	Hymenoptera	Ichneumonidae	Oecotelma	Oecotelma sp.indet					Y		
 NBNORG0000127965	NHMSYS0021221884	Animalia	Arthropoda	Insecta	Hymenoptera	Ichneumonidae	Sulcarius	Sulcarius sp. A					Y		
 NBNORG0000127974	NHMSYS0021221938	Animalia	Arthropoda	Insecta	Hymenoptera	Ichneumonidae	Zoophthorus	Zoophthorus sp. A					Y		
 NBNORG0000128102	NHMSYS0021222706	Animalia	Arthropoda	Insecta	Hymenoptera	Ichneumonidae	Netelia	Netelia sp. A					Y		
@@ -138,9 +184,13 @@ NBNORG0000115919	NHMSYS0021109684	Animalia	Chordata	Mammalia	Rodentia	Sciuridae	
 NBNORG0000037679	NBNSYS0000185051	Animalia	Cnidaria	Anthozoa	Ceriantharia	Cerianthidae	Pachycerianthus	Pachycerianthus indet.							Y
 NBNORG0000103761	NHMSYS0020752205	Animalia	Cnidaria	Hydrozoa	Leptothecata	Kirchenpaueriidae	Kirchenpaueria	Kirchenpaueria ? pinnata			(Linnaeus, 1758)				Y
 NBNORG0000034310	NBNSYS0000180935	Animalia	Cnidaria	Hydrozoa	Leptothecata	Campanulinidae	Cuspidella	Cuspidella spp.							Y
+NBNORG0000029397	NBNSYS0000173783	Animalia	Echinodermata	Ophiuroidea	Ophiurida	Amphiuridae	Amphiura	Amphiura spp.							Y
 NBNORG0000050867	NHMSYS0000315716	Animalia	Kinorhyncha		Homalorhagida	Pycnophyidae	Leptodemus	Leptodemus cf. serratus			Zelinka, 1928				Y
 NBNORG0000134967	NHMSYS0021717233	Animalia	Mollusca	Gastropoda	Architaenioglossa	Ampullariidae	Pomacea	Pomacea sp.				Y		Y	
 NBNORG0000009588	NBNSYS0000006609	Animalia	Mollusca	Gastropoda	Littorinimorpha	Hydrobiidae	Hydrobia	Hydrobia ventrosa seg.			(Montagu), seg.		Y		Y
+NBNORG0000063452	NHMSYS0000561613	Animalia	Mollusca	Gastropoda	Neogastropoda	Raphitomidae	Lusitanops	Lusitanops sp. A							Y
+NBNORG0000063139	NHMSYS0000561196	Animalia	Mollusca	Gastropoda	Neogastropoda	Raphitomidae	Neopleurotomoides	Neopleurotomoides sp. A							Y
+NBNORG0000063140	NHMSYS0000561197	Animalia	Mollusca	Gastropoda	Neogastropoda	Raphitomidae	Neopleurotomoides	Neopleurotomoides sp. B							Y
 NBNORG0000116343	NHMSYS0021123627	Animalia	Mollusca	Gastropoda		Rhodopidae	Rhodope	Rhodope cf. veranii							Y
 NBNORG0000009595	NBNSYS0000006629	Animalia	Mollusca	Gastropoda		Physidae	Physa	Physa sp. (not fontinalis)			(Say)		Y		
 NBNORG0000035078	NBNSYS0000181852	Animalia	Mollusca	Gastropoda	Nudibranchia	Eubranchidae	Eubranchus	Eubranchus sp.							Y
@@ -227,11 +277,14 @@ NBNORG0000133647	NHMSYS0021554014	Chromista	Oomycota	Peronosporea	Peronosporales
 NBNORG0000133648	NHMSYS0021554019	Chromista	Oomycota	Peronosporea	Peronosporales	Peronosporaceae	Plasmopara	Plasmopara nivea s. str.	Plasmopara aegopodii	BMSSYS0000014652	(Unger) J. Schröt.		Y		
 NBNORG0000082799	NHMSYS0021576813	Chromista	Oomycota	Peronosporea	Peronosporales	Peronosporaceae	Plasmopara	Plasmopara pusilla s. lat.	Peronospora pusilla;Plasmopara pusilla	BMSSYS0000013220;NHMSYS0001493933			Y		
 NBNORG0000133651	NHMSYS0021554034	Chromista	Oomycota	Peronosporea	Peronosporales	Peronosporaceae	Plasmopara	Plasmopara pusilla s. str.			(de Bary) J. Schröt.		Y		
+NBNORG0000106767	NHMSYS0020954797	Chromista		Bacillariophyceae	Achnanthales	Achnanthaceae	Achnanthes	Achnanthes [cf. engelbrechtii]							
+NBNORG0000106971	NHMSYS0020955028	Chromista		Bacillariophyceae	Cymbellales	Gomphonemataceae	Gomphonema	"Gomphonema ""intricatum"" type"							
 NBNORG0000044130	NBNSYS0100012157	Chromista		Bacillariophyceae	Cymbellales	Gomphonemataceae	Gomphonema	Gomphonema (Other)			M Kelly				
 NBNORG0000043985	NBNSYS0100011299	Chromista		Bacillariophyceae	Fragilariales	Fragilariaceae	Diatoma	Diatoma (Other)			M Kelly				
 NBNORG0000044830	NBNSYS0100016044	Chromista		Bacillariophyceae	Fragilariales	Fragilariaceae	Synedra	Synedra (Other)			M Kelly				
 NBNORG0000116784	NHMSYS0021130883	Chromista		Bacillariophyceae	Leptocylindrales	Leptocylindraceae	Leptocylindrus	Leptocylindrus cf. danicus							Y
 NBNORG0000116785	NHMSYS0021130889	Chromista		Bacillariophyceae	Leptocylindrales	Leptocylindraceae	Leptocylindrus	Leptocylindrus cf. minimus							Y
+NBNORG0000107060	NHMSYS0020955123	Chromista		Bacillariophyceae	Naviculales	Naviculaceae	Navicula	Navicula [cf. seminulum]							
 NBNORG0000004449	NHMSYS0021843366	Fungi	Ascomycota	Dothideomycetes	Pleosporales	Phaeosphaeriaceae	Didymocyrtis	Didymocyrtis epiphyscia s. lat.	Didymocyrtis epiphyscia;Didymocyrtis epiphysica;Phoma physciicola	BMSSYS0000044964;BMSSYS0000533730;BMSSYS0000014013			Y		
 NBNORG0000136824	NHMSYS0021843371	Fungi	Ascomycota	Dothideomycetes	Pleosporales	Phaeosphaeriaceae	Didymocyrtis	Didymocyrtis epiphyscia s. str.			Ertz & Diederich		Y		
 NBNORG0000132555	NHMSYS0021351083	Fungi	Ascomycota	Dothideomycetes			Septonema	Septonema sp. nov.					Y	Y	
@@ -293,6 +346,7 @@ NBNORG0000014404	NHMSYS0021576818	Fungi	Ascomycota	Leotiomycetes	Helotiales	Erys
 NBNORG0000133666	NHMSYS0021554109	Fungi	Ascomycota	Leotiomycetes	Helotiales	Erysiphaceae	Podosphaera	Podosphaera tridactyla s. str.			(Wallr.) de Bary		Y		
 NBNORG0000136359	NBNSYS0000017176	Fungi	Ascomycota	Leotiomycetes	Helotiales	Tricladiaceae	Cudoniella	Cudoniella clavus var. grandis			(Boud.) Dennis		Y		
 NBNORG0000014811	NBNSYS0000017521	Fungi	Ascomycota	Leotiomycetes	Leotiales	Leotiaceae	Microglossum	Microglossum olivaceum agg.	Geoglossum olivaceum;Leptoglossum olivaceum;Mitrula olivacea	BMSSYS0000007143;NHMSYS0001487451;BMSSYS0000011371			Y		
+NBNORG0000135350	BMSSYS0000042636	Fungi	Ascomycota	Orbiliomycetes	Orbiliales	Orbiliaceae	Arthrobotrys	Arthrobotrys cladodes var. macroides			Drechsler		Y		
 NBNORG0000091500	NHMSYS0020103100	Fungi	Ascomycota		Thelocarpales	Thelocarpaceae	Thelocarpon	Thelocarpon epibolum s. str.	Thelocarpon epibolum var. epibolum;Thelocarpon epibolum var. epithallinum	NHMSYS0001499647;NBNSYS0000019078	Nyl.		Y		
 NBNORG0000091187	NHMSYS0020039553	Fungi	Ascomycota					Lichen (unidentified)					Y		
 NBNORG0000138516	NHMSYS0021937894	Fungi	Basidiomycota	Agaricomycetes	Agaricales	Clavariaceae	Clavaria	Clavaria zollingeri s. lat.	Clavaria amethystina;Clavaria zollingeri	NHMSYS0001477753;NBNSYS0000020751			Y		
@@ -310,6 +364,7 @@ NBNORG0000002687	NHMSYS0021646085	Fungi	Basidiomycota	Agaricomycetes	Agaricales	
 NBNORG0000136583	NHMSYS0021835621	Fungi	Basidiomycota	Agaricomycetes	Agaricales	Hymenogastraceae	Hebeloma	Hebeloma crustuliniforme s. str.			(Bull.) Quél.		Y		
 NBNORG0000123072	NHMSYS0021762100	Fungi	Basidiomycota	Agaricomycetes	Agaricales	Inocybaceae	Pseudosperma	Pseudosperma rimosum s. lat.	Inocybe fastigiata;Inocybe rimosa s. lat.	NHMSYS0001485348;BMSSYS0000046680			Y		
 NBNORG0000134325	NHMSYS0021623224	Fungi	Basidiomycota	Agaricomycetes	Polyporales	Polyporaceae	Ganoderma	Ganoderma australe s. str.			(Fr.) Pat.	Y	Y		
+NBNORG0000135181	BMSSYS0000016492	Fungi	Basidiomycota	Agaricomycetes	Russulales	Russulaceae	Russula	Russula anthracina var. carneifolia			Romagn.		Y		
 NBNORG0000136412	NHMSYS0021832661	Fungi	Basidiomycota	Agaricomycetes	Thelephorales	Thelephoraceae	Phellodon	Phellodon niger s. str.			(Fr.) P. Karst.		Y		
 NBNORG0000136163	NHMSYS0021795107	Fungi	Basidiomycota	Tremellomycetes	Filobasidiales	Filobasidiaceae	Zyzygomyces	Zyzygomyces polyblastidii s. lat.			Diederich, Flakus, Etayo & Rodr. Flakus		Y		
 NBNORG0000076026	NHMSYS0021832721	Fungi	Basidiomycota	Pucciniomycetes	Pucciniales	Coleosporiaceae	Coleosporium	Coleosporium tussilaginis s. lat.	Caeoma compransor;Caeoma crustaceum;Caeoma rhinanthacearum;Caeoma spinulosum;Coleosporium rhinanthacearum;Coleosporium sonchi-arvensis;Coleosporium synantherarum;Coleosporium tropaeoli;Coleosporium tussilaginis;Peridermium acerifolium;Peridermium acicola;Peridermium acicolum;Peridermium oblongisporium;Peridermium pinicola;Peridermium plowrightii;Puccinia sonchi-arvensis;Trichobasis cichoracearum	NHMSYS0001476436;BMSSYS0000043263;NHMSYS0001476453;NHMSYS0001476454;NHMSYS0001478200;NHMSYS0001478203;NHMSYS0001478205;NHMSYS0001478206;BMSSYS0000043968;NHMSYS0001492179;BMSSYS0000049071;NHMSYS0001492180;NHMSYS0021789075;NHMSYS0001492186;NHMSYS0001492187;NHMSYS0001495734;BMSSYS0000051989			Y		

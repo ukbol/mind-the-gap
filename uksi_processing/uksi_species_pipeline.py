@@ -369,10 +369,13 @@ def process_species():
     logger.log(f"  Built child index for {len(children_by_parent_tvk)} parent taxa")
     
     # First pass: identify all valid species (for conflict checking)
+    # Note: We do NOT filter on REDUNDANT_FLAG here because species marked redundant
+    # in TAXA may still be the recommended name that synonyms point to in NAMES.
+    # Analysis showed 4,669 species are redundant in TAXA but valid in NAMES.
     logger.log("Identifying valid species for conflict checking...")
     valid_species_tvks = {}
     for org_key, taxon in taxa_by_org_key.items():
-        if taxon['REDUNDANT_FLAG'] == '' and taxon['RANK'] == SPECIES_RANK:
+        if taxon['RANK'] == SPECIES_RANK:
             valid_species_tvks[taxon['TAXON_VERSION_KEY']] = taxon
     logger.log(f"  Found {len(valid_species_tvks)} valid species in TAXA")
     
@@ -406,7 +409,6 @@ def process_species():
     
     species_count = 0
     invalid_count = 0
-    skipped_redundant = 0
     skipped_rank = 0
     skipped_kingdom = 0
     excluded_identical_count = 0
@@ -421,12 +423,7 @@ def process_species():
         invalid_writer.writeheader()
         
         for org_key, taxon in taxa_by_org_key.items():
-            # Filter: not redundant
-            if taxon['REDUNDANT_FLAG'] != '':
-                skipped_redundant += 1
-                continue
-            
-            # Filter: species rank only
+            # Filter: species rank only (no REDUNDANT_FLAG filter - see README)
             if taxon['RANK'] != SPECIES_RANK:
                 skipped_rank += 1
                 continue
@@ -536,7 +533,6 @@ def process_species():
     logger.log("=" * 60)
     logger.log(f"Valid species written: {species_count}")
     logger.log(f"Invalid species written: {invalid_count}")
-    logger.log(f"Skipped (redundant): {skipped_redundant}")
     logger.log(f"Skipped (not species rank): {skipped_rank}")
     logger.log(f"Skipped (not target kingdom): {skipped_kingdom}")
     logger.log(f"Excluded identical synonyms: {excluded_identical_count}")

@@ -1,10 +1,10 @@
 UKSI Species Extraction Pipeline Log
-Generated: 2026-01-24T17:05:09.371117
+Generated: 2026-01-24T17:33:25.956492
 ================================================================================
 
 PROCESSING LOG
 ----------------------------------------
-Pipeline started: 2026-01-24T17:05:05.071357
+Pipeline started: 2026-01-24T17:33:20.304190
 Input TAXA: C:\_claude_files\projects\ukbol_gaplist\uksi\uksi_20251203a_input_taxa.tsv
 Input NAMES: C:\_claude_files\projects\ukbol_gaplist\uksi\uksi_20251203a_input_names.tsv
 Output valid: C:\_claude_files\projects\ukbol_gaplist\uksi\uksi_valid_species_output.tsv
@@ -15,7 +15,7 @@ Loading TAXA table...
 Building child taxa index by PARENT_TVK...
   Built child index for 32536 parent taxa
 Identifying valid species for conflict checking...
-  Found 74853 valid species in TAXA
+  Found 79522 valid species in TAXA
 Loading NAMES table for synonyms...
   Built synonym index for 50741 valid taxa
 
@@ -31,19 +31,18 @@ Processing species...
 ============================================================
 PROCESSING COMPLETE
 ============================================================
-Valid species written: 73447
-Invalid species written: 334
-Skipped (redundant): 11324
-Skipped (not species rank): 38220
-Skipped (not target kingdom): 1072
-Excluded identical synonyms: 17511
+Valid species written: 78046
+Invalid species written: 389
+Skipped (not species rank): 44875
+Skipped (not target kingdom): 1087
+Excluded identical synonyms: 17974
 Valid-as-synonym conflicts: 0
 Output valid file: C:\_claude_files\projects\ukbol_gaplist\uksi\uksi_valid_species_output.tsv
 Output invalid file: C:\_claude_files\projects\ukbol_gaplist\uksi\uksi_invalid_species_output.tsv
 Log file: C:\_claude_files\projects\ukbol_gaplist\uksi\uksi_pipeline_log.txt
 
 ================================================================================
-EXCLUDED IDENTICAL SYNONYMS (17511 entries)
+EXCLUDED IDENTICAL SYNONYMS (17974 entries)
 ----------------------------------------
 These synonyms were excluded because the name matches the valid species name.
 
@@ -248,7 +247,7 @@ Species: Schistomeringos rudolphi (TVK: NHMSYS0021048784)
 Species: Eunice pennata (TVK: NHMSYS0021048787)
   Excluded synonym: Eunice pennata (TVK: NBNSYS0000175270)
 
-... and 17411 more
+... and 17874 more
 
 ================================================================================
 VALID NAME ALSO LISTED AS SYNONYM (0 entries)
@@ -258,21 +257,41 @@ The valid form is kept, and the synonym reference is removed.
 This may indicate a database issue that needs manual review.
 
 ================================================================================
-INVALID SPECIES FILTERED (334 entries)
+INVALID SPECIES FILTERED (389 entries)
 ----------------------------------------
 These species were moved to the invalid output file due to indeterminate names.
 
-Reason: Contains '(Other)' (4 species)
+Reason: Contains '"' (21 species)
+  - Opisthodonta "species A"
+  - Syllis "species A"
+  - Syllis "species D"
+  - Syllis "species E"
+  - Syllis "species F"
+  - Syllis "species G"
+  - Syllis "species H"
+  - Ehlersia "species A"
+  - Aberranta "species A"
+  - Aphelochaeta "species A"
+  ... and 11 more
+
+Reason: Contains '(Other)' (19 species)
   - Chironomus (Other)
-  - Gomphonema (Other)
-  - Diatoma (Other)
-  - Synedra (Other)
+  - Cladotanytarsus (Other)
+  - Conchapelopia (Other)
+  - Paratrichocladius (Other)
+  - Dicrotendipes (Other)
+  - Eukiefferiella (Other)
+  - Micropsectra (Other)
+  - Nanocladius (Other)
+  - Neozavrelia (Other)
+  - Orthocladius (Orthocladius) (Other)
+  ... and 9 more
 
 Reason: Contains '(unidentified)' (2 species)
   - Lichen (unidentified)
   - Fungus (unidentified)
 
-Reason: Contains '.' (297 species)
+Reason: Contains '.' (314 species)
   - Parougia spp.
   - Schistomeringos spp.
   - Kefersteinia sp.
@@ -283,20 +302,20 @@ Reason: Contains '.' (297 species)
   - Ehlersia sp.
   - Nephtys n. sp.
   - Eulalia n. sp.
-  ... and 287 more
+  ... and 304 more
 
-Reason: Contains '?' (27 species)
+Reason: Contains '?' (29 species)
   - Goniadella ? gracilis
   - Amerobelba ?decedens
   - Apseudes ? vicinus
   - Pseudotanais ? lilljeborgi
+  - Aphodius (Nialus) ?varians
+  - Aphodius (Subrinus) ?sturmi
   - Euryhapsis ? fuscipropes
   - Musca ?? osiris
   - Platygaster ?anopediana
   - Platygaster ?leucanthemi
-  - Platygaster ?lineata
-  - Lepidion ? schmidti
-  ... and 17 more
+  ... and 19 more
 
 Reason: Contains 'indet' (4 species)
   - Anastrepha species indet
