@@ -354,11 +354,13 @@ def process_species():
     logger.log(f"  Loaded {len(taxa_by_org_key)} taxa records")
     
     # Build index of child taxa by PARENT_TVK (for subspecies/varieties/forms)
+    # Note: We include redundant taxa here because even if an infraspecific taxon
+    # is marked redundant, it should still appear as a synonym of the valid parent species
     logger.log("Building child taxa index by PARENT_TVK...")
     children_by_parent_tvk = defaultdict(list)
     for org_key, taxon in taxa_by_org_key.items():
         parent_tvk = taxon.get('PARENT_TVK', '')
-        if parent_tvk and taxon['REDUNDANT_FLAG'] == '':
+        if parent_tvk:
             children_by_parent_tvk[parent_tvk].append({
                 'name': taxon['TAXON_NAME'],
                 'tvk': taxon['TAXON_VERSION_KEY'],
