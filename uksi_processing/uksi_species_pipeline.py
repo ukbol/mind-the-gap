@@ -379,6 +379,7 @@ def process_species():
         'genus',
         'species',
         'synonyms',
+        'synonym_tvk_list',
         'recommended_name_authority',
         'non_native_flag',
         'terrestrial_freshwater_flag',
@@ -434,27 +435,40 @@ def process_species():
             synonym_entries = synonyms_by_rec_tvk.get(tvk, [])
             
             # Filter synonyms: exclude those identical to valid name
+            # Store as list of (name, tvk) tuples
             filtered_synonyms = []
             for syn_entry in synonym_entries:
                 syn_name = syn_entry['name']
+                syn_tvk = syn_entry['tvk']
                 if syn_name == species_name:
                     # Log and exclude
-                    logger.log_excluded_identical_synonym(species_name, tvk, syn_name, syn_entry['tvk'])
+                    logger.log_excluded_identical_synonym(species_name, tvk, syn_name, syn_tvk)
                     excluded_identical_count += 1
                 else:
-                    filtered_synonyms.append(syn_name)
+                    filtered_synonyms.append((syn_name, syn_tvk))
             
-            # Add subgenus-derived synonyms if applicable
+            # Add subgenus-derived synonyms if applicable (these have no TVK)
             subgenus_synonyms = extract_subgenus_synonyms(species_name)
             for sub_syn in subgenus_synonyms:
-                if sub_syn not in filtered_synonyms and sub_syn != species_name:
-                    filtered_synonyms.append(sub_syn)
+                # Check if this name is already in the list
+                existing_names = [s[0] for s in filtered_synonyms]
+                if sub_syn not in existing_names and sub_syn != species_name:
+                    filtered_synonyms.append((sub_syn, ''))  # No TVK for derived synonyms
             
-            # Remove duplicates and sort
-            filtered_synonyms = sorted(set(filtered_synonyms))
+            # Remove duplicates by name, keeping first occurrence (which has TVK if available)
+            seen_names = set()
+            unique_synonyms = []
+            for syn_name, syn_tvk in filtered_synonyms:
+                if syn_name not in seen_names:
+                    seen_names.add(syn_name)
+                    unique_synonyms.append((syn_name, syn_tvk))
+            
+            # Sort by name
+            unique_synonyms.sort(key=lambda x: x[0])
             
             # Format synonyms: semicolon-delimited, no spaces around semicolon
-            synonyms_str = ';'.join(filtered_synonyms)
+            synonyms_str = ';'.join(s[0] for s in unique_synonyms)
+            synonym_tvks_str = ';'.join(s[1] for s in unique_synonyms)
             
             # Combine Phylum/Division
             phylum_division = hierarchy['Phylum'] if hierarchy['Phylum'] else hierarchy['Division']
@@ -471,6 +485,7 @@ def process_species():
                 'genus': hierarchy['Genus'],
                 'species': species_name,
                 'synonyms': synonyms_str,
+                'synonym_tvk_list': synonym_tvks_str,
                 'recommended_name_authority': taxon['TAXON_AUTHORITY'],
                 'non_native_flag': taxon['NON_NATIVE_FLAG'],
                 'terrestrial_freshwater_flag': taxon['TERRESTRIAL_FRESHWATER_FLAG'],

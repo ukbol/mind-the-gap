@@ -1,10 +1,10 @@
 UKSI Species Extraction Pipeline Log
-Generated: 2026-01-24T11:54:33.974095
+Generated: 2026-01-24T15:37:52.750274
 ================================================================================
 
 PROCESSING LOG
 ----------------------------------------
-Pipeline started: 2026-01-24T11:54:27.584462
+Pipeline started: 2026-01-24T15:37:48.100671
 Input TAXA: C:\_claude_files\projects\ukbol_gaplist\uksi\uksi_20251203a_input_taxa.tsv
 Input NAMES: C:\_claude_files\projects\ukbol_gaplist\uksi\uksi_20251203a_input_names.tsv
 Output valid: C:\_claude_files\projects\ukbol_gaplist\uksi\uksi_valid_species_output.tsv
