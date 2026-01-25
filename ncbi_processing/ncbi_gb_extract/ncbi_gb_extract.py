@@ -159,6 +159,31 @@ def find_target_cds_features(record, target_gene: str) -> List[SeqFeature]:
     return matching_cds
 
 
+def find_target_gene_features(record, target_gene: str) -> List[SeqFeature]:
+    """
+    Find all gene features matching the target gene name (case-insensitive).
+    
+    Used as fallback when no CDS features are found.
+    
+    Args:
+        record: BioPython SeqRecord
+        target_gene: Gene name to search for
+        
+    Returns:
+        List of matching gene features
+    """
+    target_lower = target_gene.lower()
+    matching_genes = []
+    
+    for feature in record.features:
+        if feature.type == 'gene':
+            gene_name = feature.qualifiers.get('gene', [''])[0]
+            if gene_name.lower() == target_lower:
+                matching_genes.append(feature)
+    
+    return matching_genes
+
+
 def find_source_feature(record) -> Optional[SeqFeature]:
     """
     Find the source feature in a record.
@@ -203,9 +228,12 @@ def extract_qualifiers(feature: SeqFeature, exclude_keys: Set[str] = None) -> Di
 
 
 def process_record(record, target_gene: str, all_columns: Set[str], 
-                   verbose: bool = False) -> Tuple[Optional[Dict[str, str]], str]:
+                   verbose: bool = False) -> Tuple[List[Dict[str, str]], str]:
     """
     Process a single GenBank record and extract data for target gene.
+    
+    Returns one row per CDS feature found (or gene feature if CDS not found).
+    If multiple features are found, each row is marked as a duplicate.
     
     Args:
         record: BioPython SeqRecord
@@ -214,47 +242,59 @@ def process_record(record, target_gene: str, all_columns: Set[str],
         verbose: Print warnings
         
     Returns:
-        Tuple of (data dict or None if skipped, status message)
+        Tuple of (list of data dicts, status message)
     """
     accession = record.id
     
     # Find matching CDS features
-    cds_features = find_target_cds_features(record, target_gene)
+    target_features = find_target_cds_features(record, target_gene)
+    feature_type_used = 'CDS'
     
-    if not cds_features:
-        return None, f"SKIPPED: {accession} - no CDS feature for gene '{target_gene}'"
+    # Fall back to gene features if no CDS found
+    if not target_features:
+        target_features = find_target_gene_features(record, target_gene)
+        feature_type_used = 'gene'
+        if target_features and verbose:
+            print(f"INFO: {accession} - no CDS feature, falling back to gene feature", 
+                  file=sys.stderr)
     
-    # Warn if multiple CDS features found
-    if len(cds_features) > 1 and verbose:
-        msg = f"WARNING: {accession} - found {len(cds_features)} CDS features for gene '{target_gene}', consolidating"
-        print(msg, file=sys.stderr)
+    if not target_features:
+        return [], f"SKIPPED: {accession} - no CDS or gene feature for '{target_gene}'"
     
-    # Initialize result with header information
-    result = {}
+    # Determine if we have multiple features (duplicates)
+    num_features = len(target_features)
+    is_duplicate = num_features > 1
+    
+    if is_duplicate and verbose:
+        print(f"INFO: {accession} - found {num_features} {feature_type_used} features for gene '{target_gene}', creating {num_features} output rows", 
+              file=sys.stderr)
+    
+    # Build base record data (shared across all features)
+    base_result = {}
     
     # LOCUS information
     locus_data = extract_locus_info(record)
-    result.update(locus_data)
+    base_result.update(locus_data)
     
     # Basic header fields
-    result['definition'] = record.description
-    result['accession'] = record.annotations.get('accessions', [accession])[0] if record.annotations.get('accessions') else accession
-    result['version'] = record.annotations.get('sequence_version', '')
-    if result['version']:
-        result['version'] = f"{result['accession']}.{result['version']}"
+    base_result['definition'] = record.description
+    base_result['accession'] = record.annotations.get('accessions', [accession])[0] if record.annotations.get('accessions') else accession
+    base_result['version'] = record.annotations.get('sequence_version', '')
+    if base_result['version']:
+        base_result['version'] = f"{base_result['accession']}.{base_result['version']}"
     else:
-        result['version'] = record.id
-    result['keywords'] = '; '.join(record.annotations.get('keywords', []))
-    result['organism'] = record.annotations.get('organism', '')
-    result['taxonomy'] = get_organism_lineage(record)
+        base_result['version'] = record.id
+    base_result['keywords'] = '; '.join(record.annotations.get('keywords', []))
+    base_result['organism'] = record.annotations.get('organism', '')
+    base_result['taxonomy'] = get_organism_lineage(record)
     
     # Reference information
     ref_info = get_reference_info(record)
-    result.update(ref_info)
+    base_result.update(ref_info)
     
     # Comment/structured comment
     comment = record.annotations.get('comment', '')
-    result['comment'] = comment
+    base_result['comment'] = comment
     
     # Source feature qualifiers
     source_feature = find_source_feature(record)
@@ -262,37 +302,48 @@ def process_record(record, target_gene: str, all_columns: Set[str],
         source_quals = extract_qualifiers(source_feature)
         for key, value in source_quals.items():
             col_name = f"source_{key}"
-            result[col_name] = value
+            base_result[col_name] = value
             all_columns.add(col_name)
     
     # Full sequence for extraction
     full_sequence = record.seq
     
-    # Process CDS features
-    for i, cds in enumerate(cds_features):
-        suffix = '' if i == 0 else f'_{i+1}'
+    # Process each target feature into a separate row
+    results = []
+    for feature_idx, feature in enumerate(target_features):
+        result = base_result.copy()
         
-        # CDS location
-        col_name = f'cds_location{suffix}'
-        result[col_name] = format_location(cds.location)
-        all_columns.add(col_name)
+        # Add duplicate indicator column
+        result['is_duplicate'] = 'TRUE' if is_duplicate else 'FALSE'
+        result['feature_index'] = str(feature_idx + 1)
+        result['feature_count'] = str(num_features)
+        result['feature_type'] = feature_type_used
+        all_columns.add('is_duplicate')
+        all_columns.add('feature_index')
+        all_columns.add('feature_count')
+        all_columns.add('feature_type')
         
-        # CDS qualifiers (exclude translation as we're extracting nucleotides)
-        cds_quals = extract_qualifiers(cds, exclude_keys={'translation'})
-        for key, value in cds_quals.items():
-            col_name = f'cds_{key}{suffix}'
+        # Feature location
+        result['cds_location'] = format_location(feature.location)
+        all_columns.add('cds_location')
+        
+        # Feature qualifiers (exclude translation as we're extracting nucleotides)
+        feature_quals = extract_qualifiers(feature, exclude_keys={'translation'})
+        for key, value in feature_quals.items():
+            col_name = f'cds_{key}'
             result[col_name] = value
             all_columns.add(col_name)
         
         # Extract nucleotide sequence
-        col_name = f'nucleotide_sequence{suffix}'
-        result[col_name] = extract_sequence_region(full_sequence, cds.location)
-        all_columns.add(col_name)
+        result['nucleotide_sequence'] = extract_sequence_region(full_sequence, feature.location)
+        all_columns.add('nucleotide_sequence')
+        
+        # Update all_columns with any new keys
+        all_columns.update(result.keys())
+        
+        results.append(result)
     
-    # Update all_columns with any new keys
-    all_columns.update(result.keys())
-    
-    return result, f"PROCESSED: {accession}"
+    return results, f"PROCESSED: {accession} ({num_features} {feature_type_used} feature(s))"
 
 
 def get_ordered_columns(all_columns: Set[str]) -> List[str]:
@@ -312,21 +363,19 @@ def get_ordered_columns(all_columns: Set[str]) -> List[str]:
         'definition', 'accession', 'version', 'keywords',
         'organism', 'taxonomy',
         'ref_authors', 'ref_title', 'ref_journal',
-        'comment'
+        'comment',
+        # Duplicate/feature tracking columns
+        'is_duplicate', 'feature_index', 'feature_count', 'feature_type'
     ]
     
     # Source columns
     source_cols = sorted([c for c in all_columns if c.startswith('source_')])
     
-    # CDS columns (primary)
-    cds_primary = sorted([c for c in all_columns if c.startswith('cds_') and not re.search(r'_\d+$', c)])
+    # CDS columns
+    cds_cols = sorted([c for c in all_columns if c.startswith('cds_')])
     
-    # Nucleotide sequence (primary)
-    nuc_primary = ['nucleotide_sequence'] if 'nucleotide_sequence' in all_columns else []
-    
-    # Additional CDS columns (from multiple features)
-    cds_additional = sorted([c for c in all_columns if c.startswith('cds_') and re.search(r'_\d+$', c)])
-    nuc_additional = sorted([c for c in all_columns if c.startswith('nucleotide_sequence_')])
+    # Nucleotide sequence
+    nuc_col = ['nucleotide_sequence'] if 'nucleotide_sequence' in all_columns else []
     
     # Build ordered list
     ordered = []
@@ -335,10 +384,8 @@ def get_ordered_columns(all_columns: Set[str]) -> List[str]:
             ordered.append(col)
     
     ordered.extend(source_cols)
-    ordered.extend(cds_primary)
-    ordered.extend(nuc_primary)
-    ordered.extend(cds_additional)
-    ordered.extend(nuc_additional)
+    ordered.extend(cds_cols)
+    ordered.extend(nuc_col)
     
     # Add any remaining columns not yet included
     remaining = sorted(all_columns - set(ordered))
@@ -349,7 +396,7 @@ def get_ordered_columns(all_columns: Set[str]) -> List[str]:
 
 def process_genbank_file(input_path: Path, target_gene: str, 
                          all_columns: Set[str], all_records: List[Dict],
-                         verbose: bool = False) -> Tuple[int, int]:
+                         verbose: bool = False) -> Tuple[int, int, int]:
     """
     Process a single GenBank file.
     
@@ -361,22 +408,24 @@ def process_genbank_file(input_path: Path, target_gene: str,
         verbose: Print progress information
         
     Returns:
-        Tuple of (processed count, skipped count)
+        Tuple of (processed count, skipped count, output rows count)
     """
     processed = 0
     skipped = 0
+    output_rows = 0
     
     try:
         for record in SeqIO.parse(input_path, "genbank"):
-            data, status = process_record(record, target_gene, all_columns, verbose)
+            data_list, status = process_record(record, target_gene, all_columns, verbose)
             
-            if data is None:
+            if not data_list:
                 skipped += 1
                 if verbose:
                     print(status, file=sys.stderr)
             else:
-                all_records.append(data)
+                all_records.extend(data_list)
                 processed += 1
+                output_rows += len(data_list)
                 
                 if verbose and processed % 1000 == 0:
                     print(f"Processed {processed} records from {input_path.name}...", 
@@ -384,7 +433,7 @@ def process_genbank_file(input_path: Path, target_gene: str,
     except Exception as e:
         print(f"ERROR processing {input_path}: {e}", file=sys.stderr)
     
-    return processed, skipped
+    return processed, skipped, output_rows
 
 
 def write_output(output_path: Path, all_records: List[Dict], 
@@ -440,9 +489,10 @@ Output Format:
   Core columns include locus info, definition, accession, version, organism,
   taxonomy, source qualifiers, CDS qualifiers, and nucleotide sequence.
   
-  Records without the target gene CDS are skipped and logged to stderr.
-  Multiple CDS features for the same gene are consolidated as additional
-  columns (e.g., cds_protein_id, cds_protein_id_2).
+  Records without the target gene CDS (or gene feature as fallback) are 
+  skipped and logged to stderr. If multiple CDS/gene features are found for
+  the same record, each is output as a separate row with duplicate tracking
+  columns (is_duplicate, feature_index, feature_count, feature_type).
 '''
     )
     
@@ -520,16 +570,18 @@ Output Format:
     all_records: List[Dict] = []
     total_processed = 0
     total_skipped = 0
+    total_output_rows = 0
     
     for input_file in input_files:
         if args.verbose:
             print(f"Processing: {input_file}", file=sys.stderr)
         
-        processed, skipped = process_genbank_file(
+        processed, skipped, output_rows = process_genbank_file(
             input_file, args.gene, all_columns, all_records, args.verbose
         )
         total_processed += processed
         total_skipped += skipped
+        total_output_rows += output_rows
     
     # Write output
     if args.verbose:
@@ -538,7 +590,7 @@ Output Format:
     write_output(output_path, all_records, all_columns)
     
     if args.verbose:
-        print(f"Complete. Processed: {total_processed}, Skipped: {total_skipped}", 
+        print(f"Complete. Records processed: {total_processed}, Skipped: {total_skipped}, Output rows: {total_output_rows}", 
               file=sys.stderr)
     
     # Clean up temp file if used

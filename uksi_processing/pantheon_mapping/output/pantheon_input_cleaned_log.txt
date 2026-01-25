@@ -1,0 +1,36 @@
+[2026-01-25 09:58:25] ============================================================
+[2026-01-25 09:58:25] Pantheon to UKSI Name Matcher
+[2026-01-25 09:58:25] ============================================================
+[2026-01-25 09:58:25] UKSI input: C:\GitHub\mind-the-gap\uksi_processing\uksi_20251203a_input_names.tsv
+[2026-01-25 09:58:25] Pantheon input: C:\GitHub\mind-the-gap\uksi_processing\pantheon_mapping\pantheon_input_cleaned.tsv
+[2026-01-25 09:58:25] Output directory: output
+[2026-01-25 09:58:25] 
+[2026-01-25 09:58:25] Loading UKSI file: C:\GitHub\mind-the-gap\uksi_processing\uksi_20251203a_input_names.tsv
+[2026-01-25 09:58:26]   Total UKSI records loaded: 336,814
+[2026-01-25 09:58:26]   Unique UKSI names for matching: 259,151
+[2026-01-25 09:58:26]     NAME_STATUS 'R': 156,803
+[2026-01-25 09:58:26]     NAME_STATUS 'S': 87,443
+[2026-01-25 09:58:26]     NAME_STATUS 'U': 14,905
+[2026-01-25 09:58:26] 
+[2026-01-25 09:58:26] Loading Pantheon file: C:\GitHub\mind-the-gap\uksi_processing\pantheon_mapping\pantheon_input_cleaned.tsv
+[2026-01-25 09:58:26]   Total Pantheon records loaded: 12,796
+[2026-01-25 09:58:26]   Found 'original_taxon' column for fallback matching
+[2026-01-25 09:58:26]   Taxa with duplicate rows: 50
+[2026-01-25 09:59:57]   Unique Pantheon taxa after deduplication: 12,745
+[2026-01-25 09:59:57] 
+[2026-01-25 09:59:57] Matching Pantheon taxa against UKSI...
+[2026-01-25 09:59:57]   Fallback column 'original_taxon' available
+[2026-01-25 10:00:26]   Matched: 12,745 (100.0%)
+[2026-01-25 10:00:26]     - on Taxon: 12,711
+[2026-01-25 10:00:26]     - on original_taxon (fallback): 34
+[2026-01-25 10:00:26]   Unmatched: 0 (0.0%)
+[2026-01-25 10:00:26]   Matched by NAME_STATUS:
+[2026-01-25 10:00:26]     R (Recommended): 12,686
+[2026-01-25 10:00:26]     S (Synonym): 56
+[2026-01-25 10:00:26]     U (Unverified): 3
+[2026-01-25 10:00:26] 
+[2026-01-25 10:00:26] Writing output files...
+[2026-01-25 10:00:26]   Matched: output\pantheon_input_cleaned_matched.tsv
+[2026-01-25 10:00:26]   No unmatched records to write
+[2026-01-25 10:00:26] 
+[2026-01-25 10:00:26] Processing complete.
