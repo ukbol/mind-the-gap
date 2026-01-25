@@ -80,7 +80,7 @@ Exports valid species with comprehensive data to a TSV file.
 
 **Species filtering:**
 - Includes: Species, Microspecies, Species hybrid, Species aggregate, Intergeneric hybrid, Species sensu lato/stricto
-- Excludes: Names containing `.` (sp., spp., cf., aff.), `?`, `(Other)`, `"`, `(unidentified)`, `indet`
+- Excludes: Names containing `.` (sp., spp., cf., aff.), `?`, `(Other)`, `"`, `(unidentified)`, `indet`, `/` (species aggregates like species1/species2)
 - Invalid species are written to a separate file for review
 
 **Synonym generation:**
@@ -109,17 +109,13 @@ Invalid species filtered: 1,429
 
 ## Output Columns
 
-### Core taxa columns
+All column headers are lowercase.
+
+### Core identifiers
 | Column | Description |
 |--------|-------------|
-| ORGANISM_KEY | UKSI organism identifier |
-| TAXON_VERSION_KEY | UKSI TVK (primary key for linking) |
-| TAXON_NAME | Scientific name |
-| TAXON_AUTHORITY | Taxonomic authority |
-| NON_NATIVE_FLAG | Non-native species indicator |
-| TERRESTRIAL_FRESHWATER_FLAG | Terrestrial/freshwater indicator |
-| FRESHWATER | Freshwater indicator |
-| MARINE_FLAG | Marine indicator |
+| organism_key | UKSI organism identifier |
+| taxon_version_key | UKSI TVK (primary key for linking) |
 
 ### Higher taxonomy
 | Column | Description |
@@ -130,12 +126,26 @@ Invalid species filtered: 1,429
 | order | Order |
 | family | Family |
 | genus | Genus |
-| species | Full species name with authority |
 
 ### Synonyms
 | Column | Description |
 |--------|-------------|
 | synonyms | Semicolon-separated list of Latin synonyms |
+
+### Taxon information
+| Column | Description |
+|--------|-------------|
+| taxon_name | Scientific name |
+| taxon_authority | Taxonomic authority |
+| taxon_rank | Taxonomic rank (Species, Species aggregate, etc.) |
+
+### Flags
+| Column | Description |
+|--------|-------------|
+| non_native_flag | Non-native species indicator |
+| terrestrial_freshwater_flag | Terrestrial/freshwater indicator |
+| freshwater | Freshwater indicator |
+| marine_flag | Marine indicator |
 
 
 ### Pantheon columns
@@ -154,33 +164,33 @@ Invalid species filtered: 1,429
 | pantheon_habitat_score | Habitat score | Habitat quality score |
 | pantheon_associations | Associations | Species associations |
 
-### JNCC designation columns
+### JNCC designation columns (all lowercase)
 | Column | Description |
 |--------|-------------|
-| jncc_A: Bern Convention | Bern Convention listing |
-| jncc_C: Birds Directive | EU Birds Directive |
-| jncc_C1: Convention on Migratory Species | CMS listing |
-| jncc_C2: OSPAR | OSPAR Convention |
-| jncc_D: Habitats Directive | EU Habitats Directive |
-| jncc_E: EC Cites | CITES listing |
-| jncc_F: Global Red list status | IUCN Global Red List |
-| jncc_Fa: Red Listing based on pre 1994 IUCN guidelines | Pre-1994 Red List |
-| jncc_Fb: Red Listing based on 1994 IUCN guidelines | 1994 Red List |
-| jncc_Fc: Red listing based on 2001 IUCN guidelines | 2001 Red List |
-| jncc_Fd: Red data categories - birds | Bird red data |
-| jncc_Fe: Red data categories - Spiders | Spider red data |
-| jncc_Ga: Rare and scarce species | Rare/scarce listing |
-| jncc_Gb: Rare and scarce species (not IUCN) | Non-IUCN rare/scarce |
-| jncc_Ha: Biodiversity Action Plan UK | UK BAP priority |
-| jncc_Hb: Biodiversity Lists - England | England NERC S.41 |
-| jncc_Hc: Biodiversity Lists - Scotland | Scottish Biodiversity List |
-| jncc_Hd: Biodiversity Lists - Wales | Wales Environment Act S7 |
-| jncc_He: Biodiversity Lists - Northern Ireland | NI Priority species |
-| jncc_I: Wildlife and Countryside Act 1981 | WCA Schedule 5 |
-| jncc_J: Wildlife (NI) Order 1985 | NI Wildlife Order |
-| jncc_K: Conservation of Habitats Regulations 2010 | Habitats Regulations |
-| jncc_L: Conservation Regulations (NI) 1995 | NI Habitats Regulations |
-| jncc_M: Protection of Badgers Act | Badger protection |
+| jncc_a: bern convention | Bern Convention listing |
+| jncc_c: birds directive | EU Birds Directive |
+| jncc_c1: convention on migratory species | CMS listing |
+| jncc_c2: ospar | OSPAR Convention |
+| jncc_d: habitats directive | EU Habitats Directive |
+| jncc_e: ec cites | CITES listing |
+| jncc_f: global red list status | IUCN Global Red List |
+| jncc_fa: red listing based on pre 1994 iucn guidelines | Pre-1994 Red List |
+| jncc_fb: red listing based on 1994 iucn guidelines | 1994 Red List |
+| jncc_fc: red listing based on 2001 iucn guidelines | 2001 Red List |
+| jncc_fd: red data categories  - birds (not based on iucn criteria) | Bird red data |
+| jncc_fe: red data categories - spiders (not based on iucn criteria) | Spider red data |
+| jncc_ga: rare and scarce species | Rare/scarce listing |
+| jncc_gb: rare and scarce species (not based on iucn criteria) | Non-IUCN rare/scarce |
+| jncc_ha: biodiversity action plan uk list of priority species | UK BAP priority |
+| jncc_hb: biodiversity lists - england | England NERC S.41 |
+| jncc_hc: biodiversity lists - scotland | Scottish Biodiversity List |
+| jncc_hd: biodiversity lists - wales | Wales Environment Act S7 |
+| jncc_he: biodiversity lists - northern ireland | NI Priority species |
+| jncc_i: wildlife and countryside act 1981 | WCA Schedule 5 |
+| jncc_j: the wildlife (northern ireland) order 1985 | NI Wildlife Order |
+| jncc_k: the conservation of habitats and species regulations 2010 | Habitats Regulations |
+| jncc_l: the conservation (nature habitats, etc_) regulations (ni) 199 | NI Habitats Regulations |
+| jncc_m: protection of badgers act | Badger protection |
 
 ## Database Schema
 
@@ -275,6 +285,7 @@ Species are filtered to the invalid output file if they contain:
 
 ## Version History
 
+- **2025-01-25 v2.1** - Reordered columns, added taxon_rank, all lowercase headers, exclude species aggregates with "/" pattern, removed redundant species column
 - **2025-01-25 v2.0** - Added invalid species filtering, semicolon synonym separator, subgenus synonym generation, synonym deduplication
 - **2025-01-25 v1.0** - Initial database pipeline with JNCC resolution and hierarchical propagation
 

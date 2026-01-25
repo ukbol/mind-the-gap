@@ -68,6 +68,55 @@ class TaxonResult:
     other_names: List[str] = field(default_factory=list)
     bins_found: Set[str] = field(default_factory=set)
     names_recorded: Set[str] = field(default_factory=set)  # Which of taxon's names have records
+    bin_uris: Set[str] = field(default_factory=set)  # Distinct bin_uri values
+    otu_ids: Set[str] = field(default_factory=set)  # Distinct otu_id values
+
+
+# =============================================================================
+# HELPER FUNCTIONS
+# =============================================================================
+
+# Values to treat as empty/missing for cluster IDs
+EMPTY_CLUSTER_VALUES = frozenset(['', 'none', 'null', 'na', 'n/a', '-', '.'])
+
+# Values to treat as empty/missing for species/subspecies names
+# BOLD data commonly uses "None" for unidentified specimens
+EMPTY_SPECIES_VALUES = frozenset(['', 'none', 'null', 'na', 'n/a', '-', '.'])
+
+
+def is_valid_cluster_id(cluster_id: str) -> bool:
+    """Check if a cluster ID is valid (not empty or a none-like string)."""
+    return cluster_id.lower() not in EMPTY_CLUSTER_VALUES
+
+
+def is_valid_species_name(species_name: str) -> bool:
+    """
+    Check if a species name is valid (not empty or a none-like placeholder).
+    
+    BOLD data commonly has "None" in species/subspecies columns for 
+    specimens not identified to species level. These should be ignored
+    as they don't represent real taxonomic identifications.
+    """
+    return species_name.lower() not in EMPTY_SPECIES_VALUES
+
+
+def parse_cluster_ids(field_value: str) -> List[str]:
+    """
+    Parse cluster IDs from a field value.
+    
+    Handles pipe-separated values and filters out empty/none values.
+    
+    Args:
+        field_value: Raw field value (may be pipe-separated)
+    
+    Returns:
+        List of valid cluster IDs
+    """
+    if not field_value:
+        return []
+    
+    ids = [c.strip() for c in field_value.split('|')]
+    return [cid for cid in ids if cid and is_valid_cluster_id(cid)]
 
 
 # =============================================================================
@@ -91,12 +140,28 @@ def setup_logging(log_level: str = "INFO") -> None:
 # FILE LOADING
 # =============================================================================
 
+def detect_species_column(fieldnames: List[str]) -> str:
+    """
+    Detect which column to use for the valid species name.
+    
+    Prefers 'taxon_name' over 'species' if both are present.
+    
+    Returns column name to use.
+    """
+    if 'taxon_name' in fieldnames:
+        return 'taxon_name'
+    elif 'species' in fieldnames:
+        return 'species'
+    else:
+        return None
+
+
 def load_species_list(species_file: Path) -> Tuple[List[Taxon], List[str]]:
     """
     Load species list from TSV file.
     
     Expected columns:
-    - 'species': Valid name (required)
+    - 'taxon_name' or 'species': Valid name (required, prefers taxon_name)
     - 'synonyms': Semicolon-separated synonyms (optional, can be empty)
     - Additional columns are preserved
     
@@ -113,12 +178,16 @@ def load_species_list(species_file: Path) -> Tuple[List[Taxon], List[str]]:
                 reader = csv.DictReader(f, delimiter='\t')
                 input_columns = list(reader.fieldnames) if reader.fieldnames else []
                 
-                if 'species' not in input_columns:
-                    logging.error("Species list must have a 'species' column")
+                # Detect species column (prefer taxon_name over species)
+                species_column = detect_species_column(input_columns)
+                if species_column is None:
+                    logging.error("Species list must have a 'taxon_name' or 'species' column")
                     sys.exit(1)
                 
+                logging.info(f"Using '{species_column}' column for valid species names")
+                
                 for row_idx, row in enumerate(reader):
-                    valid_name = row.get('species', '').strip()
+                    valid_name = row.get(species_column, '').strip()
                     if not valid_name:
                         continue
                     
@@ -175,15 +244,17 @@ def detect_cluster_column(fieldnames: List[str]) -> str:
 def build_indices_from_records(
     records_file: Path,
     chunk_size: int = 100000
-) -> Tuple[Dict[str, int], Dict[str, Set[str]], Dict[str, Set[str]], str]:
+) -> Tuple[Dict[str, int], Dict[str, Set[str]], Dict[str, Set[str]], Dict[str, Set[str]], Dict[str, Set[str]], str]:
     """
     Build indices from records file in a single pass.
     
     Returns:
         - name_to_count: species_name (lowercase) -> record count
-        - name_to_bins: species_name (lowercase) -> set of BIN/OTU IDs
+        - name_to_bins: species_name (lowercase) -> set of BIN/OTU IDs (for analysis)
         - bin_to_names: BIN/OTU ID -> set of species_names (lowercase)
-        - cluster_column: name of column used for clustering
+        - name_to_bin_uris: species_name (lowercase) -> set of bin_uri values
+        - name_to_otu_ids: species_name (lowercase) -> set of otu_id values
+        - cluster_column: name of column used for primary clustering
     """
     logging.info(f"Building indices from {records_file}")
     start_time = time.time()
@@ -191,6 +262,8 @@ def build_indices_from_records(
     name_to_count: Dict[str, int] = defaultdict(int)
     name_to_bins: Dict[str, Set[str]] = defaultdict(set)
     bin_to_names: Dict[str, Set[str]] = defaultdict(set)
+    name_to_bin_uris: Dict[str, Set[str]] = defaultdict(set)
+    name_to_otu_ids: Dict[str, Set[str]] = defaultdict(set)
     
     total_records = 0
     records_with_cluster = 0
@@ -199,6 +272,8 @@ def build_indices_from_records(
     
     cluster_column = None
     has_subspecies = False
+    has_bin_uri = False
+    has_otu_id = False
     
     for encoding in ['utf-8', 'latin-1']:
         try:
@@ -208,7 +283,17 @@ def build_indices_from_records(
                 
                 # Detect cluster column (file-level decision)
                 cluster_column = detect_cluster_column(fieldnames)
-                logging.info(f"Using cluster column: {cluster_column}")
+                logging.info(f"Using cluster column for analysis: {cluster_column}")
+                
+                # Check which cluster columns exist
+                has_bin_uri = 'bin_uri' in fieldnames
+                has_otu_id = 'otu_id' in fieldnames or 'OTU_ID' in fieldnames
+                otu_col = 'otu_id' if 'otu_id' in fieldnames else 'OTU_ID' if 'OTU_ID' in fieldnames else None
+                
+                if has_bin_uri:
+                    logging.info("bin_uri column detected")
+                if has_otu_id:
+                    logging.info(f"otu_id column detected ({otu_col})")
                 
                 # Check for subspecies column
                 has_subspecies = 'subspecies' in fieldnames
@@ -218,19 +303,33 @@ def build_indices_from_records(
                 for row in reader:
                     total_records += 1
                     
-                    # Get species name
+                    # Get species name - skip if empty or placeholder like "None"
                     species = row.get('species', '').strip()
-                    if not species:
+                    if not species or not is_valid_species_name(species):
                         continue
                     
-                    # Get cluster IDs (may be pipe-separated)
+                    # Get cluster IDs for primary analysis (may be pipe-separated)
                     cluster_field = row.get(cluster_column, '').strip()
-                    cluster_ids = [c.strip() for c in cluster_field.split('|') if c.strip()]
+                    cluster_ids = parse_cluster_ids(cluster_field)
+                    
+                    # Get bin_uri and otu_id separately for output columns
+                    bin_uri_ids = []
+                    otu_id_ids = []
+                    if has_bin_uri:
+                        bin_uri_ids = parse_cluster_ids(row.get('bin_uri', '').strip())
+                    if has_otu_id:
+                        otu_id_ids = parse_cluster_ids(row.get(otu_col, '').strip())
                     
                     # Process species name
                     species_lower = species.lower()
                     name_to_count[species_lower] += 1
                     unique_names.add(species_lower)
+                    
+                    # Track bin_uri and otu_id separately
+                    for bid in bin_uri_ids:
+                        name_to_bin_uris[species_lower].add(bid)
+                    for oid in otu_id_ids:
+                        name_to_otu_ids[species_lower].add(oid)
                     
                     if cluster_ids:
                         records_with_cluster += 1
@@ -242,12 +341,16 @@ def build_indices_from_records(
                     # Also process subspecies if present
                     if has_subspecies:
                         subspecies = row.get('subspecies', '').strip()
-                        if subspecies and subspecies.lower() not in ['', 'none', 'null']:
-                            # Build trinomial
+                        if subspecies and is_valid_species_name(subspecies):
                             subspecies_lower = subspecies.lower()
-                            # Count under subspecies name too
                             name_to_count[subspecies_lower] += 1
                             unique_names.add(subspecies_lower)
+                            
+                            # Track bin_uri and otu_id for subspecies too
+                            for bid in bin_uri_ids:
+                                name_to_bin_uris[subspecies_lower].add(bid)
+                            for oid in otu_id_ids:
+                                name_to_otu_ids[subspecies_lower].add(oid)
                             
                             if cluster_ids:
                                 for cid in cluster_ids:
@@ -261,11 +364,12 @@ def build_indices_from_records(
             elapsed = time.time() - start_time
             logging.info(f"Index building complete in {elapsed:.1f} seconds")
             logging.info(f"  Total records: {total_records:,}")
-            logging.info(f"  Records with cluster ID: {records_with_cluster:,}")
+            logging.info(f"  Records with valid cluster ID: {records_with_cluster:,}")
             logging.info(f"  Unique species names: {len(unique_names):,}")
             logging.info(f"  Unique BIN/OTU IDs: {len(unique_bins):,}")
             
-            return dict(name_to_count), dict(name_to_bins), dict(bin_to_names), cluster_column
+            return (dict(name_to_count), dict(name_to_bins), dict(bin_to_names), 
+                    dict(name_to_bin_uris), dict(name_to_otu_ids), cluster_column)
             
         except UnicodeDecodeError:
             if encoding == 'utf-8':
@@ -274,6 +378,8 @@ def build_indices_from_records(
                 name_to_count = defaultdict(int)
                 name_to_bins = defaultdict(set)
                 bin_to_names = defaultdict(set)
+                name_to_bin_uris = defaultdict(set)
+                name_to_otu_ids = defaultdict(set)
                 total_records = 0
                 records_with_cluster = 0
                 unique_names = set()
@@ -293,7 +399,9 @@ def analyze_taxon(
     taxon: Taxon,
     name_to_count: Dict[str, int],
     name_to_bins: Dict[str, Set[str]],
-    bin_to_names: Dict[str, Set[str]]
+    bin_to_names: Dict[str, Set[str]],
+    name_to_bin_uris: Dict[str, Set[str]],
+    name_to_otu_ids: Dict[str, Set[str]]
 ) -> TaxonResult:
     """
     Analyze a single taxon and determine its BAGS grade and status.
@@ -303,6 +411,8 @@ def analyze_taxon(
         name_to_count: Mapping of species name -> record count
         name_to_bins: Mapping of species name -> set of BIN/OTU IDs
         bin_to_names: Mapping of BIN/OTU ID -> set of species names
+        name_to_bin_uris: Mapping of species name -> set of bin_uri values
+        name_to_otu_ids: Mapping of species name -> set of otu_id values
     
     Returns:
         TaxonResult with grade, status, and other metrics
@@ -317,6 +427,10 @@ def analyze_taxon(
         if count > 0:
             result.number_records += count
             result.names_recorded.add(name)
+        
+        # Collect bin_uris and otu_ids for this taxon
+        result.bin_uris.update(name_to_bin_uris.get(name, set()))
+        result.otu_ids.update(name_to_otu_ids.get(name, set()))
     
     # No records = Grade F, Status BLACK
     if result.number_records == 0:
@@ -385,10 +499,12 @@ def analyze_taxa_batch(
     taxa_batch: List[Taxon],
     name_to_count: Dict[str, int],
     name_to_bins: Dict[str, Set[str]],
-    bin_to_names: Dict[str, Set[str]]
+    bin_to_names: Dict[str, Set[str]],
+    name_to_bin_uris: Dict[str, Set[str]],
+    name_to_otu_ids: Dict[str, Set[str]]
 ) -> List[TaxonResult]:
     """Analyze a batch of taxa (for parallel processing)."""
-    return [analyze_taxon(t, name_to_count, name_to_bins, bin_to_names) for t in taxa_batch]
+    return [analyze_taxon(t, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids) for t in taxa_batch]
 
 
 def analyze_all_taxa_parallel(
@@ -396,6 +512,8 @@ def analyze_all_taxa_parallel(
     name_to_count: Dict[str, int],
     name_to_bins: Dict[str, Set[str]],
     bin_to_names: Dict[str, Set[str]],
+    name_to_bin_uris: Dict[str, Set[str]],
+    name_to_otu_ids: Dict[str, Set[str]],
     num_workers: int = None,
     batch_size: int = 1000
 ) -> List[TaxonResult]:
@@ -407,6 +525,8 @@ def analyze_all_taxa_parallel(
         name_to_count: Mapping of species name -> record count
         name_to_bins: Mapping of species name -> set of BIN/OTU IDs
         bin_to_names: Mapping of BIN/OTU ID -> set of species names
+        name_to_bin_uris: Mapping of species name -> set of bin_uri values
+        name_to_otu_ids: Mapping of species name -> set of otu_id values
         num_workers: Number of parallel workers (default: CPU count)
         batch_size: Taxa per batch
     
@@ -422,7 +542,7 @@ def analyze_all_taxa_parallel(
     # For small datasets or single worker, don't use multiprocessing
     if len(taxa) < batch_size or num_workers == 1:
         logging.info("Using single-threaded analysis")
-        results = [analyze_taxon(t, name_to_count, name_to_bins, bin_to_names) for t in taxa]
+        results = [analyze_taxon(t, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids) for t in taxa]
         elapsed = time.time() - start_time
         logging.info(f"Analysis complete in {elapsed:.1f} seconds")
         return results
@@ -442,7 +562,7 @@ def analyze_all_taxa_parallel(
     
     with ProcessPoolExecutor(max_workers=num_workers) as executor:
         futures = {
-            executor.submit(analyze_taxa_batch, batch, name_to_count, name_to_bins, bin_to_names): i
+            executor.submit(analyze_taxa_batch, batch, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids): i
             for i, batch in enumerate(batches)
         }
         
@@ -469,7 +589,9 @@ def analyze_all_taxa_serial(
     taxa: List[Taxon],
     name_to_count: Dict[str, int],
     name_to_bins: Dict[str, Set[str]],
-    bin_to_names: Dict[str, Set[str]]
+    bin_to_names: Dict[str, Set[str]],
+    name_to_bin_uris: Dict[str, Set[str]],
+    name_to_otu_ids: Dict[str, Set[str]]
 ) -> List[TaxonResult]:
     """
     Analyze all taxa using single-threaded processing.
@@ -482,7 +604,7 @@ def analyze_all_taxa_serial(
     
     results = []
     for i, taxon in enumerate(taxa):
-        results.append(analyze_taxon(taxon, name_to_count, name_to_bins, bin_to_names))
+        results.append(analyze_taxon(taxon, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids))
         
         if (i + 1) % 10000 == 0:
             logging.info(f"  Processed {i + 1:,}/{len(taxa):,} taxa")
@@ -520,7 +642,7 @@ def write_results(
     logging.info(f"Writing results to {output_file}")
     
     # Define output columns: input columns first, then analysis columns
-    analysis_columns = ['number_records', 'bags_grade', 'species_status', 'other_names']
+    analysis_columns = ['number_records', 'bags_grade', 'species_status', 'bin_uris', 'otu_ids', 'other_names']
     
     # Build fieldnames - input columns (excluding duplicates with analysis) + analysis
     output_columns = list(input_columns)
@@ -538,6 +660,8 @@ def write_results(
                 row['number_records'] = result.number_records
                 row['bags_grade'] = result.bags_grade
                 row['species_status'] = result.species_status
+                row['bin_uris'] = ';'.join(sorted(result.bin_uris))
+                row['otu_ids'] = ';'.join(sorted(result.otu_ids))
                 row['other_names'] = ';'.join(format_species_name(n) for n in result.other_names)
                 
                 writer.writerow(row)
@@ -624,7 +748,7 @@ Examples:
         '--species-list',
         type=Path,
         required=True,
-        help='Path to species list TSV file (must have species and synonyms columns)'
+        help='Path to species list TSV file (must have taxon_name or species column, plus optional synonyms column)'
     )
     
     parser.add_argument(
@@ -687,14 +811,14 @@ Examples:
     taxa, input_columns = load_species_list(args.species_list)
     
     # Build indices from records file
-    name_to_count, name_to_bins, bin_to_names, cluster_col = build_indices_from_records(args.records)
+    name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids, cluster_col = build_indices_from_records(args.records)
     
     # Analyze taxa
     if args.workers == 1:
-        results = analyze_all_taxa_serial(taxa, name_to_count, name_to_bins, bin_to_names)
+        results = analyze_all_taxa_serial(taxa, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids)
     else:
         results = analyze_all_taxa_parallel(
-            taxa, name_to_count, name_to_bins, bin_to_names,
+            taxa, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids,
             num_workers=args.workers,
             batch_size=args.batch_size
         )

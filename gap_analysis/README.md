@@ -81,7 +81,8 @@ Tab-separated file with headers:
 
 | Column | Required | Description |
 |--------|----------|-------------|
-| `species` | Yes | Valid species name |
+| `taxon_name` | Yes | Valid species name (preferred to species)|
+| `species` | No | Valid species name (if taxon_name not present)|
 | `synonyms` | No | Semicolon-separated synonyms (can be empty) |
 | *(other columns)* | No | Preserved in output |
 

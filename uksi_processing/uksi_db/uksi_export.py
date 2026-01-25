@@ -67,6 +67,7 @@ INVALID_NAME_PATTERNS = [
     r'"',                   # Double quotes
     r'\(unidentified\)',    # (unidentified)
     r'\bindet\b',           # indet (indeterminate)
+    r'/',                   # Slash (catches species aggregates like "species1/species2")
 ]
 INVALID_NAME_REGEX = re.compile('|'.join(INVALID_NAME_PATTERNS), re.IGNORECASE)
 
@@ -539,17 +540,11 @@ def export_species(conn: sqlite3.Connection):
     species_rows = cur.fetchall()
     log(f"  Found {len(species_rows):,} species (before filtering)")
     
-    # Build output headers
+    # Build output headers (all lowercase, reordered as specified)
     headers = [
-        # Taxa table columns
-        'ORGANISM_KEY',
-        'TAXON_VERSION_KEY', 
-        'TAXON_NAME',
-        'TAXON_AUTHORITY',
-        'NON_NATIVE_FLAG',
-        'TERRESTRIAL_FRESHWATER_FLAG',
-        'FRESHWATER',
-        'MARINE_FLAG',
+        # Core identifiers
+        'organism_key',
+        'taxon_version_key',
         # Higher taxonomy
         'kingdom',
         'phylum_division',
@@ -557,18 +552,26 @@ def export_species(conn: sqlite3.Connection):
         'order',
         'family',
         'genus',
-        'species',
+        # Taxon info
+        'taxon_name',
+        'taxon_authority',
+        'taxon_rank',
         # Synonyms
         'synonyms',
+        # Flags
+        'non_native_flag',
+        'terrestrial_freshwater_flag',
+        'freshwater',
+        'marine_flag',
     ]
     
     # Add Pantheon columns
     for _, output_name in PANTHEON_COLUMNS:
         headers.append(output_name)
     
-    # Add JNCC columns
+    # Add JNCC columns (lowercase)
     for _, output_name in JNCC_COLUMNS:
-        headers.append(output_name)
+        headers.append(output_name.lower())
     
     # Write output
     log(f"\nWriting valid species to {OUTPUT_PATH}...")
@@ -604,12 +607,6 @@ def export_species(conn: sqlite3.Connection):
             # Get higher taxonomy
             higher_tax = get_higher_taxonomy(org_key, lineage_lookup)
             
-            # Build species name (for the 'species' column)
-            if taxon_authority:
-                species_full = f"{taxon_name} {taxon_authority}"
-            else:
-                species_full = taxon_name
-            
             # Get synonyms (semicolon separated)
             syn_list = synonyms.get(tvk, [])
             syn_str = ';'.join(syn_list)
@@ -620,27 +617,30 @@ def export_species(conn: sqlite3.Connection):
             # Get JNCC designations
             jncc = jncc_designations.get(tvk, {})
             
-            # Build output row
+            # Build output row (matching new column order)
             row = [
+                # Core identifiers
                 org_key,
                 tvk,
-                taxon_name,
-                taxon_authority,
-                non_native,
-                terr_fw,
-                freshwater,
-                marine,
+                # Higher taxonomy
                 higher_tax['kingdom'],
                 higher_tax['phylum_division'],
                 higher_tax['class'],
                 higher_tax['order'],
                 higher_tax['family'],
                 higher_tax['genus'],
-                species_full,
+                # Taxon info
+                taxon_name,
+                taxon_authority,
+                rank,
+                # Synonyms
+                syn_str,
+                # Flags
+                non_native,
+                terr_fw,
+                freshwater,
+                marine,
             ]
-            
-            # Add synonyms
-            row.append(syn_str)
             
             # Add Pantheon columns
             for input_col, _ in PANTHEON_COLUMNS:
@@ -684,7 +684,7 @@ def validate_export(conn: sqlite3.Connection, valid_count: int, invalid_count: i
     # Count records with various data
     with_synonyms = sum(1 for r in rows if r.get('synonyms', ''))
     with_pantheon = sum(1 for r in rows if r.get('pantheon_sqs', ''))
-    with_jncc = sum(1 for r in rows if any(r.get(col[1], '') for col in JNCC_COLUMNS))
+    with_jncc = sum(1 for r in rows if any(r.get(col[1].lower(), '') for col in JNCC_COLUMNS))
     
     log(f"  - With synonyms: {with_synonyms:,}")
     log(f"  - With Pantheon data: {with_pantheon:,}")
@@ -709,7 +709,7 @@ def validate_export(conn: sqlite3.Connection, valid_count: int, invalid_count: i
     # Check subgenus synonym generation
     subgenus_count = 0
     for r in rows:
-        name = r.get('TAXON_NAME', '')
+        name = r.get('taxon_name', '')
         syns = r.get('synonyms', '')
         if SUBGENUS_PATTERN.match(name) and syns:
             subgenus_count += 1
@@ -719,7 +719,7 @@ def validate_export(conn: sqlite3.Connection, valid_count: int, invalid_count: i
     log("\n  Sample subgenus species with synonyms:")
     count = 0
     for r in rows:
-        name = r.get('TAXON_NAME', '')
+        name = r.get('taxon_name', '')
         syns = r.get('synonyms', '')
         if SUBGENUS_PATTERN.match(name) and syns:
             log(f"    {name}")
