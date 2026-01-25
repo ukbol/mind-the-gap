@@ -34,7 +34,7 @@ LOG_FILE = r'C:\_claude_files\projects\ukbol_gaplist\uksi\uksi_pipeline_log.txt'
 TARGET_KINGDOMS = {'Animalia', 'Plantae', 'Fungi', 'Chromista'}
 
 # Ranks that count as "species level" for the main output
-SPECIES_RANK = 'Species'
+SPECIES_RANKS = {'Species', 'Microspecies', 'Praespecies'}
 
 # Ranks to include in synonyms (species + all infraspecific)
 SYNONYM_RANKS = {
@@ -376,7 +376,7 @@ def process_species():
     logger.log("Identifying valid species for conflict checking...")
     valid_species_tvks = {}
     for org_key, taxon in taxa_by_org_key.items():
-        if taxon['RANK'] == SPECIES_RANK:
+        if taxon['RANK'] in SPECIES_RANKS:
             valid_species_tvks[taxon['TAXON_VERSION_KEY']] = taxon
     logger.log(f"  Found {len(valid_species_tvks)} valid species in TAXA")
     
@@ -425,8 +425,8 @@ def process_species():
         invalid_writer.writeheader()
         
         for org_key, taxon in taxa_by_org_key.items():
-            # Filter: species rank only (no REDUNDANT_FLAG filter - see README)
-            if taxon['RANK'] != SPECIES_RANK:
+            # Filter: species-level rank only (no REDUNDANT_FLAG filter - see README)
+            if taxon['RANK'] not in SPECIES_RANKS:
                 skipped_rank += 1
                 continue
             

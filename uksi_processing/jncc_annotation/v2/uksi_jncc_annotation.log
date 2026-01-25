@@ -1,0 +1,826 @@
+2026-01-24 23:55:45,081 - INFO - Starting JNCC annotation (v2 - using included_tvk_list)
+2026-01-24 23:55:45,082 - INFO - UKSI input file: C:\GitHub\mind-the-gap\uksi_processing\jncc_annotation\uksi_valid_species_output.tsv
+2026-01-24 23:55:45,082 - INFO - JNCC input file: C:\GitHub\mind-the-gap\uksi_processing\jncc_annotation\20231206_jncc_conservation_designations_taxon_uksi_mapped.tsv
+2026-01-24 23:55:45,082 - INFO - Output file: C:\GitHub\mind-the-gap\uksi_processing\jncc_annotation\v2\uksi_valid_species_jncc_annotated.tsv
+2026-01-24 23:55:45,082 - INFO - Log file: C:\GitHub\mind-the-gap\uksi_processing\jncc_annotation\v2\uksi_jncc_annotation.log
+2026-01-24 23:55:45,082 - INFO - Matching against both taxon_version_key and synonym_tvk_list
+2026-01-24 23:55:45,082 - INFO - Loading JNCC conservation designations...
+2026-01-24 23:55:45,209 - INFO - Loaded 16939 TVKs from 14395 JNCC rows
+2026-01-24 23:55:45,210 - INFO - Processing UKSI species file...
+2026-01-24 23:55:45,303 - DEBUG - Multiple TVK matches for species Mastigusa diversa: TVKs=['NHMSYS0021813346', 'NBNSYS0000008850', 'NBNSYS0000008849'], status=valid;synonym
+2026-01-24 23:55:45,351 - DEBUG - Multiple TVK matches for species Oniscus asellus: TVKs=['NBNSYS0000008561', 'NHMSYS0021605532', 'NHMSYS0021605537'], status=valid;synonym
+2026-01-24 23:55:45,409 - DEBUG - Multiple TVK matches for species Hydroporus necopinatus: TVKs=['NHMSYS0001718525', 'NHMSYS0001718526'], status=valid;synonym
+2026-01-24 23:55:45,417 - DEBUG - Multiple TVK matches for species Ochthebius viridis: TVKs=['NBNSYS0000007757', 'NHMSYS0020750789'], status=valid;synonym
+2026-01-24 23:55:45,427 - DEBUG - Multiple TVK matches for species Euplectus bonvouloiri: TVKs=['NHMSYS0001718148', 'NBNSYS0000024111'], status=valid;synonym
+2026-01-24 23:55:45,430 - DEBUG - Multiple TVK matches for species Mycetoporus piceolus (= erichsonanus): TVKs=['NHMSYS0021832836', 'NBNSYS0000023591'], status=valid;synonym
+2026-01-24 23:55:45,431 - DEBUG - Multiple TVK matches for species Protaetia cuprea: TVKs=['NHMSYS0001719688', 'NHMSYS0001719689'], status=valid;synonym
+2026-01-24 23:55:45,453 - DEBUG - Multiple TVK matches for species Hylesinus wachtli: TVKs=['NHMSYS0021132198', 'NHMSYS0021366609'], status=valid;synonym
+2026-01-24 23:55:45,460 - DEBUG - Multiple TVK matches for species Dicranomyia melleicauda: TVKs=['NHMSYS0000078851', 'NBNSYS0100002817'], status=valid;synonym
+2026-01-24 23:55:45,461 - DEBUG - Multiple TVK matches for species Idioptera apicata: TVKs=['NHMSYS0021818626', 'NBNSYS0100002949'], status=valid;synonym
+2026-01-24 23:55:45,461 - DEBUG - Multiple TVK matches for species Idioptera mundata: TVKs=['NHMSYS0021818636', 'NBNSYS0100002951'], status=valid;synonym
+2026-01-24 23:55:45,461 - DEBUG - Multiple TVK matches for species Idioptera trimaculata: TVKs=['NHMSYS0021818646', 'NBNSYS0100002953'], status=valid;synonym
+2026-01-24 23:55:45,461 - DEBUG - Multiple TVK matches for species Idioptera verralli: TVKs=['NHMSYS0021818651', 'NBNSYS0100002954'], status=valid;synonym
+2026-01-24 23:55:45,499 - DEBUG - Multiple TVK matches for species Tachydromia enecator: TVKs=['NHMSYS0021818731', 'NBNSYS0000012217'], status=valid;synonym
+2026-01-24 23:55:45,501 - DEBUG - Multiple TVK matches for species Rhamphomyia trilineata: TVKs=['NHMSYS0021818736', 'NBNSYS0000012391'], status=valid;synonym
+2026-01-24 23:55:45,504 - DEBUG - Multiple TVK matches for species Hydrophorus pilipes: TVKs=['NHMSYS0021763935', 'NBNSYS0000012653'], status=valid;synonym
+2026-01-24 23:55:45,514 - DEBUG - Multiple TVK matches for species Melanostoma certum: TVKs=['NHMSYS0021764005', 'NBNSYS0000006865'], status=valid;synonym
+2026-01-24 23:55:45,516 - DEBUG - Multiple TVK matches for species Clistoabdominalis fusculus: TVKs=['NHMSYS0021819001', 'NBNSYS0000033114'], status=valid;synonym
+2026-01-24 23:55:45,516 - DEBUG - Multiple TVK matches for species Eudorylas ruralis: TVKs=['NBNSYS0000028877', 'NHMSYS0021005859'], status=valid;synonym
+2026-01-24 23:55:45,516 - DEBUG - Multiple TVK matches for species Semicephalops carinatus: TVKs=['NHMSYS0021818961', 'NBNSYS0000028850'], status=valid;synonym
+2026-01-24 23:55:45,516 - DEBUG - Multiple TVK matches for species Semicephalops perspicuus: TVKs=['NHMSYS0021818971', 'NBNSYS0000028856'], status=valid;synonym
+2026-01-24 23:55:45,516 - DEBUG - Multiple TVK matches for species Semicephalops straminipes: TVKs=['NHMSYS0021818981', 'NHMSYS0021005829'], status=valid;synonym
+2026-01-24 23:55:45,520 - DEBUG - Multiple TVK matches for species Homoneura muscaria: TVKs=['NHMSYS0021819011', 'NBNSYS0000029009'], status=valid;synonym
+2026-01-24 23:55:45,520 - DEBUG - Multiple TVK matches for species Nannomyza basalis: TVKs=['NHMSYS0021819021', 'NBNSYS0000028999'], status=valid;synonym
+2026-01-24 23:55:45,520 - DEBUG - Multiple TVK matches for species Paralauxania albiceps: TVKs=['NHMSYS0021819026', 'NBNSYS0000028998'], status=valid;synonym
+2026-01-24 23:55:45,530 - DEBUG - Multiple TVK matches for species Periscelis laszloi: TVKs=['NHMSYS0021763945', 'NBNSYS0000029327'], status=valid;synonym
+2026-01-24 23:55:45,538 - DEBUG - Multiple TVK matches for species Cordilura ustulata: TVKs=['NBNSYS0000030381', 'NBNSYS0000030374'], status=valid;synonym
+2026-01-24 23:55:45,538 - DEBUG - Multiple TVK matches for species Leptopa vittata: TVKs=['NHMSYS0021819046', 'NBNSYS0000030416', 'NBNSYS0000030417'], status=valid;synonym
+2026-01-24 23:55:45,538 - DEBUG - Multiple TVK matches for species Scathophaga decipiens: TVKs=['NHMSYS0021819061', 'NBNSYS0100002555'], status=valid;synonym
+2026-01-24 23:55:45,538 - DEBUG - Multiple TVK matches for species Scathophaga tinctinervis: TVKs=['NHMSYS0020442463', 'NBNSYS0100002557'], status=valid;synonym
+2026-01-24 23:55:45,539 - DEBUG - Multiple TVK matches for species Scatomyza scybalaria: TVKs=['NHMSYS0021819056', 'NBNSYS0000030408'], status=valid;synonym
+2026-01-24 23:55:45,542 - DEBUG - Multiple TVK matches for species Coenosia acuminata: TVKs=['NHMSYS0021819076', 'NBNSYS0000030972'], status=valid;synonym
+2026-01-24 23:55:45,544 - DEBUG - Multiple TVK matches for species Lispocephala vitripennis: TVKs=['NBNSYS0100025775', 'NBNSYS0100003788'], status=valid;synonym
+2026-01-24 23:55:45,545 - DEBUG - Multiple TVK matches for species Phaonia tuguriorum: TVKs=['NHMSYS0021819081', 'NBNSYS0000030816'], status=valid;synonym
+2026-01-24 23:55:45,551 - DEBUG - Multiple TVK matches for species Beckerias pannonicus: TVKs=['NBNSYS0100022890', 'NBNSYS0100002240'], status=valid;synonym
+2026-01-24 23:55:45,558 - DEBUG - Multiple TVK matches for species Globiceps (Kelidocoris) fulvicollis: TVKs=['NHMSYS0020917992', 'NHMSYS0020309266'], status=valid;synonym
+2026-01-24 23:55:45,563 - DEBUG - Multiple TVK matches for species Carpocoris mediterraneus: TVKs=['NHMSYS0021131474', 'NHMSYS0021131480'], status=valid;synonym
+2026-01-24 23:55:45,564 - DEBUG - Multiple TVK matches for species Parapiesma quadratum: TVKs=['NHMSYS0020309619', 'NHMSYS0020977075'], status=valid;synonym
+2026-01-24 23:55:45,644 - DEBUG - Multiple TVK matches for species Lindenius pygmaeus: TVKs=['NHMSYS0000876243', 'NHMSYS0000876244'], status=valid;synonym
+2026-01-24 23:55:45,667 - DEBUG - Multiple TVK matches for species Zygaena exulans: TVKs=['NHMSYS0000520663', 'NHMSYS0021143431'], status=valid;synonym
+2026-01-24 23:55:45,667 - DEBUG - Multiple TVK matches for species Zygaena lonicerae: TVKs=['NBNSYS0000005677', 'NHMSYS0021143443'], status=valid;synonym
+2026-01-24 23:55:45,668 - DEBUG - Multiple TVK matches for species Zygaena loti: TVKs=['NHMSYS0000520668', 'NHMSYS0021143429'], status=valid;synonym
+2026-01-24 23:55:45,668 - DEBUG - Multiple TVK matches for species Zygaena purpuralis: TVKs=['NHMSYS0000520673', 'NHMSYS0021143423', 'NHMSYS0021143424'], status=valid;synonym
+2026-01-24 23:55:45,668 - DEBUG - Multiple TVK matches for species Zygaena viciae: TVKs=['NHMSYS0000520678', 'NHMSYS0021143436'], status=valid;synonym
+2026-01-24 23:55:45,668 - DEBUG - Multiple TVK matches for species Erynnis tages: TVKs=['NHMSYS0000550499', 'NHMSYS0021143456'], status=valid;synonym
+2026-01-24 23:55:45,668 - DEBUG - Multiple TVK matches for species Euphydryas aurinia: TVKs=['NHMSYS0000516340', 'NHMSYS0000502585'], status=valid;synonym
+2026-01-24 23:55:45,670 - DEBUG - Multiple TVK matches for species Apomyelois bistriatella: TVKs=['NHMSYS0000517188', 'NBNSYS0000027020'], status=valid;synonym
+2026-01-24 23:55:45,672 - DEBUG - Multiple TVK matches for species Mecyna flavalis: TVKs=['NHMSYS0021143730', 'NBNSYS0000026927'], status=valid;synonym
+2026-01-24 23:55:45,674 - DEBUG - Multiple TVK matches for species Aspitates gilvaria: TVKs=['NHMSYS0000517298', 'NHMSYS0021144301'], status=valid;synonym
+2026-01-24 23:55:45,674 - DEBUG - Multiple TVK matches for species Lycia zonaria: TVKs=['NHMSYS0000520883', 'NHMSYS0021144218'], status=valid;synonym
+2026-01-24 23:55:45,676 - DEBUG - Multiple TVK matches for species Eupithecia extensaria: TVKs=['NHMSYS0000520043', 'NHMSYS0021144116'], status=valid;synonym
+2026-01-24 23:55:45,676 - DEBUG - Multiple TVK matches for species Perizoma albulata: TVKs=['NHMSYS0000522437', 'NHMSYS0021144060'], status=valid;synonym
+2026-01-24 23:55:45,677 - DEBUG - Multiple TVK matches for species Idaea ochrata: TVKs=['NHMSYS0000520553', 'NBNSYS0000005769'], status=valid;synonym
+2026-01-24 23:55:45,678 - DEBUG - Multiple TVK matches for species Coscinia cribraria: TVKs=['NBNSYS0000006139', 'NHMSYS0021144406'], status=valid;synonym
+2026-01-24 23:55:45,678 - DEBUG - Multiple TVK matches for species Eilema complana: TVKs=['NBNSYS0000006133', 'NHMSYS0000502289'], status=valid;synonym
+2026-01-24 23:55:45,681 - DEBUG - Multiple TVK matches for species Xestia alpicola: TVKs=['NHMSYS0000523349', 'NHMSYS0021144948'], status=valid;synonym
+2026-01-24 23:55:45,681 - DEBUG - Multiple TVK matches for species Gortyna borelii: TVKs=['NHMSYS0000520248', 'NHMSYS0021144613'], status=valid;synonym
+2026-01-24 23:55:45,682 - DEBUG - Multiple TVK matches for species Hydraecia osseola: TVKs=['NHMSYS0000520468', 'NHMSYS0021144615'], status=valid;synonym
+2026-01-24 23:55:45,682 - DEBUG - Multiple TVK matches for species Luperina nickerlii: TVKs=['NHMSYS0000520843', 'NHMSYS0021144623', 'NHMSYS0021144625'], status=valid;synonym
+2026-01-24 23:55:45,682 - DEBUG - Multiple TVK matches for species Photedes morrisii: TVKs=['NBNSYS0000100174', 'NHMSYS0021144650', 'NHMSYS0021144649'], status=valid;synonym
+2026-01-24 23:55:45,682 - DEBUG - Multiple TVK matches for species Aporophyla lueneburgensis: TVKs=['NBNSYS0000005281', 'NHMSYS0021144770'], status=valid;synonym
+2026-01-24 23:55:45,682 - DEBUG - Multiple TVK matches for species Lithophane furcifera: TVKs=['NBNSYS0000006331', 'NHMSYS0021144731'], status=valid;synonym
+2026-01-24 23:55:45,683 - DEBUG - Multiple TVK matches for species Aeshna isoceles: TVKs=['NHMSYS0021689820', 'NHMSYS0021009091'], status=valid;synonym
+2026-01-24 23:55:45,686 - DEBUG - Multiple TVK matches for species Capnia vidua: TVKs=['NHMSYS0020316247', 'NBNSYS0000022436'], status=valid;synonym
+2026-01-24 23:55:45,687 - DEBUG - Multiple TVK matches for species Perla carlukiana: TVKs=['NBNSYS0000153420', 'NBNSYS0000022443'], status=valid;synonym
+2026-01-24 23:55:45,687 - DEBUG - Multiple TVK matches for species Taeniopteryx nebulosa: TVKs=['NBNSYS0000022416', 'NHMSYS0020784625'], status=valid;synonym
+2026-01-24 23:55:45,695 - DEBUG - Multiple TVK matches for species Mesophylax impunctatus: TVKs=['NBNSYS0000008451', 'NBNSYS0000008453'], status=valid;synonym
+2026-01-24 23:55:45,697 - DEBUG - Multiple TVK matches for species Maurieseuma nontronense: TVKs=['NHMSYS0021783500', 'NHMSYS0021118548'], status=valid;synonym
+2026-01-24 23:55:45,697 - DEBUG - Multiple TVK matches for species Ceratosphys amoena: TVKs=['NHMSYS0021118570', 'NHMSYS0021118576'], status=valid;synonym
+2026-01-24 23:55:45,701 - DEBUG - Multiple TVK matches for species Pentapora fascialis: TVKs=['NHMSYS0000333524', 'NHMSYS0020750803'], status=valid;synonym
+2026-01-24 23:55:45,707 - DEBUG - Multiple TVK matches for species Alosa fallax: TVKs=['NHMSYS0000544611', 'EHSSYS0000000001'], status=valid;synonym
+2026-01-24 23:55:45,709 - DEBUG - Multiple TVK matches for species Gasterosteus aculeatus: TVKs=['NBNSYS0000188612', 'NHMSYS0020755078'], status=valid;synonym
+2026-01-24 23:55:45,715 - DEBUG - Multiple TVK matches for species Circus aeruginosus: TVKs=['NHMSYS0000530293', 'NHMSYS0020303005'], status=valid;synonym
+2026-01-24 23:55:45,715 - DEBUG - Multiple TVK matches for species Haliaeetus albicilla: TVKs=['NBNSYS0000000281', 'NHMSYS0021277444'], status=valid;synonym
+2026-01-24 23:55:45,716 - DEBUG - Multiple TVK matches for species Anser albifrons: TVKs=['NHMSYS0000530149', 'NHMSYS0000532791', 'NHMSYS0000532795'], status=valid;synonym
+2026-01-24 23:55:45,716 - DEBUG - Multiple TVK matches for species Anser anser: TVKs=['NBNSYS0000000201', 'NHMSYS0020302935'], status=valid;synonym
+2026-01-24 23:55:45,716 - DEBUG - Multiple TVK matches for species Anser fabalis: TVKs=['NHMSYS0021621884', 'NHMSYS0020302938'], status=valid;synonym
+2026-01-24 23:55:45,716 - DEBUG - Multiple TVK matches for species Branta bernicla: TVKs=['NBNSYS0000000260', 'NHMSYS0000534055', 'NHMSYS0020302961'], status=valid;synonym
+2026-01-24 23:55:45,716 - DEBUG - Multiple TVK matches for species Cygnus columbianus: TVKs=['NBNSYS0000000200', 'NBNSYS0000173164'], status=valid;synonym
+2026-01-24 23:55:45,717 - DEBUG - Multiple TVK matches for species Somateria mollissima: TVKs=['NBNSYS0000000197', 'NHMSYS0021183110'], status=valid;synonym
+2026-01-24 23:55:45,717 - DEBUG - Multiple TVK matches for species Alca torda: TVKs=['NBNSYS0000000040', 'NHMSYS0020302925'], status=valid;synonym
+2026-01-24 23:55:45,717 - DEBUG - Multiple TVK matches for species Uria aalge: TVKs=['NBNSYS0000000041', 'NHMSYS0020303249'], status=valid;synonym
+2026-01-24 23:55:45,717 - DEBUG - Multiple TVK matches for species Anarhynchus alexandrinus: TVKs=['NHMSYS0021813951', 'NBNSYS0000000159'], status=valid;synonym
+2026-01-24 23:55:45,717 - DEBUG - Multiple TVK matches for species Anarhynchus leschenaultii: TVKs=['NHMSYS0021813976', 'NBNSYS0000000175'], status=valid;synonym
+2026-01-24 23:55:45,717 - DEBUG - Multiple TVK matches for species Charadrius hiaticula: TVKs=['NBNSYS0000000028', 'NHMSYS0021003494'], status=valid;synonym
+2026-01-24 23:55:45,717 - DEBUG - Multiple TVK matches for species Haematopus ostralegus: TVKs=['NBNSYS0000000026', 'NHMSYS0020303056'], status=valid;synonym
+2026-01-24 23:55:45,718 - DEBUG - Multiple TVK matches for species Larus argentatus: TVKs=['NBNSYS0000000038', 'NHMSYS0020303070'], status=valid;synonym
+2026-01-24 23:55:45,718 - DEBUG - Multiple TVK matches for species Larus canus: TVKs=['NBNSYS0000000354', 'NHMSYS0020303073'], status=valid;synonym
+2026-01-24 23:55:45,718 - DEBUG - Multiple TVK matches for species Larus fuscus: TVKs=['NBNSYS0000000037', 'NHMSYS0020303075'], status=valid;synonym
+2026-01-24 23:55:45,718 - DEBUG - Multiple TVK matches for species Arenaria interpres: TVKs=['NBNSYS0000000142', 'NHMSYS0020302955'], status=valid;synonym
+2026-01-24 23:55:45,718 - DEBUG - Multiple TVK matches for species Calidris alpina: TVKs=['NBNSYS0000000035', 'NHMSYS0020302969', 'NHMSYS0020302971'], status=valid;synonym
+2026-01-24 23:55:45,718 - DEBUG - Multiple TVK matches for species Calidris canutus: TVKs=['NBNSYS0000000151', 'NHMSYS0020302973'], status=valid;synonym
+2026-01-24 23:55:45,719 - DEBUG - Multiple TVK matches for species Gallinago gallinago: TVKs=['NBNSYS0000000030', 'NHMSYS0020303047'], status=valid;synonym
+2026-01-24 23:55:45,719 - DEBUG - Multiple TVK matches for species Limosa lapponica: TVKs=['NBNSYS0000000146', 'NHMSYS0020303079'], status=valid;synonym
+2026-01-24 23:55:45,719 - DEBUG - Multiple TVK matches for species Limosa limosa: TVKs=['NBNSYS0000000145', 'NHMSYS0020303080', 'NHMSYS0020193654'], status=valid;synonym
+2026-01-24 23:55:45,719 - DEBUG - Multiple TVK matches for species Numenius arquata: TVKs=['NBNSYS0000000032', 'NHMSYS0020303109'], status=valid;synonym
+2026-01-24 23:55:45,720 - DEBUG - Multiple TVK matches for species Tringa totanus: TVKs=['NBNSYS0000000034', 'NHMSYS0020303227'], status=valid;synonym
+2026-01-24 23:55:45,720 - DEBUG - Multiple TVK matches for species Columba oenas: TVKs=['NHMSYS0000530308', 'NHMSYS0020303009'], status=valid;synonym
+2026-01-24 23:55:45,721 - DEBUG - Multiple TVK matches for species Falco columbarius: TVKs=['NHMSYS0000530743', 'NHMSYS0021003443'], status=valid;synonym
+2026-01-24 23:55:45,721 - DEBUG - Multiple TVK matches for species Lagopus lagopus: TVKs=['NHMSYS0000530420', 'NHMSYS0000533983'], status=valid;synonym
+2026-01-24 23:55:45,721 - DEBUG - Multiple TVK matches for species Lagopus muta: TVKs=['NHMSYS0000530421', 'NHMSYS0020303064'], status=valid;synonym
+2026-01-24 23:55:45,721 - DEBUG - Multiple TVK matches for species Lyrurus tetrix: TVKs=['NBNSYS0000172474', 'NHMSYS0021274936'], status=valid;synonym
+2026-01-24 23:55:45,721 - DEBUG - Multiple TVK matches for species Gavia arctica: TVKs=['NBNSYS0000000219', 'NHMSYS0000533291'], status=valid;synonym
+2026-01-24 23:55:45,722 - DEBUG - Multiple TVK matches for species Aegithalos caudatus: TVKs=['NHMSYS0000530133', 'NHMSYS0020302922'], status=valid;synonym
+2026-01-24 23:55:45,722 - DEBUG - Multiple TVK matches for species Alauda arvensis: TVKs=['NHMSYS0000530139', 'NHMSYS0020302924'], status=valid;synonym
+2026-01-24 23:55:45,722 - DEBUG - Multiple TVK matches for species Certhia familiaris: TVKs=['NHMSYS0000530266', 'NHMSYS0021277804'], status=valid;synonym
+2026-01-24 23:55:45,722 - DEBUG - Multiple TVK matches for species Cinclus cinclus: TVKs=['NHMSYS0000530289', 'NHMSYS0020303003', 'NHMSYS0020303004'], status=valid;synonym
+2026-01-24 23:55:45,723 - DEBUG - Multiple TVK matches for species Garrulus glandarius: TVKs=['NHMSYS0000530374', 'NHMSYS0020303052'], status=valid;synonym
+2026-01-24 23:55:45,723 - DEBUG - Multiple TVK matches for species Pyrrhocorax pyrrhocorax: TVKs=['NHMSYS0000530800', 'NHMSYS0020303182'], status=valid;synonym
+2026-01-24 23:55:45,723 - DEBUG - Multiple TVK matches for species Emberiza calandra: TVKs=['NHMSYS0001688304', 'NHMSYS0020303028'], status=valid;synonym
+2026-01-24 23:55:45,723 - DEBUG - Multiple TVK matches for species Carduelis carduelis: TVKs=['NHMSYS0000530247', 'NHMSYS0020302978'], status=valid;synonym
+2026-01-24 23:55:45,723 - DEBUG - Multiple TVK matches for species Chloris chloris: TVKs=['NHMSYS0021002985', 'NHMSYS0021183105'], status=valid;synonym
+2026-01-24 23:55:45,724 - DEBUG - Multiple TVK matches for species Fringilla coelebs: TVKs=['NHMSYS0000530367', 'NHMSYS0020303044'], status=valid;synonym
+2026-01-24 23:55:45,724 - DEBUG - Multiple TVK matches for species Linaria cannabina: TVKs=['NHMSYS0021004282', 'NHMSYS0021004287', 'NHMSYS0021004508'], status=valid;synonym
+2026-01-24 23:55:45,724 - DEBUG - Multiple TVK matches for species Linaria flavirostris: TVKs=['NHMSYS0021004297', 'NHMSYS0021004302'], status=valid;synonym
+2026-01-24 23:55:45,724 - DEBUG - Multiple TVK matches for species Loxia curvirostra: TVKs=['NHMSYS0000530454', 'NHMSYS0020303087'], status=valid;synonym
+2026-01-24 23:55:45,724 - DEBUG - Multiple TVK matches for species Loxia leucoptera: TVKs=['NHMSYS0000530455', 'NHMSYS0020303088', 'NHMSYS0020303089'], status=valid;synonym
+2026-01-24 23:55:45,724 - DEBUG - Multiple TVK matches for species Pyrrhula pyrrhula: TVKs=['NHMSYS0000530802', 'NHMSYS0020303183'], status=valid;synonym
+2026-01-24 23:55:45,725 - DEBUG - Multiple TVK matches for species Anthus petrosus: TVKs=['NHMSYS0000530158', 'NHMSYS0000532831'], status=valid;synonym
+2026-01-24 23:55:45,725 - DEBUG - Multiple TVK matches for species Motacilla alba: TVKs=['NHMSYS0000530493', 'NBNSYS0000001346'], status=valid;synonym
+2026-01-24 23:55:45,725 - DEBUG - Multiple TVK matches for species Motacilla flava: TVKs=['NHMSYS0000530496', 'NBNSYS0000001343'], status=valid;synonym
+2026-01-24 23:55:45,726 - DEBUG - Multiple TVK matches for species Cyanistes caeruleus: TVKs=['NHMSYS0001688296', 'NHMSYS0020303020'], status=valid;synonym
+2026-01-24 23:55:45,726 - DEBUG - Multiple TVK matches for species Lophophanes cristatus: TVKs=['NHMSYS0001688298', 'NHMSYS0020303086'], status=valid;synonym
+2026-01-24 23:55:45,726 - DEBUG - Multiple TVK matches for species Parus major: TVKs=['NHMSYS0000530533', 'NHMSYS0020303131'], status=valid;synonym
+2026-01-24 23:55:45,726 - DEBUG - Multiple TVK matches for species Periparus ater: TVKs=['NHMSYS0001688300', 'NHMSYS0020303139'], status=valid;synonym
+2026-01-24 23:55:45,726 - DEBUG - Multiple TVK matches for species Poecile montanus: TVKs=['NHMSYS0001688302', 'NHMSYS0020212827'], status=valid;synonym
+2026-01-24 23:55:45,726 - DEBUG - Multiple TVK matches for species Poecile palustris: TVKs=['NHMSYS0001688303', 'NHMSYS0020303174', 'NHMSYS0020212828'], status=valid;synonym
+2026-01-24 23:55:45,727 - DEBUG - Multiple TVK matches for species Prunella modularis: TVKs=['NHMSYS0000530790', 'NHMSYS0020303179'], status=valid;synonym
+2026-01-24 23:55:45,728 - DEBUG - Multiple TVK matches for species Sturnus vulgaris: TVKs=['NHMSYS0000530628', 'NHMSYS0020193673', 'NHMSYS0020303208'], status=valid;synonym
+2026-01-24 23:55:45,728 - DEBUG - Multiple TVK matches for species Troglodytes troglodytes: TVKs=['NHMSYS0000530671', 'NHMSYS0001596569', 'NHMSYS0020303229', 'NHMSYS0001596570', 'NHMSYS0020303230', 'NHMSYS0020303232'], status=valid;synonym
+2026-01-24 23:55:45,728 - DEBUG - Multiple TVK matches for species Turdus philomelos: TVKs=['NHMSYS0000530678', 'NHMSYS0020303239', 'NHMSYS0020303240'], status=valid;synonym
+2026-01-24 23:55:45,729 - DEBUG - Multiple TVK matches for species Gulosus aristotelis: TVKs=['NHMSYS0021537828', 'NHMSYS0021537833'], status=valid;synonym
+2026-01-24 23:55:45,729 - DEBUG - Multiple TVK matches for species Phalacrocorax carbo: TVKs=['NBNSYS0000000004', 'NHMSYS0000532975'], status=valid;synonym
+2026-01-24 23:55:45,729 - DEBUG - Multiple TVK matches for species Dendrocopos major: TVKs=['NHMSYS0000530331', 'NHMSYS0020303023'], status=valid;synonym
+2026-01-24 23:55:45,729 - DEBUG - Multiple TVK matches for species Dryobates minor: TVKs=['NHMSYS0021271561', 'NHMSYS0021271566'], status=valid;synonym
+2026-01-24 23:55:45,730 - DEBUG - Multiple TVK matches for species Hydrobates leucorhous: TVKs=['NHMSYS0021537808', 'NHMSYS0021537813'], status=valid;synonym
+2026-01-24 23:55:45,734 - DEBUG - Multiple TVK matches for species Lepus timidus: TVKs=['NBNSYS0000005106', 'NBNSYS0000042516'], status=valid;synonym
+2026-01-24 23:55:45,735 - DEBUG - Multiple TVK matches for species Microtus arvalis: TVKs=['NHMSYS0000080208', 'NHMSYS0001699418'], status=valid;synonym
+2026-01-24 23:55:45,756 - DEBUG - Multiple TVK matches for species Margaritifera (Pseudunio) auricularia: TVKs=['NHMSYS0020528217', 'NHMSYS0020528218'], status=valid;synonym
+2026-01-24 23:55:45,759 - DEBUG - Multiple TVK matches for species Xandarovula patula: TVKs=['NHMSYS0021055450', 'NBNSYS0000177977'], status=valid;synonym
+2026-01-24 23:55:45,761 - DEBUG - Multiple TVK matches for species Hydrobia acuta: TVKs=['NHMSYS0001702045', 'NHMSYS0021055596'], status=valid;synonym
+2026-01-24 23:55:45,763 - DEBUG - Multiple TVK matches for species Mercuria tachoensis: TVKs=['NHMSYS0021666478', 'NHMSYS0020755137'], status=valid;synonym
+2026-01-24 23:55:45,773 - DEBUG - Multiple TVK matches for species Candiella odhneri: TVKs=['NHMSYS0021738218', 'NHMSYS0021457344'], status=valid;synonym
+2026-01-24 23:55:45,776 - DEBUG - Multiple TVK matches for species Arion (Carinarion) circumscriptus: TVKs=['NHMSYS0001701900', 'NHMSYS0021009872'], status=valid;synonym
+2026-01-24 23:55:45,776 - DEBUG - Multiple TVK matches for species Granaria frumentum: TVKs=['NHMSYS0021109187', 'NHMSYS0021109193'], status=valid;synonym
+2026-01-24 23:55:45,777 - DEBUG - Multiple TVK matches for species Oxychilus (Oxychilus) navarricus: TVKs=['NHMSYS0001702139', 'NHMSYS0001702140'], status=valid;synonym
+2026-01-24 23:55:45,869 - DEBUG - Multiple TVK matches for species Lecanographa atlantica: TVKs=['NHMSYS0021761070', 'NHMSYS0020039021'], status=valid;synonym
+2026-01-24 23:55:45,869 - DEBUG - Multiple TVK matches for species Ingaderia sorediata: TVKs=['NHMSYS0021645550', 'BMSSYS0000045555'], status=valid;synonym
+2026-01-24 23:55:45,870 - DEBUG - Multiple TVK matches for species Ingaderia vandenboomii: TVKs=['NHMSYS0021645555', 'NHMSYS0020327873'], status=valid;synonym
+2026-01-24 23:55:45,870 - DEBUG - Multiple TVK matches for species Dirina massiliensis: TVKs=['NBNSYS0000102288', 'NHMSYS0001480962', 'NHMSYS0001480963'], status=valid;synonym
+2026-01-24 23:55:45,871 - DEBUG - Multiple TVK matches for species Psoronactis dilleniana: TVKs=['BMSSYS0000050266', 'BMSSYS0000046983'], status=valid;synonym
+2026-01-24 23:55:45,871 - DEBUG - Multiple TVK matches for species Candelariella aurella: TVKs=['NBNSYS0000018294', 'NHMSYS0001476787', 'NHMSYS0001476789'], status=valid;synonym
+2026-01-24 23:55:45,871 - DEBUG - Multiple TVK matches for species Candelariella medians: TVKs=['NBNSYS0000018298', 'NHMSYS0001476794', 'NHMSYS0001476795'], status=valid;synonym
+2026-01-24 23:55:45,871 - DEBUG - Multiple TVK matches for species Candelariella vitellina: TVKs=['NHMSYS0001476797', 'NHMSYS0001476798', 'NHMSYS0001476799'], status=valid;synonym
+2026-01-24 23:55:45,899 - DEBUG - Multiple TVK matches for species Wentiomyces lichenicola: TVKs=['NHMSYS0020536343', 'NHMSYS0001501851'], status=valid;synonym
+2026-01-24 23:55:45,899 - DEBUG - Multiple TVK matches for species Endococcus fusiger: TVKs=['NHMSYS0020990188', 'NHMSYS0020102976'], status=valid;synonym
+2026-01-24 23:55:45,901 - DEBUG - Multiple TVK matches for species Naetrocymbe punctiformis: TVKs=['BMSSYS0000011894', 'NHMSYS0001475001'], status=valid;synonym
+2026-01-24 23:55:45,902 - DEBUG - Multiple TVK matches for species Bagliettoa calciseda: TVKs=['NHMSYS0020989786', 'NHMSYS0000364470'], status=valid;synonym
+2026-01-24 23:55:45,902 - DEBUG - Multiple TVK matches for species Endocarpon pusillum: TVKs=['NBNSYS0000020601', 'BMSSYS0000006356', 'NHMSYS0001481366'], status=valid;synonym
+2026-01-24 23:55:45,902 - DEBUG - Multiple TVK matches for species Muellerella haplotella: TVKs=['NHMSYS0001489990', 'NHMSYS0001489992'], status=valid;synonym
+2026-01-24 23:55:45,903 - DEBUG - Multiple TVK matches for species Thelidium papulare: TVKs=['NBNSYS0000020658', 'NHMSYS0001499640', 'BMSSYS0000018485'], status=valid;synonym
+2026-01-24 23:55:45,904 - DEBUG - Multiple TVK matches for species Verrucaria macrostoma: TVKs=['NBNSYS0000020692', 'NHMSYS0020991009', 'NHMSYS0001501637'], status=valid;synonym
+2026-01-24 23:55:45,904 - DEBUG - Multiple TVK matches for species Verrucaria nigrescens: TVKs=['NBNSYS0000020700', 'NHMSYS0020536329', 'NHMSYS0020536330'], status=valid;synonym
+2026-01-24 23:55:45,908 - DEBUG - Multiple TVK matches for species Sclerococcum tegularum: TVKs=['BMSSYS0000731208', 'NHMSYS0020535341'], status=valid;synonym
+2026-01-24 23:55:45,910 - DEBUG - Multiple TVK matches for species Acarospora macrospora: TVKs=['NBNSYS0000018155', 'NHMSYS0001472781', 'BMSSYS0000000058'], status=valid;synonym
+2026-01-24 23:55:45,910 - DEBUG - Multiple TVK matches for species Acarospora umbilicata: TVKs=['NBNSYS0000018163', 'BMSSYS0000000071'], status=valid;synonym
+2026-01-24 23:55:45,911 - DEBUG - Multiple TVK matches for species Endohyalina insularis: TVKs=['NHMSYS0020990194', 'NHMSYS0020039057'], status=valid;synonym
+2026-01-24 23:55:45,913 - DEBUG - Multiple TVK matches for species Rinodina roboris: TVKs=['NBNSYS0000019015', 'NBNSYS0000041627', 'BMSSYS0000016431'], status=valid;synonym
+2026-01-24 23:55:45,913 - DEBUG - Multiple TVK matches for species Byssoloma llimonae: TVKs=['NHMSYS0021552749', 'NHMSYS0020327865'], status=valid;synonym
+2026-01-24 23:55:45,913 - DEBUG - Multiple TVK matches for species Micarea cinerea: TVKs=['NHMSYS0001489444', 'NHMSYS0001489445', 'NHMSYS0001489446'], status=valid;synonym
+2026-01-24 23:55:45,913 - DEBUG - Multiple TVK matches for species Micarea inopinula: TVKs=['NHMSYS0021553569', 'NHMSYS0020535694'], status=valid;synonym
+2026-01-24 23:55:45,913 - DEBUG - Multiple TVK matches for species Micarea lignaria: TVKs=['NHMSYS0001489455', 'NHMSYS0000840849', 'BMSSYS0000011218'], status=valid;synonym
+2026-01-24 23:55:45,914 - DEBUG - Multiple TVK matches for species Catillaria chalybeia: TVKs=['NHMSYS0001476912', 'NHMSYS0001476913'], status=valid;synonym
+2026-01-24 23:55:45,914 - DEBUG - Multiple TVK matches for species Cladonia ciliata: TVKs=['NBNSYS0000018357', 'NHMSYS0001477611', 'NHMSYS0001477612'], status=valid;synonym
+2026-01-24 23:55:45,915 - DEBUG - Multiple TVK matches for species Cladonia crispata: TVKs=['NBNSYS0000018363', 'NBNSYS0000018364', 'NHMSYS0001477622'], status=valid;synonym
+2026-01-24 23:55:45,915 - DEBUG - Multiple TVK matches for species Cladonia furcata: TVKs=['NBNSYS0000018374', 'NHMSYS0001477638', 'NHMSYS0001477639'], status=valid;synonym
+2026-01-24 23:55:45,915 - DEBUG - Multiple TVK matches for species Cladonia squamosa: TVKs=['NBNSYS0000018405', 'NHMSYS0001477674', 'NHMSYS0000840846'], status=valid;synonym
+2026-01-24 23:55:45,915 - DEBUG - Multiple TVK matches for species Cladonia uncialis: TVKs=['NHMSYS0001477683', 'NHMSYS0001477684', 'NHMSYS0001477685'], status=valid;synonym
+2026-01-24 23:55:45,916 - DEBUG - Multiple TVK matches for species Haematomma ochroleucum: TVKs=['NHMSYS0001483484', 'NHMSYS0001483485', 'NHMSYS0001483486'], status=valid;synonym
+2026-01-24 23:55:45,916 - DEBUG - Multiple TVK matches for species Lecanora albellula: TVKs=['NHMSYS0020039368', 'NHMSYS0020535607', 'NHMSYS0020990316'], status=valid;synonym
+2026-01-24 23:55:45,916 - DEBUG - Multiple TVK matches for species Lecanora campestris: TVKs=['NHMSYS0001486327', 'NHMSYS0001486328', 'NBNSYS0000018575'], status=valid;synonym
+2026-01-24 23:55:45,916 - DEBUG - Multiple TVK matches for species Lecanora conizaeoides: TVKs=['NBNSYS0000018584', 'NHMSYS0001486353', 'NHMSYS0001486354'], status=valid;synonym
+2026-01-24 23:55:45,917 - DEBUG - Multiple TVK matches for species Lecidella elaeochroma: TVKs=['NHMSYS0001486983', 'NHMSYS0001486984', 'NHMSYS0001486985'], status=valid;synonym
+2026-01-24 23:55:45,917 - DEBUG - Multiple TVK matches for species Miriquidica complanata: TVKs=['NBNSYS0000018184', 'NHMSYS0001489669', 'NHMSYS0001489670'], status=valid;synonym
+2026-01-24 23:55:45,917 - DEBUG - Multiple TVK matches for species Miriquidica nigroleprosa: TVKs=['NHMSYS0001489676', 'NHMSYS0001489677', 'NHMSYS0001489678'], status=valid;synonym
+2026-01-24 23:55:45,917 - DEBUG - Multiple TVK matches for species Miriquidica pycnocarpa: TVKs=['NHMSYS0020819470', 'NHMSYS0020990617', 'NHMSYS0020535714'], status=valid;synonym
+2026-01-24 23:55:45,918 - DEBUG - Multiple TVK matches for species Alectoria sarmentosa: TVKs=['NBNSYS0000018169', 'NHMSYS0001474319', 'NBNSYS0000018170'], status=valid;synonym
+2026-01-24 23:55:45,918 - DEBUG - Multiple TVK matches for species Cetraria islandica: TVKs=['NBNSYS0000018334', 'NHMSYS0001477208', 'NHMSYS0001477209'], status=valid;synonym
+2026-01-24 23:55:45,923 - DEBUG - Multiple TVK matches for species Toniniopsis aromatica: TVKs=['BMSSYS0000731219', 'NHMSYS0001499835'], status=valid;synonym
+2026-01-24 23:55:45,924 - DEBUG - Multiple TVK matches for species Lepraria diffusa: TVKs=['NHMSYS0000363086', 'NHMSYS0001487379', 'NHMSYS0001487380'], status=valid;synonym
+2026-01-24 23:55:45,924 - DEBUG - Multiple TVK matches for species Stereocaulon dactylophyllum: TVKs=['NHMSYS0001498941', 'NHMSYS0001498942', 'NBNSYS0000019056'], status=valid;synonym
+2026-01-24 23:55:45,924 - DEBUG - Multiple TVK matches for species Stereocaulon vesuvianum: TVKs=['NBNSYS0000019067', 'NBNSYS0000019068', 'NHMSYS0001498954', 'NHMSYS0001498955'], status=valid;synonym
+2026-01-24 23:55:45,924 - DEBUG - Multiple TVK matches for species Mycoblastus sanguinarius: TVKs=['NBNSYS0000018850', 'NHMSYS0001490328', 'NHMSYS0001490329'], status=valid;synonym
+2026-01-24 23:55:45,925 - DEBUG - Multiple TVK matches for species Tephromela atra: TVKs=['NBNSYS0000018569', 'NHMSYS0001499452', 'NHMSYS0001499453'], status=valid;synonym
+2026-01-24 23:55:45,926 - DEBUG - Multiple TVK matches for species Porpidia macrocarpa: TVKs=['NHMSYS0001494687', 'NHMSYS0001494688', 'NHMSYS0020990987'], status=valid;synonym
+2026-01-24 23:55:45,926 - DEBUG - Multiple TVK matches for species Porpidia superba: TVKs=['NBNSYS0000039722', 'NHMSYS0001494697', 'NHMSYS0001494698'], status=valid;synonym
+2026-01-24 23:55:45,926 - DEBUG - Multiple TVK matches for species Blennothallia crispa: TVKs=['BMSSYS0000533587', 'BMSSYS0000004369'], status=valid;synonym
+2026-01-24 23:55:45,926 - DEBUG - Multiple TVK matches for species Enchylium tenax: TVKs=['NHMSYS0001481345', 'NHMSYS0021576913', 'NHMSYS0021646070'], status=valid;synonym
+2026-01-24 23:55:45,927 - DEBUG - Multiple TVK matches for species Lathagrium cristatum: TVKs=['BMSSYS0000046958', 'NHMSYS0001478252', 'NHMSYS0021576918'], status=valid;synonym
+2026-01-24 23:55:45,927 - DEBUG - Multiple TVK matches for species Scytinium callopismum: TVKs=['BMSSYS0000051049', 'NHMSYS0021576928'], status=valid;synonym
+2026-01-24 23:55:45,928 - DEBUG - Multiple TVK matches for species Solorina bispora: TVKs=['NBNSYS0000019355', 'NHMSYS0001497673', 'NHMSYS0001497674', 'NBNSYS0000019357'], status=valid;synonym
+2026-01-24 23:55:45,929 - DEBUG - Multiple TVK matches for species Rhizocarpon atroalbescens: TVKs=['BMSSYS0000016199', 'NHMSYS0001496261'], status=valid;synonym
+2026-01-24 23:55:45,929 - DEBUG - Multiple TVK matches for species Rhizocarpon infernulum: TVKs=['NHMSYS0001496271', 'NHMSYS0020990817', 'NHMSYS0001496273'], status=valid;synonym
+2026-01-24 23:55:45,929 - DEBUG - Multiple TVK matches for species Athallia vitellinula: TVKs=['NHMSYS0020989765', 'NHMSYS0001476666'], status=valid;synonym
+2026-01-24 23:55:45,930 - DEBUG - Multiple TVK matches for species Blastenia coralliza: TVKs=['NHMSYS0020989823', 'NHMSYS0020989889'], status=valid;synonym
+2026-01-24 23:55:45,930 - DEBUG - Multiple TVK matches for species Calogaya pusilla: TVKs=['BMSSYS0000043328', 'NBNSYS0000020556'], status=valid;synonym
+2026-01-24 23:55:45,930 - DEBUG - Multiple TVK matches for species Flavoplaca arcis: TVKs=['NHMSYS0020990207', 'NHMSYS0020039002'], status=valid;synonym
+2026-01-24 23:55:45,930 - DEBUG - Multiple TVK matches for species Flavoplaca itiana: TVKs=['NHMSYS0021842996', 'NHMSYS0001476640'], status=valid;synonym
+2026-01-24 23:55:45,930 - DEBUG - Multiple TVK matches for species Flavoplaca limonia: TVKs=['NHMSYS0020990214', 'NHMSYS0020989894'], status=valid;synonym
+2026-01-24 23:55:45,930 - DEBUG - Multiple TVK matches for species Flavoplaca oasis: TVKs=['NHMSYS0020990218', 'NHMSYS0020535109'], status=valid;synonym
+2026-01-24 23:55:45,930 - DEBUG - Multiple TVK matches for species Fulgensia bracteata: TVKs=['NBNSYS0000020568', 'NHMSYS0001482439'], status=valid;synonym
+2026-01-24 23:55:45,930 - DEBUG - Multiple TVK matches for species Gyalolechia bracteata: TVKs=['BMSSYS0000045954', 'BMSSYS0000006890'], status=valid;synonym
+2026-01-24 23:55:45,930 - DEBUG - Multiple TVK matches for species Haloplaca sorediella: TVKs=['NHMSYS0020990271', 'NHMSYS0020039008'], status=valid;synonym
+2026-01-24 23:55:45,931 - DEBUG - Multiple TVK matches for species Kuettlingeria teicholyta: TVKs=['NHMSYS0021647555', 'NBNSYS0000020560'], status=valid;synonym
+2026-01-24 23:55:45,931 - DEBUG - Multiple TVK matches for species Variospora aurantia: TVKs=['BMSSYS0000052410', 'NHMSYS0000361648'], status=valid;synonym
+2026-01-24 23:55:45,931 - DEBUG - Multiple TVK matches for species Xanthocarpia diffusa: TVKs=['BMSSYS0000534315', 'NHMSYS0020989891'], status=valid;synonym
+2026-01-24 23:55:45,931 - DEBUG - Multiple TVK matches for species Xanthocarpia fulva: TVKs=['NHMSYS0021843116', 'NHMSYS0020989896'], status=valid;synonym
+2026-01-24 23:55:45,932 - DEBUG - Multiple TVK matches for species Hymenelia obtecta: TVKs=['NHMSYS0001484715', 'NHMSYS0001485521'], status=valid;synonym
+2026-01-24 23:55:45,933 - DEBUG - Multiple TVK matches for species Phlyctis agelaea: TVKs=['NHMSYS0001493251', 'NBNSYS0000018855'], status=valid;synonym
+2026-01-24 23:55:45,933 - DEBUG - Multiple TVK matches for species Porina chlorotica: TVKs=['NBNSYS0000100038', 'NHMSYS0020990979', 'NBNSYS0000019886'], status=valid;synonym
+2026-01-24 23:55:45,933 - DEBUG - Multiple TVK matches for species Porina guentheri: TVKs=['NBNSYS0000019889', 'NHMSYS0001494648', 'NBNSYS0000019890'], status=valid;synonym
+2026-01-24 23:55:45,934 - DEBUG - Multiple TVK matches for species Thelenella muscorum: TVKs=['NHMSYS0020000041', 'NHMSYS0001499553', 'NHMSYS0001499554'], status=valid;synonym
+2026-01-24 23:55:45,934 - DEBUG - Multiple TVK matches for species Circinaria calcarea: TVKs=['BMSSYS0000043742', 'NHMSYS0000361491'], status=valid;synonym
+2026-01-24 23:55:45,935 - DEBUG - Multiple TVK matches for species Ochrolechia frigida: TVKs=['NBNSYS0000019366', 'NHMSYS0001491016', 'BMSSYS0000597827'], status=valid;synonym
+2026-01-24 23:55:45,935 - DEBUG - Multiple TVK matches for species Ropalospora lugubris: TVKs=['NBNSYS0000019019', 'NHMSYS0001496546'], status=valid;synonym
+2026-01-24 23:55:45,935 - DEBUG - Multiple TVK matches for species Schaereria fuscocinerea: TVKs=['NBNSYS0000019032', 'NHMSYS0001497118', 'NHMSYS0000841049'], status=valid;synonym
+2026-01-24 23:55:45,935 - DEBUG - Multiple TVK matches for species Fuscidea cyathoides: TVKs=['NHMSYS0001482504', 'NHMSYS0001482505', 'NBNSYS0000018488'], status=valid;synonym
+2026-01-24 23:55:45,936 - DEBUG - Multiple TVK matches for species Orphniospora moriopsis: TVKs=['NHMSYS0001491532', 'NHMSYS0001491533', 'NHMSYS0001491534'], status=valid;synonym
+2026-01-24 23:55:45,954 - DEBUG - Multiple TVK matches for species Microglossum atropurpureum: TVKs=['NHMSYS0001489514', 'NHMSYS0001482868'], status=valid;synonym
+2026-01-24 23:55:45,957 - DEBUG - Multiple TVK matches for species Forssellia concordatula: TVKs=['NHMSYS0021843211', 'NHMSYS0020535994'], status=valid;synonym
+2026-01-24 23:55:45,960 - DEBUG - Multiple TVK matches for species Dissingia leucomelaena: TVKs=['NHMSYS0021663021', 'NBNSYS0000019584'], status=valid;synonym
+2026-01-24 23:55:45,960 - DEBUG - Multiple TVK matches for species Otidea concinna: TVKs=['BMSSYS0000012533', 'NHMSYS0001491550'], status=valid;synonym
+2026-01-24 23:55:45,975 - DEBUG - Multiple TVK matches for species Paranectria oropensis: TVKs=['NHMSYS0001491737', 'NHMSYS0001491738', 'NHMSYS0001491739'], status=valid;synonym
+2026-01-24 23:55:45,991 - DEBUG - Multiple TVK matches for species Sarcosagium campestre: TVKs=['BMSSYS0000050922', 'NHMSYS0001497076', 'NBNSYS0000019024'], status=valid;synonym
+2026-01-24 23:55:45,998 - DEBUG - Multiple TVK matches for species Gyalectiphila achromatica: TVKs=['NHMSYS0021843236', 'BMSSYS0000016127'], status=valid;synonym
+2026-01-24 23:55:46,018 - DEBUG - Multiple TVK matches for species Lichenomphalia ericetorum: TVKs=['NHMSYS0021797642', 'NHMSYS0001488367'], status=valid;synonym
+2026-01-24 23:55:46,023 - DEBUG - Multiple TVK matches for species Lyophyllum osmophorum: TVKs=['NHMSYS0021782190', 'BMSSYS0000039444'], status=valid;synonym
+2026-01-24 23:55:46,024 - DEBUG - Multiple TVK matches for species Rugosomyces onychinus: TVKs=['BMSSYS0000050762', 'NBNSYS0000162269'], status=valid;synonym
+2026-01-24 23:55:46,035 - DEBUG - Multiple TVK matches for species Pseudotricholoma metapodium: TVKs=['BMSSYS0000050225', 'NBNSYS0000037943'], status=valid;synonym
+2026-01-24 23:55:46,036 - DEBUG - Multiple TVK matches for species Flammulaster limulatus: TVKs=['NHMSYS0001482317', 'BMSSYS0000006830'], status=valid;synonym
+2026-01-24 23:55:46,039 - DEBUG - Multiple TVK matches for species Dissoderma paradoxum: TVKs=['NHMSYS0021645485', 'BMSSYS0000017806'], status=valid;synonym
+2026-01-24 23:55:46,039 - DEBUG - Multiple TVK matches for species Dissoderma pearsonii: TVKs=['NHMSYS0021645490', 'BMSSYS0000017807'], status=valid;synonym
+2026-01-24 23:55:46,040 - DEBUG - Multiple TVK matches for species Omphalina galericolor: TVKs=['NHMSYS0001491299', 'NHMSYS0019999791'], status=valid;synonym
+2026-01-24 23:55:46,041 - DEBUG - Multiple TVK matches for species Aureoboletus moravicus: TVKs=['BMSSYS0000042790', 'NBNSYS0000038784'], status=valid;synonym
+2026-01-24 23:55:46,042 - DEBUG - Multiple TVK matches for species Butyriboletus fechtneri: TVKs=['BMSSYS0000043238', 'NHMSYS0001475959'], status=valid;synonym
+2026-01-24 23:55:46,042 - DEBUG - Multiple TVK matches for species Butyriboletus fuscoroseus: TVKs=['NHMSYS0021905573', 'BMSSYS0000043114'], status=valid;synonym
+2026-01-24 23:55:46,042 - DEBUG - Multiple TVK matches for species Butyriboletus subappendiculatus: TVKs=['BMSSYS0000043241', 'NHMSYS0001476078'], status=valid;synonym
+2026-01-24 23:55:46,042 - DEBUG - Multiple TVK matches for species Caloboletus radicans: TVKs=['BMSSYS0000043320', 'NBNSYS0000143053'], status=valid;synonym
+2026-01-24 23:55:46,042 - DEBUG - Multiple TVK matches for species Chalciporus rubinus: TVKs=['BMSSYS0000003705', 'NHMSYS0001496606'], status=valid;synonym
+2026-01-24 23:55:46,042 - DEBUG - Multiple TVK matches for species Cyanoboletus pulverulentus: TVKs=['BMSSYS0000044581', 'NBNSYS0000039411'], status=valid;synonym
+2026-01-24 23:55:46,042 - DEBUG - Multiple TVK matches for species Hemileccinum depilatum: TVKs=['BMSSYS0000046179', 'NHMSYS0020531024'], status=valid;synonym
+2026-01-24 23:55:46,042 - DEBUG - Multiple TVK matches for species Hemileccinum impolitum: TVKs=['BMSSYS0000046180', 'NBNSYS0000037356'], status=valid;synonym
+2026-01-24 23:55:46,042 - DEBUG - Multiple TVK matches for species Hortiboletus bubalinus: TVKs=['BMSSYS0000046287', 'NHMSYS0020535086'], status=valid;synonym
+2026-01-24 23:55:46,042 - DEBUG - Multiple TVK matches for species Hortiboletus engelii: TVKs=['BMSSYS0000046288', 'NHMSYS0020811799'], status=valid;synonym
+2026-01-24 23:55:46,042 - DEBUG - Multiple TVK matches for species Hortiboletus rubellus: TVKs=['BMSSYS0000046289', 'NBNSYS0000143057'], status=valid;synonym
+2026-01-24 23:55:46,042 - DEBUG - Multiple TVK matches for species Imleria badia: TVKs=['BMSSYS0000046598', 'NHMSYS0001475893'], status=valid;synonym
+2026-01-24 23:55:46,042 - DEBUG - Multiple TVK matches for species Imperator rhodopurpureus: TVKs=['BMSSYS0000046603', 'NBNSYS0000039347'], status=valid;synonym
+2026-01-24 23:55:46,042 - DEBUG - Multiple TVK matches for species Lanmaoa fragrans: TVKs=['BMSSYS0000046926', 'NBNSYS0000038210'], status=valid;synonym
+2026-01-24 23:55:46,042 - DEBUG - Multiple TVK matches for species Leccinellum crocipodium: TVKs=['BMSSYS0000047067', 'NBNSYS0000037977'], status=valid;synonym
+2026-01-24 23:55:46,042 - DEBUG - Multiple TVK matches for species Leccinellum pseudoscabrum: TVKs=['NHMSYS0021647645', 'NHMSYS0001486536'], status=valid;synonym
+2026-01-24 23:55:46,043 - DEBUG - Multiple TVK matches for species Neoboletus praestigiator: TVKs=['BMSSYS0000731015', 'NHMSYS0001475982', 'BMSSYS0000002712', 'NBNSYS0000039200'], status=valid;synonym
+2026-01-24 23:55:46,043 - DEBUG - Multiple TVK matches for species Neoboletus xanthopus: TVKs=['BMSSYS0000598384', 'NHMSYS0001476001'], status=valid;synonym
+2026-01-24 23:55:46,043 - DEBUG - Multiple TVK matches for species Rheubarbariboletus armeniacus: TVKs=['BMSSYS0000050563', 'BMSSYS0000002638'], status=valid;synonym
+2026-01-24 23:55:46,043 - DEBUG - Multiple TVK matches for species Rubroboletus rhodoxanthus: TVKs=['NHMSYS0021648870', 'NBNSYS0000143056'], status=valid;synonym
+2026-01-24 23:55:46,043 - DEBUG - Multiple TVK matches for species Suillellus luridus: TVKs=['BMSSYS0000051716', 'BMSSYS0000002714'], status=valid;synonym
+2026-01-24 23:55:46,043 - DEBUG - Multiple TVK matches for species Xerocomellus chrysenteron: TVKs=['BMSSYS0000052612', 'NHMSYS0001475918'], status=valid;synonym
+2026-01-24 23:55:46,043 - DEBUG - Multiple TVK matches for species Xerocomellus cisalpinus: TVKs=['BMSSYS0000052613', 'NHMSYS0001475920'], status=valid;synonym
+2026-01-24 23:55:46,043 - DEBUG - Multiple TVK matches for species Xerocomus ferrugineus: TVKs=['NHMSYS0001501958', 'BMSSYS0000039648'], status=valid;synonym
+2026-01-24 23:55:46,047 - DEBUG - Multiple TVK matches for species Geastrum michelianum: TVKs=['NHMSYS0001482829', 'NBNSYS0000041480'], status=valid;synonym
+2026-01-24 23:55:46,049 - DEBUG - Multiple TVK matches for species Craterellus melanoxeros: TVKs=['BMSSYS0000728876', 'BMSSYS0000003298'], status=valid;synonym
+2026-01-24 23:55:46,051 - DEBUG - Multiple TVK matches for species Buglossoporus quercinus: TVKs=['NBNSYS0000189320', 'BMSSYS0000014509'], status=valid;synonym
+2026-01-24 23:55:46,060 - DEBUG - Multiple TVK matches for species Phellodon fuligineoalbus: TVKs=['BMSSYS0000049356', 'NBNSYS0000021216'], status=valid;synonym
+2026-01-24 23:55:46,062 - DEBUG - Multiple TVK matches for species Zyzygomyces physciacearum: TVKs=['NHMSYS0021645860', 'BMSSYS0000046240'], status=valid;synonym
+2026-01-24 23:55:46,068 - DEBUG - Multiple TVK matches for species Puccinia prunellarum-moliniae: TVKs=['BMSSYS0000597732', 'NBNSYS0000155420'], status=valid;synonym
+2026-01-24 23:55:46,078 - DEBUG - Multiple TVK matches for species Batrachospermum gelatinosum: TVKs=['NHMSYS0000600172', 'NHMSYS0000600173'], status=valid;synonym
+2026-01-24 23:55:46,082 - DEBUG - Multiple TVK matches for species Gymnocolea inflata: TVKs=['NHMSYS0021593242', 'NHMSYS0021593247', 'NHMSYS0021593252'], status=valid;synonym
+2026-01-24 23:55:46,083 - DEBUG - Multiple TVK matches for species Mesoptychia gillmanii: TVKs=['NHMSYS0021597892', 'NHMSYS0021597877'], status=valid;synonym
+2026-01-24 23:55:46,084 - DEBUG - Multiple TVK matches for species Plagiochila porelloides: TVKs=['NHMSYS0021732093', 'NHMSYS0021600162', 'NHMSYS0021600157'], status=valid;synonym
+2026-01-24 23:55:46,086 - DEBUG - Multiple TVK matches for species Bryum schleicheri: TVKs=['NHMSYS0000309516', 'NBNSYS0000036590'], status=valid;synonym
+2026-01-24 23:55:46,088 - DEBUG - Multiple TVK matches for species Fissidens bryoides: TVKs=['NBNSYS0000036273', 'NHMSYS0021125871'], status=valid;synonym
+2026-01-24 23:55:46,089 - DEBUG - Multiple TVK matches for species Ephemerum crassinervium: TVKs=['NHMSYS0021600312', 'NHMSYS0021600317'], status=valid;synonym
+2026-01-24 23:55:46,089 - DEBUG - Multiple TVK matches for species Hymenostylium recurvirostrum: TVKs=['NHMSYS0000310072', 'NHMSYS0021194674'], status=valid;synonym
+2026-01-24 23:55:46,090 - DEBUG - Multiple TVK matches for species Weissia brachycarpa: TVKs=['NHMSYS0000310829', 'NHMSYS0000310830'], status=valid;synonym
+2026-01-24 23:55:46,090 - DEBUG - Multiple TVK matches for species Weissia controversa: TVKs=['NBNSYS0000036403', 'NHMSYS0000841019'], status=valid;synonym
+2026-01-24 23:55:46,094 - DEBUG - Multiple TVK matches for species Hylocomiastrum: TVKs=['NBNSYS0000149206', 'NBNSYS0000149207'], status=synonym
+2026-01-24 23:55:46,095 - DEBUG - Multiple TVK matches for species Abietinella abietina: TVKs=['NBNSYS0000140834', 'NHMSYS0020918141'], status=valid;synonym
+2026-01-24 23:55:46,096 - DEBUG - Multiple TVK matches for species Atrichum undulatum: TVKs=['NHMSYS0021600167', 'NBNSYS0000036148'], status=valid;synonym
+2026-01-24 23:55:46,096 - DEBUG - Multiple TVK matches for species Sphagnum palustre: TVKs=['NBNSYS0000036070', 'NHMSYS0000310679', 'NHMSYS0000310680'], status=valid;synonym
+2026-01-24 23:55:46,097 - DEBUG - Multiple TVK matches for species Sphagnum subnitens: TVKs=['NHMSYS0000310691', 'NBNSYS0000036085', 'NHMSYS0000310694'], status=valid;synonym
+2026-01-24 23:55:46,097 - DEBUG - Multiple TVK matches for species Chara papillosa: TVKs=['NHMSYS0000465483', 'NHMSYS0000457194'], status=valid;synonym
+2026-01-24 23:55:46,097 - DEBUG - Multiple TVK matches for species Chara subspinosa: TVKs=['NHMSYS0021872482', 'NHMSYS0000457210'], status=valid;synonym
+2026-01-24 23:55:46,101 - DEBUG - Multiple TVK matches for species Cosmarium turpinii: TVKs=['NHMSYS0000601481', 'NHMSYS0000601482'], status=valid;synonym
+2026-01-24 23:55:46,102 - DEBUG - Multiple TVK matches for species Pleurotaenium tridentulum: TVKs=['NHMSYS0000605644', 'NHMSYS0000605645'], status=valid;synonym
+2026-01-24 23:55:46,116 - DEBUG - Multiple TVK matches for species Juniperus communis: TVKs=['NBNSYS0000004634', 'NHMSYS0000460002', 'NHMSYS0000460003', 'NHMSYS0100001856'], status=valid;synonym
+2026-01-24 23:55:46,117 - DEBUG - Multiple TVK matches for species Baldellia ranunculoides: TVKs=['NBNSYS0000002099', 'NHMSYS0020755099'], status=valid;synonym
+2026-01-24 23:55:46,117 - DEBUG - Multiple TVK matches for species Arum italicum: TVKs=['NHMSYS0000456118', 'NHMSYS0000456121'], status=valid;synonym
+2026-01-24 23:55:46,118 - DEBUG - Multiple TVK matches for species Triglochin maritima: TVKs=['NBNSYS0000158561', 'NBNSYS0000002121'], status=valid;synonym
+2026-01-24 23:55:46,118 - DEBUG - Multiple TVK matches for species Triglochin palustris: TVKs=['NBNSYS0000158562', 'NBNSYS0000002120'], status=valid;synonym
+2026-01-24 23:55:46,118 - DEBUG - Multiple TVK matches for species Stuckenia filiformis: TVKs=['NHMSYS0021872172', 'NBNSYS0000002145'], status=valid;synonym
+2026-01-24 23:55:46,118 - DEBUG - Multiple TVK matches for species Stuckenia pectinata: TVKs=['NHMSYS0021060372', 'NBNSYS0000002146'], status=valid;synonym
+2026-01-24 23:55:46,118 - DEBUG - Multiple TVK matches for species Zannichellia palustris: TVKs=['NBNSYS0000002150', 'NHMSYS0000465217', 'NHMSYS0000465218'], status=valid;synonym
+2026-01-24 23:55:46,119 - DEBUG - Multiple TVK matches for species Ruppia maritima: TVKs=['NBNSYS0000002149', 'NHMSYS0021060370'], status=valid;synonym
+2026-01-24 23:55:46,119 - DEBUG - Multiple TVK matches for species Zostera marina: TVKs=['NBNSYS0000002123', 'NHMSYS0021060376'], status=valid;synonym
+2026-01-24 23:55:46,119 - DEBUG - Multiple TVK matches for species Zostera noltei: TVKs=['NBNSYS0100006056', 'NHMSYS0021060379'], status=valid;synonym
+2026-01-24 23:55:46,119 - DEBUG - Multiple TVK matches for species Aethusa cynapium: TVKs=['NBNSYS0000003696', 'NHMSYS0000455630', 'NHMSYS0000455632'], status=valid;synonym
+2026-01-24 23:55:46,119 - DEBUG - Multiple TVK matches for species Angelica archangelica: TVKs=['NBNSYS0000003704', 'NHMSYS0021240639'], status=valid;synonym
+2026-01-24 23:55:46,119 - DEBUG - Multiple TVK matches for species Apium graveolens: TVKs=['NBNSYS0000003663', 'NBNSYS0500000159'], status=valid;synonym
+2026-01-24 23:55:46,119 - DEBUG - Multiple TVK matches for species Daucus carota: TVKs=['NBNSYS0000014362', 'NHMSYS0000458012', 'NHMSYS0000458013'], status=valid;synonym
+2026-01-24 23:55:46,120 - DEBUG - Multiple TVK matches for species Helosciadium nodiflorum: TVKs=['NHMSYS0021872397', 'NBNSYS0000003666'], status=valid;synonym
+2026-01-24 23:55:46,120 - DEBUG - Multiple TVK matches for species Heracleum sphondylium: TVKs=['NBNSYS0000003710', 'NHMSYS0000459305'], status=valid;synonym
+2026-01-24 23:55:46,120 - DEBUG - Multiple TVK matches for species Pastinaca sativa: TVKs=['NBNSYS0000003709', 'NHMSYS0021130712'], status=valid;synonym
+2026-01-24 23:55:46,120 - DEBUG - Multiple TVK matches for species Thysselinum palustre: TVKs=['NHMSYS0021871017', 'NHMSYS0021240774'], status=valid;synonym
+2026-01-24 23:55:46,120 - DEBUG - Multiple TVK matches for species Torilis arvensis: TVKs=['NHMSYS0000464491', 'NHMSYS0021240779'], status=valid;synonym
+2026-01-24 23:55:46,121 - DEBUG - Multiple TVK matches for species Hedera helix: TVKs=['NBNSYS0000003630', 'NHMSYS0000459245'], status=valid;synonym
+2026-01-24 23:55:46,121 - DEBUG - Multiple TVK matches for species Galanthus nivalis: TVKs=['NBNSYS0000002253', 'NBNSYS0500000285', 'NBNSYS0500000286'], status=valid;synonym
+2026-01-24 23:55:46,121 - DEBUG - Multiple TVK matches for species Galanthus plicatus: TVKs=['NHMSYS0000458938', 'NHMSYS0000458939', 'NHMSYS0000458940'], status=valid;synonym
+2026-01-24 23:55:46,121 - DEBUG - Multiple TVK matches for species Galanthus reginae-olgae: TVKs=['NHMSYS0000458941', 'NHMSYS0021874247', 'NHMSYS0021873947'], status=valid;synonym
+2026-01-24 23:55:46,121 - DEBUG - Multiple TVK matches for species Leucojum aestivum: TVKs=['NBNSYS0000002252', 'NHMSYS0000460307'], status=valid;synonym
+2026-01-24 23:55:46,122 - DEBUG - Multiple TVK matches for species Narcissus pseudonarcissus: TVKs=['NBNSYS0000014596', 'NBNSYS0000002256'], status=valid;synonym
+2026-01-24 23:55:46,123 - DEBUG - Multiple TVK matches for species Dactylorhiza incarnata: TVKs=['NHMSYS0000457908', 'NHMSYS0000457909', 'NHMSYS0000457912', 'NHMSYS0000457913', 'NHMSYS0000457914', 'NHMSYS0021874187', 'NHMSYS0000457916', 'NHMSYS0000457917'], status=valid;synonym
+2026-01-24 23:55:46,123 - DEBUG - Multiple TVK matches for species Dactylorhiza kerryensis: TVKs=['NHMSYS0000457918', 'NHMSYS0021874882', 'NHMSYS0021875027'], status=valid;synonym
+2026-01-24 23:55:46,123 - DEBUG - Multiple TVK matches for species Dactylorhiza maculata: TVKs=['NHMSYS0000457923', 'NHMSYS0021874657', 'NHMSYS0000457924', 'NHMSYS0021873992', 'NHMSYS0000457928'], status=valid;synonym
+2026-01-24 23:55:46,123 - DEBUG - Multiple TVK matches for species Dactylorhiza praetermissa: TVKs=['NHMSYS0000457949', 'NHMSYS0021874032', 'NHMSYS0000457888', 'NHMSYS0021875552'], status=valid;synonym
+2026-01-24 23:55:46,123 - DEBUG - Multiple TVK matches for species Dactylorhiza purpurella: TVKs=['NHMSYS0000457952', 'NHMSYS0021875057', 'NHMSYS0000457954'], status=valid;synonym
+2026-01-24 23:55:46,123 - DEBUG - Multiple TVK matches for species Dactylorhiza traunsteinerioides: TVKs=['NHMSYS0020116813', 'NHMSYS0020978920', 'NHMSYS0020116863'], status=valid;synonym
+2026-01-24 23:55:46,123 - DEBUG - Multiple TVK matches for species Dactylorhiza viridis: TVKs=['NHMSYS0000457959', 'NHMSYS0000457408'], status=valid;synonym
+2026-01-24 23:55:46,123 - DEBUG - Multiple TVK matches for species Epipactis helleborine: TVKs=['NBNSYS0000002289', 'NHMSYS0021874582', 'NHMSYS0021875442'], status=valid;synonym
+2026-01-24 23:55:46,123 - DEBUG - Multiple TVK matches for species Epipactis leptochila: TVKs=['NHMSYS0000458447', 'NHMSYS0021875422', 'NBNSYS0000034303'], status=valid;synonym
+2026-01-24 23:55:46,125 - DEBUG - Multiple TVK matches for species Epipactis phyllanthes: TVKs=['NHMSYS0000458454', 'NHMSYS0000458455', 'NBNSYS0100003051', 'NBNSYS0100003052', 'NBNSYS0100003053', 'NBNSYS0100003054'], status=valid;synonym
+2026-01-24 23:55:46,125 - DEBUG - Multiple TVK matches for species Gymnadenia conopsea: TVKs=['NHMSYS0000459168', 'NHMSYS0000459169'], status=valid;synonym
+2026-01-24 23:55:46,125 - DEBUG - Multiple TVK matches for species Ophrys apifera: TVKs=['NHMSYS0000461294', 'NHMSYS0021875652', 'NHMSYS0021875582', 'NHMSYS0021875722', 'NHMSYS0021875577', 'NHMSYS0021874977', 'NBNSYS0500000287', 'NBNSYS0000039827'], status=valid;synonym
+2026-01-24 23:55:46,126 - DEBUG - Multiple TVK matches for species Platanthera obtusata: TVKs=['NHMSYS0020704609', 'NBNSYS0000163766'], status=valid;synonym
+2026-01-24 23:55:46,126 - DEBUG - Multiple TVK matches for species Achillea maritima: TVKs=['NHMSYS0021240634', 'NHMSYS0000461412'], status=valid;synonym
+2026-01-24 23:55:46,127 - DEBUG - Multiple TVK matches for species Artemisia campestris: TVKs=['NBNSYS0000004476', 'NHMSYS0021118873', 'NHMSYS0020488426'], status=valid;synonym
+2026-01-24 23:55:46,128 - DEBUG - Multiple TVK matches for species Centaurea debeauxii: TVKs=['NHMSYS0000457017', 'NHMSYS0100000969', 'NHMSYS0021118897'], status=valid;synonym
+2026-01-24 23:55:46,130 - DEBUG - Multiple TVK matches for species Filago germanica: TVKs=['NHMSYS0000465647', 'NBNSYS0000004403'], status=valid;synonym
+2026-01-24 23:55:46,130 - DEBUG - Multiple TVK matches for species Galatella linosyris: TVKs=['NHMSYS0021870527', 'NBNSYS0000004435'], status=valid;synonym
+2026-01-24 23:55:46,131 - DEBUG - Multiple TVK matches for species Helminthotheca echioides: TVKs=['NHMSYS0100001729', 'NBNSYS0000004525'], status=valid;synonym
+2026-01-24 23:55:46,132 - DEBUG - Multiple TVK matches for species Hieracium lanceolatifolium: TVKs=['NHMSYS0021873497', 'NHMSYS0000840779'], status=valid;synonym
+2026-01-24 23:55:46,132 - DEBUG - Multiple TVK matches for species Hieracium umbellatum: TVKs=['NHMSYS0000459693', 'NHMSYS0000459694'], status=synonym
+2026-01-24 23:55:46,132 - DEBUG - Multiple TVK matches for species Hieracium benhopense: TVKs=['NHMSYS0021653685', 'NHMSYS0000459563'], status=valid;synonym
+2026-01-24 23:55:46,132 - DEBUG - Multiple TVK matches for species Hieracium caesitium: TVKs=['NHMSYS0020442360', 'NHMSYS0021118683'], status=valid;synonym
+2026-01-24 23:55:46,132 - DEBUG - Multiple TVK matches for species Hieracium cambrense: TVKs=['NHMSYS0021653690', 'NHMSYS0000459648'], status=valid;synonym
+2026-01-24 23:55:46,133 - DEBUG - Multiple TVK matches for species Hieracium argenteum: TVKs=['NHMSYS0000459340', 'NHMSYS0021118677'], status=valid;synonym
+2026-01-24 23:55:46,134 - DEBUG - Multiple TVK matches for species Hieracium subcrinellum: TVKs=['NHMSYS0021653780', 'NHMSYS0020755108'], status=valid;synonym
+2026-01-24 23:55:46,135 - DEBUG - Multiple TVK matches for species Hieracium breviglandulosum: TVKs=['NHMSYS0021870662', 'NHMSYS0000459407'], status=valid;synonym
+2026-01-24 23:55:46,135 - DEBUG - Multiple TVK matches for species Hieracium lintonense: TVKs=['NHMSYS0021653730', 'NHMSYS0000459358'], status=valid;synonym
+2026-01-24 23:55:46,136 - DEBUG - Multiple TVK matches for species Hieracium pseudacroleucum: TVKs=['NHMSYS0021653755', 'NHMSYS0021118707'], status=valid;synonym
+2026-01-24 23:55:46,136 - DEBUG - Multiple TVK matches for species Hieracium triviale: TVKs=['NHMSYS0021870657', 'NHMSYS0021118701'], status=valid;synonym
+2026-01-24 23:55:46,137 - DEBUG - Multiple TVK matches for species Hypochaeris radicata: TVKs=['NBNSYS0000004518', 'NHMSYS0000523073', 'NHMSYS0021118879'], status=valid;synonym
+2026-01-24 23:55:46,137 - DEBUG - Multiple TVK matches for species Jacobaea aquatica: TVKs=['NHMSYS0021241532', 'NHMSYS0021241537'], status=valid;synonym
+2026-01-24 23:55:46,137 - DEBUG - Multiple TVK matches for species Laphangium luteoalbum: TVKs=['NHMSYS0021870182', 'NBNSYS0000004412'], status=valid;synonym
+2026-01-24 23:55:46,138 - DEBUG - Multiple TVK matches for species Leucanthemum vulgare: TVKs=['NBNSYS0000004464', 'NHMSYS0021240719'], status=valid;synonym
+2026-01-24 23:55:46,138 - DEBUG - Multiple TVK matches for species Limbarda crithmoides: TVKs=['NHMSYS0100001945', 'NBNSYS0000004398'], status=valid;synonym
+2026-01-24 23:55:46,138 - DEBUG - Multiple TVK matches for species Logfia minima: TVKs=['NBNSYS0000150750', 'NHMSYS0000458842'], status=valid;synonym
+2026-01-24 23:55:46,139 - DEBUG - Multiple TVK matches for species Omalotheca norvegica: TVKs=['NHMSYS0000461173', 'NHMSYS0000459100'], status=valid;synonym
+2026-01-24 23:55:46,139 - DEBUG - Multiple TVK matches for species Omalotheca supina: TVKs=['NHMSYS0100002170', 'NBNSYS0000004410'], status=valid;synonym
+2026-01-24 23:55:46,139 - DEBUG - Multiple TVK matches for species Omalotheca sylvatica: TVKs=['NHMSYS0000461174', 'NBNSYS0000004408'], status=valid;synonym
+2026-01-24 23:55:46,139 - DEBUG - Multiple TVK matches for species Pilosella flagellaris: TVKs=['NHMSYS0000461276', 'NHMSYS0000461277'], status=valid;synonym
+2026-01-24 23:55:46,139 - DEBUG - Multiple TVK matches for species Pilosella peleteriana: TVKs=['NHMSYS0000461676', 'NHMSYS0000461677', 'NHMSYS0000461678', 'NHMSYS0000461679'], status=valid;synonym
+2026-01-24 23:55:46,141 - DEBUG - Multiple TVK matches for species Senecio vulgaris: TVKs=['NBNSYS0000004371', 'NHMSYS0021118891'], status=valid;synonym
+2026-01-24 23:55:46,141 - DEBUG - Multiple TVK matches for species Solidago virgaurea: TVKs=['NBNSYS0000004417', 'NHMSYS0021240749'], status=valid;synonym
+2026-01-24 23:55:46,148 - DEBUG - Multiple TVK matches for species Taraxacum stenoglossum: TVKs=['NHMSYS0021872087', 'NHMSYS0000464201'], status=valid;synonym
+2026-01-24 23:55:46,148 - DEBUG - Multiple TVK matches for species Taraxacum clovense: TVKs=['NHMSYS0000464191', 'NHMSYS0000464348'], status=valid;synonym
+2026-01-24 23:55:46,149 - DEBUG - Multiple TVK matches for species Tephroseris integrifolia: TVKs=['NBNSYS0000033481', 'NHMSYS0000464372', 'NHMSYS0000464373'], status=valid;synonym
+2026-01-24 23:55:46,149 - DEBUG - Multiple TVK matches for species Tripleurospermum maritimum: TVKs=['NHMSYS0000464607', 'NBNSYS0000004460', 'NHMSYS0021127693', 'NHMSYS0021118867'], status=valid;synonym
+2026-01-24 23:55:46,149 - DEBUG - Multiple TVK matches for species Tripolium pannonicum: TVKs=['NHMSYS0021872072', 'NBNSYS0000004422'], status=valid;synonym
+2026-01-24 23:55:46,150 - DEBUG - Multiple TVK matches for species Campanula rotundifolia: TVKs=['NBNSYS0000004288', 'NHMSYS0021118854', 'NHMSYS0021118860'], status=valid;synonym
+2026-01-24 23:55:46,150 - DEBUG - Multiple TVK matches for species Aegonychon purpureocaeruleum: TVKs=['NHMSYS0000455618', 'NBNSYS0000004015'], status=valid;synonym
+2026-01-24 23:55:46,151 - DEBUG - Multiple TVK matches for species Lycopsis arvensis: TVKs=['NBNSYS0000150919', 'NHMSYS0000455907'], status=valid;synonym
+2026-01-24 23:55:46,151 - DEBUG - Multiple TVK matches for species Myosotis stricta: TVKs=['NHMSYS0021873427', 'NHMSYS0021605732'], status=valid;synonym
+2026-01-24 23:55:46,152 - DEBUG - Multiple TVK matches for species Symphytum officinale: TVKs=['NBNSYS0000003984', 'NHMSYS0000464114', 'NHMSYS0000464115'], status=valid;synonym
+2026-01-24 23:55:46,152 - DEBUG - Multiple TVK matches for species Brassica rapa: TVKs=['NBNSYS0000002802', 'NHMSYS0000456606'], status=valid;synonym
+2026-01-24 23:55:46,153 - DEBUG - Multiple TVK matches for species Cochlearia officinalis: TVKs=['NHMSYS0000457397', 'NHMSYS0000457401', 'NHMSYS0000457402'], status=valid;synonym
+2026-01-24 23:55:46,153 - DEBUG - Multiple TVK matches for species Cochlearia pyrenaica: TVKs=['NBNSYS0000002851', 'NHMSYS0100001055', 'NHMSYS0000457403'], status=valid;synonym
+2026-01-24 23:55:46,153 - DEBUG - Multiple TVK matches for species Coincya monensis: TVKs=['NBNSYS0000034043', 'NHMSYS0000457412'], status=valid;synonym
+2026-01-24 23:55:46,154 - DEBUG - Multiple TVK matches for species Drabella muralis: TVKs=['NHMSYS0021872167', 'NBNSYS0000002866'], status=valid;synonym
+2026-01-24 23:55:46,154 - DEBUG - Multiple TVK matches for species Erophila verna: TVKs=['NHMSYS0000458582', 'NBNSYS0000002867'], status=valid;synonym
+2026-01-24 23:55:46,155 - DEBUG - Multiple TVK matches for species Nasturtium microphyllum: TVKs=['NHMSYS0000460932', 'NHMSYS0000462434'], status=valid;synonym
+2026-01-24 23:55:46,155 - DEBUG - Multiple TVK matches for species Nasturtium officinale: TVKs=['NHMSYS0000460933', 'NBNSYS0000002894'], status=valid;synonym
+2026-01-24 23:55:46,155 - DEBUG - Multiple TVK matches for species Noccaea caerulescens: TVKs=['NHMSYS0000461068', 'NHMSYS0000464422'], status=valid;synonym
+2026-01-24 23:55:46,155 - DEBUG - Multiple TVK matches for species Raphanus raphanistrum: TVKs=['NBNSYS0000002815', 'NHMSYS0000462282', 'NHMSYS0000462283'], status=valid;synonym
+2026-01-24 23:55:46,157 - DEBUG - Multiple TVK matches for species Beta vulgaris: TVKs=['NBNSYS0000003106', 'NBNSYS0000003107'], status=valid;synonym
+2026-01-24 23:55:46,157 - DEBUG - Multiple TVK matches for species Blitum bonus-henricus: TVKs=['NHMSYS0021873182', 'NBNSYS0000003088'], status=valid;synonym
+2026-01-24 23:55:46,157 - DEBUG - Multiple TVK matches for species Chenopodiastrum murale: TVKs=['NHMSYS0021873392', 'NBNSYS0000003099'], status=valid;synonym
+2026-01-24 23:55:46,158 - DEBUG - Multiple TVK matches for species Lipandra polysperma: TVKs=['NHMSYS0021870862', 'NBNSYS0000003089'], status=valid;synonym
+2026-01-24 23:55:46,158 - DEBUG - Multiple TVK matches for species Oxybasis chenopodioides: TVKs=['NHMSYS0021669628', 'NBNSYS0000003103'], status=valid;synonym
+2026-01-24 23:55:46,158 - DEBUG - Multiple TVK matches for species Oxybasis glauca: TVKs=['NHMSYS0021669633', 'NBNSYS0000003104'], status=valid;synonym
+2026-01-24 23:55:46,158 - DEBUG - Multiple TVK matches for species Oxybasis rubra: TVKs=['NHMSYS0021669623', 'NBNSYS0000003102'], status=valid;synonym
+2026-01-24 23:55:46,158 - DEBUG - Multiple TVK matches for species Oxybasis urbica: TVKs=['NHMSYS0021669643', 'NBNSYS0000003100'], status=valid;synonym
+2026-01-24 23:55:46,158 - DEBUG - Multiple TVK matches for species Arenaria leptoclados: TVKs=['NHMSYS0000456046', 'NHMSYS0000456053'], status=valid;synonym
+2026-01-24 23:55:46,158 - DEBUG - Multiple TVK matches for species Arenaria norvegica: TVKs=['NBNSYS0000034114', 'NHMSYS0000456048', 'NHMSYS0000456049'], status=valid;synonym
+2026-01-24 23:55:46,158 - DEBUG - Multiple TVK matches for species Arenaria serpyllifolia: TVKs=['NBNSYS0000004683', 'NHMSYS0000456056'], status=valid;synonym
+2026-01-24 23:55:46,158 - DEBUG - Multiple TVK matches for species Cerastium fontanum: TVKs=['NBNSYS0000003022', 'NHMSYS0000457067', 'NHMSYS0000457068', 'NHMSYS0000457069'], status=valid;synonym
+2026-01-24 23:55:46,159 - DEBUG - Multiple TVK matches for species Cherleria sedoides: TVKs=['NBNSYS0000144262', 'NBNSYS0000003056'], status=valid;synonym
+2026-01-24 23:55:46,159 - DEBUG - Multiple TVK matches for species Herniaria ciliolata: TVKs=['NHMSYS0000459314', 'NHMSYS0000459315'], status=valid;synonym
+2026-01-24 23:55:46,159 - DEBUG - Multiple TVK matches for species Sabulina rubella: TVKs=['NHMSYS0021605742', 'NBNSYS0000003053'], status=valid;synonym
+2026-01-24 23:55:46,159 - DEBUG - Multiple TVK matches for species Sabulina stricta: TVKs=['NHMSYS0021872052', 'NBNSYS0000003054'], status=valid;synonym
+2026-01-24 23:55:46,159 - DEBUG - Multiple TVK matches for species Sabulina verna: TVKs=['NHMSYS0021873242', 'NBNSYS0000003052'], status=valid;synonym
+2026-01-24 23:55:46,159 - DEBUG - Multiple TVK matches for species Sagina apetala: TVKs=['NBNSYS0000004655', 'NHMSYS0000463045'], status=valid;synonym
+2026-01-24 23:55:46,159 - DEBUG - Multiple TVK matches for species Sagina filicaulis: TVKs=['NHMSYS0000463048', 'NHMSYS0000463046'], status=valid;synonym
+2026-01-24 23:55:46,160 - DEBUG - Multiple TVK matches for species Scleranthus annuus: TVKs=['NBNSYS0000004587', 'NBNSYS0000004588', 'NBNSYS0000004589'], status=valid;synonym
+2026-01-24 23:55:46,160 - DEBUG - Multiple TVK matches for species Scleranthus perennis: TVKs=['NBNSYS0000039530', 'NHMSYS0000463330', 'NHMSYS0000463331'], status=valid;synonym
+2026-01-24 23:55:46,160 - DEBUG - Multiple TVK matches for species Silene flos-cuculi: TVKs=['NHMSYS0100002969', 'NBNSYS0000156751'], status=valid;synonym
+2026-01-24 23:55:46,161 - DEBUG - Multiple TVK matches for species Stellaria aquatica: TVKs=['NBNSYS0000157227', 'NBNSYS0000003028'], status=valid;synonym
+2026-01-24 23:55:46,161 - DEBUG - Multiple TVK matches for species Stellaria nemorum: TVKs=['NBNSYS0000003029', 'NBNSYS0000003030', 'NHMSYS0000464010'], status=valid;synonym
+2026-01-24 23:55:46,161 - DEBUG - Multiple TVK matches for species Montia fontana: TVKs=['NBNSYS0000003074', 'NBNSYS0000003077', 'NBNSYS0000101088', 'NHMSYS0000460771', 'NBNSYS0000003078'], status=valid;synonym
+2026-01-24 23:55:46,161 - DEBUG - Multiple TVK matches for species Armeria maritima: TVKs=['NHMSYS0000456077', 'NBNSYS0000004611', 'NHMSYS0000456078', 'NHMSYS0021060385'], status=valid;synonym
+2026-01-24 23:55:46,162 - DEBUG - Multiple TVK matches for species Limonium binervosum: TVKs=['NHMSYS0000460353', 'NHMSYS0000460354', 'NHMSYS0000460355', 'NHMSYS0000459815', 'NHMSYS0000459816', 'NHMSYS0000459818'], status=valid;synonym
+2026-01-24 23:55:46,162 - DEBUG - Multiple TVK matches for species Limonium britannicum: TVKs=['NHMSYS0000459820', 'NHMSYS0000459821', 'NHMSYS0000459822', 'NHMSYS0000459823', 'NHMSYS0000459824'], status=valid;synonym
+2026-01-24 23:55:46,162 - DEBUG - Multiple TVK matches for species Limonium procerum: TVKs=['NHMSYS0000459834', 'NHMSYS0000460356', 'NHMSYS0000460357'], status=valid;synonym
+2026-01-24 23:55:46,162 - DEBUG - Multiple TVK matches for species Limonium recurvum: TVKs=['NHMSYS0000460358', 'NHMSYS0000460359', 'NHMSYS0000460360', 'NHMSYS0000460362'], status=valid;synonym
+2026-01-24 23:55:46,162 - DEBUG - Multiple TVK matches for species Bistorta officinalis: TVKs=['NHMSYS0000456490', 'NBNSYS0000003750'], status=valid;synonym
+2026-01-24 23:55:46,162 - DEBUG - Multiple TVK matches for species Bistorta vivipara: TVKs=['NHMSYS0000456491', 'NHMSYS0000461615'], status=valid;synonym
+2026-01-24 23:55:46,163 - DEBUG - Multiple TVK matches for species Polygonum oxyspermum: TVKs=['NHMSYS0000461871', 'NHMSYS0000461873'], status=valid;synonym
+2026-01-24 23:55:46,163 - DEBUG - Multiple TVK matches for species Rumex acetosa: TVKs=['NBNSYS0000003778', 'NHMSYS0000462957', 'NHMSYS0000462959', 'NHMSYS0000462960'], status=valid;synonym
+2026-01-24 23:55:46,163 - DEBUG - Multiple TVK matches for species Rumex acetosella: TVKs=['NBNSYS0000003774', 'NHMSYS0000462961', 'NHMSYS0000462963'], status=valid;synonym
+2026-01-24 23:55:46,163 - DEBUG - Multiple TVK matches for species Rumex crispus: TVKs=['NBNSYS0000003789', 'NHMSYS0000462972', 'NHMSYS0000344858', 'NBNSYS0000014463'], status=valid;synonym
+2026-01-24 23:55:46,164 - DEBUG - Multiple TVK matches for species Tamus communis: TVKs=['NBNSYS0000002282', 'NHMSYS0020823747'], status=valid;synonym
+2026-01-24 23:55:46,165 - DEBUG - Multiple TVK matches for species Valerianella locusta: TVKs=['NBNSYS0000004337', 'NBNSYS0100005947'], status=valid;synonym
+2026-01-24 23:55:46,165 - DEBUG - Multiple TVK matches for species Empetrum nigrum: TVKs=['NBNSYS0000004598', 'NHMSYS0000458378', 'NBNSYS0000004599'], status=valid;synonym
+2026-01-24 23:55:46,166 - DEBUG - Multiple TVK matches for species Hypopitys monotropa: TVKs=['NHMSYS0021240704', 'NHMSYS0021240709', 'NHMSYS0021240714'], status=valid;synonym
+2026-01-24 23:55:46,166 - DEBUG - Multiple TVK matches for species Pyrola rotundifolia: TVKs=['NBNSYS0000004592', 'NHMSYS0000462192', 'NHMSYS0000462193'], status=valid;synonym
+2026-01-24 23:55:46,167 - DEBUG - Multiple TVK matches for species Lysimachia europaea: TVKs=['NHMSYS0021872682', 'NBNSYS0000003941'], status=valid;synonym
+2026-01-24 23:55:46,167 - DEBUG - Multiple TVK matches for species Lysimachia foemina: TVKs=['NHMSYS0021872662', 'NHMSYS0000455900'], status=valid;synonym
+2026-01-24 23:55:46,167 - DEBUG - Multiple TVK matches for species Lysimachia maritima: TVKs=['NHMSYS0020823763', 'NBNSYS0000003946'], status=valid;synonym
+2026-01-24 23:55:46,167 - DEBUG - Multiple TVK matches for species Lysimachia minima: TVKs=['NHMSYS0021873662', 'NBNSYS0000143890'], status=valid;synonym
+2026-01-24 23:55:46,167 - DEBUG - Multiple TVK matches for species Lysimachia tenella: TVKs=['NHMSYS0100001991', 'NBNSYS0000003942'], status=valid;synonym
+2026-01-24 23:55:46,167 - DEBUG - Multiple TVK matches for species Anthyllis vulneraria: TVKs=['NBNSYS0000003255', 'NHMSYS0000455975', 'NHMSYS0000455977', 'NHMSYS0000455981'], status=valid;synonym
+2026-01-24 23:55:46,168 - DEBUG - Multiple TVK matches for species Cytisus scoparius: TVKs=['NBNSYS0000003214', 'NHMSYS0000457860', 'NHMSYS0000457861'], status=valid;synonym
+2026-01-24 23:55:46,168 - DEBUG - Multiple TVK matches for species Ervilia hirsuta: TVKs=['NHMSYS0021870502', 'NBNSYS0000003280'], status=valid;synonym
+2026-01-24 23:55:46,168 - DEBUG - Multiple TVK matches for species Ervilia sylvatica: TVKs=['NHMSYS0021870157', 'NBNSYS0000003289'], status=valid;synonym
+2026-01-24 23:55:46,168 - DEBUG - Multiple TVK matches for species Ervum tetraspermum: TVKs=['NHMSYS0100001491', 'NHMSYS0000464865'], status=valid;synonym
+2026-01-24 23:55:46,168 - DEBUG - Multiple TVK matches for species Genista tinctoria: TVKs=['NBNSYS0000003206', 'NHMSYS0000459005', 'NHMSYS0000459006'], status=valid;synonym
+2026-01-24 23:55:46,169 - DEBUG - Multiple TVK matches for species Medicago sativa: TVKs=['NBNSYS0000013971', 'NBNSYS0000003219'], status=valid;synonym
+2026-01-24 23:55:46,170 - DEBUG - Multiple TVK matches for species Onobrychis viciifolia: TVKs=['NBNSYS0000003279', 'NHMSYS0021118885'], status=valid;synonym
+2026-01-24 23:55:46,170 - DEBUG - Multiple TVK matches for species Trifolium fragiferum: TVKs=['NBNSYS0000003248', 'NHMSYS0000464568'], status=valid;synonym
+2026-01-24 23:55:46,170 - DEBUG - Multiple TVK matches for species Trifolium incarnatum: TVKs=['NBNSYS0000013889', 'NHMSYS0100003139'], status=valid;synonym
+2026-01-24 23:55:46,172 - DEBUG - Multiple TVK matches for species Vicia sativa: TVKs=['NBNSYS0000014093', 'NBNSYS0000003294', 'NHMSYS0000464863', 'NHMSYS0000345903'], status=valid;synonym
+2026-01-24 23:55:46,172 - DEBUG - Multiple TVK matches for species Polygala vulgaris: TVKs=['NBNSYS0000002949', 'NHMSYS0000461833', 'NHMSYS0000461834'], status=valid;synonym
+2026-01-24 23:55:46,172 - DEBUG - Multiple TVK matches for species Betula pubescens: TVKs=['NBNSYS0000003829', 'NHMSYS0000456460', 'NBNSYS0000003830'], status=valid;synonym
+2026-01-24 23:55:46,173 - DEBUG - Multiple TVK matches for species Centaurium tenuiflorum: TVKs=['NHMSYS0000457037', 'NHMSYS0021605687'], status=valid;synonym
+2026-01-24 23:55:46,174 - DEBUG - Multiple TVK matches for species Gentianella amarella: TVKs=['NHMSYS0000459016', 'NHMSYS0021605727', 'NHMSYS0021874422', 'NHMSYS0000459020'], status=valid;synonym
+2026-01-24 23:55:46,174 - DEBUG - Multiple TVK matches for species Gentianopsis ciliata: TVKs=['NHMSYS0021240694', 'NBNSYS0000039919'], status=valid;synonym
+2026-01-24 23:55:46,174 - DEBUG - Multiple TVK matches for species Asperula cynanchica: TVKs=['NBNSYS0000014864', 'NBNSYS0000004303'], status=valid;synonym
+2026-01-24 23:55:46,174 - DEBUG - Multiple TVK matches for species Galium aparine: TVKs=['NBNSYS0000004319', 'NHMSYS0021240664', 'NHMSYS0021240669'], status=valid;synonym
+2026-01-24 23:55:46,174 - DEBUG - Multiple TVK matches for species Galium fleurotii: TVKs=['NBNSYS0000014180', 'NHMSYS0021240674'], status=valid;synonym
+2026-01-24 23:55:46,174 - DEBUG - Multiple TVK matches for species Galium palustre: TVKs=['NBNSYS0000004313', 'NHMSYS0000458971', 'NHMSYS0000458972'], status=valid;synonym
+2026-01-24 23:55:46,174 - DEBUG - Multiple TVK matches for species Galium pumilum: TVKs=['NBNSYS0000004743', 'NHMSYS0021240679'], status=valid;synonym
+2026-01-24 23:55:46,174 - DEBUG - Multiple TVK matches for species Galium verum: TVKs=['NBNSYS0000004309', 'NBNSYS0100003237'], status=valid;synonym
+2026-01-24 23:55:46,175 - DEBUG - Multiple TVK matches for species Callitriche brutia: TVKs=['NBNSYS0000003623', 'NHMSYS0000456301'], status=valid;synonym
+2026-01-24 23:55:46,176 - DEBUG - Multiple TVK matches for species Clinopodium nepeta: TVKs=['NBNSYS0000144633', 'NBNSYS0000004215'], status=valid;synonym
+2026-01-24 23:55:46,176 - DEBUG - Multiple TVK matches for species Lamiastrum galeobdolon: TVKs=['NBNSYS0000004239', 'NHMSYS0000460077', 'NBNSYS0000004760'], status=valid;synonym
+2026-01-24 23:55:46,176 - DEBUG - Multiple TVK matches for species Origanum vulgare: TVKs=['NBNSYS0000004207', 'NHMSYS0021240724'], status=valid;synonym
+2026-01-24 23:55:46,177 - DEBUG - Multiple TVK matches for species Salvia verbenaca: TVKs=['NBNSYS0000004222', 'NHMSYS0021240744'], status=valid;synonym
+2026-01-24 23:55:46,178 - DEBUG - Multiple TVK matches for species Euphrasia arctica: TVKs=['NBNSYS0000014123', 'NHMSYS0000458649'], status=valid;synonym
+2026-01-24 23:55:46,178 - DEBUG - Multiple TVK matches for species Euphrasia officinalis: TVKs=['NHMSYS0021127699', 'NHMSYS0100001533', 'NHMSYS0100001535', 'NHMSYS0021127705'], status=valid;synonym
+2026-01-24 23:55:46,178 - DEBUG - Multiple TVK matches for species Melampyrum pratense: TVKs=['NBNSYS0000004138', 'NHMSYS0000460653', 'NHMSYS0000460654'], status=valid;synonym
+2026-01-24 23:55:46,178 - DEBUG - Multiple TVK matches for species Odontites vernus: TVKs=['NBNSYS0000004164', 'NHMSYS0000461135', 'NHMSYS0000461137', 'NBNSYS0000004166'], status=valid;synonym
+2026-01-24 23:55:46,178 - DEBUG - Multiple TVK matches for species Orobanche minor: TVKs=['NHMSYS0000461381', 'NHMSYS0020755134', 'NHMSYS0021118666'], status=valid;synonym
+2026-01-24 23:55:46,179 - DEBUG - Multiple TVK matches for species Pedicularis sylvatica: TVKs=['NBNSYS0000004131', 'NHMSYS0000461550', 'NHMSYS0000461551'], status=valid;synonym
+2026-01-24 23:55:46,179 - DEBUG - Multiple TVK matches for species Phelipanche purpurea: TVKs=['NHMSYS0021870782', 'NBNSYS0000004172'], status=valid;synonym
+2026-01-24 23:55:46,179 - DEBUG - Multiple TVK matches for species Rhinanthus minor: TVKs=['NBNSYS0000004135', 'NHMSYS0000462356', 'NHMSYS0000462357', 'NHMSYS0000462359', 'NHMSYS0000462360', 'NHMSYS0000462361', 'NHMSYS0000462362'], status=valid;synonym
+2026-01-24 23:55:46,179 - DEBUG - Multiple TVK matches for species Plantago major: TVKs=['NBNSYS0000004273', 'NBNSYS0000004790', 'NHMSYS0000461764'], status=valid;synonym
+2026-01-24 23:55:46,180 - DEBUG - Multiple TVK matches for species Veronica hederifolia: TVKs=['NBNSYS0000004120', 'NHMSYS0000464821', 'NHMSYS0000464822'], status=valid;synonym
+2026-01-24 23:55:46,181 - DEBUG - Multiple TVK matches for species Veronica serpyllifolia: TVKs=['NBNSYS0000004112', 'NHMSYS0021128545', 'NHMSYS0000464833'], status=valid;synonym
+2026-01-24 23:55:46,181 - DEBUG - Multiple TVK matches for species Veronica spicata: TVKs=['NBNSYS0000004105', 'NBNSYS0000004106', 'NHMSYS0000464834'], status=valid;synonym
+2026-01-24 23:55:46,181 - DEBUG - Multiple TVK matches for species Euphorbia amygdaloides: TVKs=['NBNSYS0000003741', 'NHMSYS0000458630', 'NHMSYS0000344590'], status=valid;synonym
+2026-01-24 23:55:46,181 - DEBUG - Multiple TVK matches for species Euphorbia characias: TVKs=['NBNSYS0000005495', 'NHMSYS0000458631', 'NHMSYS0000458632'], status=valid;synonym
+2026-01-24 23:55:46,182 - DEBUG - Multiple TVK matches for species Euphorbia stricta: TVKs=['NHMSYS0100001505', 'NBNSYS0000039527'], status=valid;synonym
+2026-01-24 23:55:46,182 - DEBUG - Multiple TVK matches for species Hypericum maculatum: TVKs=['NBNSYS0000002958', 'NHMSYS0000459854', 'NBNSYS0000002960'], status=valid;synonym
+2026-01-24 23:55:46,182 - DEBUG - Multiple TVK matches for species Linum perenne: TVKs=['NBNSYS0000003144', 'NHMSYS0100001951'], status=valid;synonym
+2026-01-24 23:55:46,182 - DEBUG - Multiple TVK matches for species Linum radiola: TVKs=['NHMSYS0021872927', 'NBNSYS0000003146'], status=valid;synonym
+2026-01-24 23:55:46,182 - DEBUG - Multiple TVK matches for species Populus nigra: TVKs=['NHMSYS0000345555', 'NHMSYS0000461971'], status=valid;synonym
+2026-01-24 23:55:46,183 - DEBUG - Multiple TVK matches for species Salix caprea: TVKs=['NBNSYS0000003868', 'NHMSYS0000463088', 'NHMSYS0000463089'], status=valid;synonym
+2026-01-24 23:55:46,183 - DEBUG - Multiple TVK matches for species Salix cinerea: TVKs=['NBNSYS0000003871', 'NHMSYS0000463093', 'NBNSYS0000003873'], status=valid;synonym
+2026-01-24 23:55:46,183 - DEBUG - Multiple TVK matches for species Viola canina: TVKs=['NBNSYS0000002934', 'NHMSYS0000464881', 'NHMSYS0021873927'], status=valid;synonym
+2026-01-24 23:55:46,183 - DEBUG - Multiple TVK matches for species Viola palustris: TVKs=['NBNSYS0000002939', 'NHMSYS0000464892', 'NHMSYS0000464893'], status=valid;synonym
+2026-01-24 23:55:46,183 - DEBUG - Multiple TVK matches for species Viola tricolor: TVKs=['NBNSYS0000002944', 'NHMSYS0000464902', 'NHMSYS0000464904'], status=valid;synonym
+2026-01-24 23:55:46,183 - DEBUG - Multiple TVK matches for species Helianthemum oelandicum: TVKs=['NHMSYS0000459267', 'NHMSYS0000459269', 'NBNSYS0100003384'], status=valid;synonym
+2026-01-24 23:55:46,184 - DEBUG - Multiple TVK matches for species Malva multiflora: TVKs=['NHMSYS0021873222', 'NBNSYS0000003138'], status=valid;synonym
+2026-01-24 23:55:46,185 - DEBUG - Multiple TVK matches for species Chamaenerion angustifolium: TVKs=['NHMSYS0100001010', 'NBNSYS0000003598'], status=valid;synonym
+2026-01-24 23:55:46,186 - DEBUG - Multiple TVK matches for species Carex demissa: TVKs=['NHMSYS0000456842', 'NHMSYS0000456908'], status=valid;synonym
+2026-01-24 23:55:46,186 - DEBUG - Multiple TVK matches for species Carex divulsa: TVKs=['NBNSYS0000014681', 'NHMSYS0000456846', 'NHMSYS0000456847'], status=valid;synonym
+2026-01-24 23:55:46,187 - DEBUG - Multiple TVK matches for species Carex muricata: TVKs=['NBNSYS0000039526', 'NHMSYS0000456873', 'NHMSYS0020110544'], status=valid;synonym
+2026-01-24 23:55:46,187 - DEBUG - Multiple TVK matches for species Carex simpliciuscula: TVKs=['NHMSYS0100000930', 'NHMSYS0000460031'], status=valid;synonym
+2026-01-24 23:55:46,187 - DEBUG - Multiple TVK matches for species Carex viridula: TVKs=['NHMSYS0000456904', 'NHMSYS0000456911'], status=valid;synonym
+2026-01-24 23:55:46,188 - DEBUG - Multiple TVK matches for species Eleocharis mamillata: TVKs=['NHMSYS0020110555', 'NHMSYS0020110556'], status=valid;synonym
+2026-01-24 23:55:46,188 - DEBUG - Multiple TVK matches for species Eleocharis palustris: TVKs=['NHMSYS0000458304', 'NHMSYS0000458306', 'NHMSYS0021874052'], status=valid;synonym
+2026-01-24 23:55:46,188 - DEBUG - Multiple TVK matches for species Trichophorum germanicum: TVKs=['NHMSYS0100003134', 'NHMSYS0021007988'], status=valid;synonym
+2026-01-24 23:55:46,188 - DEBUG - Multiple TVK matches for species Juncus bulbosus: TVKs=['NBNSYS0000002234', 'NBNSYS0100003622'], status=valid;synonym
+2026-01-24 23:55:46,188 - DEBUG - Multiple TVK matches for species Juncus ranarius: TVKs=['NHMSYS0000459988', 'NBNSYS0000002218'], status=valid;synonym
+2026-01-24 23:55:46,189 - DEBUG - Multiple TVK matches for species Luzula multiflora: TVKs=['NBNSYS0000002247', 'NBNSYS0000004765', 'NHMSYS0000460498'], status=valid;synonym
+2026-01-24 23:55:46,189 - DEBUG - Multiple TVK matches for species Alopecurus magellanicus: TVKs=['NBNSYS0200001716', 'NBNSYS0000002662'], status=valid;synonym
+2026-01-24 23:55:46,190 - DEBUG - Multiple TVK matches for species Anisantha sterilis: TVKs=['NBNSYS0000002575', 'NBNSYS0000143226'], status=valid;synonym
+2026-01-24 23:55:46,190 - DEBUG - Multiple TVK matches for species Aristavena setacea: TVKs=['NHMSYS0021872392', 'NHMSYS0000458051'], status=valid;synonym
+2026-01-24 23:55:46,190 - DEBUG - Multiple TVK matches for species Avenella flexuosa: TVKs=['NHMSYS0021873492', 'NBNSYS0000002623'], status=valid;synonym
+2026-01-24 23:55:46,190 - DEBUG - Multiple TVK matches for species Avenula pubescens: TVKs=['NHMSYS0000456377', 'NHMSYS0000459280'], status=valid;synonym
+2026-01-24 23:55:46,190 - DEBUG - Multiple TVK matches for species Bromus hordeaceus: TVKs=['NBNSYS0000004689', 'NHMSYS0000456668', 'NBNSYS0000002580', 'NHMSYS0000456669', 'NHMSYS0000456672'], status=valid;synonym
+2026-01-24 23:55:46,190 - DEBUG - Multiple TVK matches for species Bromus racemosus: TVKs=['NBNSYS0000002585', 'NHMSYS0100000822'], status=valid;synonym
+2026-01-24 23:55:46,191 - DEBUG - Multiple TVK matches for species Catapodium rigidum: TVKs=['NHMSYS0000456981', 'NHMSYS0021128365'], status=valid;synonym
+2026-01-24 23:55:46,191 - DEBUG - Multiple TVK matches for species Deschampsia cespitosa: TVKs=['NHMSYS0000458048', 'NHMSYS0020322979', 'NHMSYS0000458050', 'NHMSYS0100001286'], status=valid;synonym
+2026-01-24 23:55:46,192 - DEBUG - Multiple TVK matches for species Drymochloa sylvatica: TVKs=['NHMSYS0100001321', 'NBNSYS0000002511'], status=valid;synonym
+2026-01-24 23:55:46,192 - DEBUG - Multiple TVK matches for species Elymus athericus: TVKs=['NHMSYS0000458335', 'NHMSYS0000458356'], status=valid;synonym
+2026-01-24 23:55:46,192 - DEBUG - Multiple TVK matches for species Elymus junceiformis: TVKs=['NHMSYS0021870967', 'NBNSYS0000002597'], status=valid;synonym
+2026-01-24 23:55:46,192 - DEBUG - Multiple TVK matches for species Elymus repens: TVKs=['NHMSYS0000458346', 'NHMSYS0000465599'], status=valid;synonym
+2026-01-24 23:55:46,193 - DEBUG - Multiple TVK matches for species Festuca rubra: TVKs=['NHMSYS0000458790', 'NHMSYS0000458791', 'NBNSYS0000002515', 'NHMSYS0000458795', 'NHMSYS0000458796', 'NHMSYS0000458800', 'NHMSYS0000458801'], status=valid;synonym
+2026-01-24 23:55:46,193 - DEBUG - Multiple TVK matches for species Helictochloa pratensis: TVKs=['NHMSYS0021873287', 'NBNSYS0000002616'], status=valid;synonym
+2026-01-24 23:55:46,194 - DEBUG - Multiple TVK matches for species Koeleria macrantha: TVKs=['NHMSYS0000460038', 'NBNSYS0000002607'], status=valid;synonym
+2026-01-24 23:55:46,194 - DEBUG - Multiple TVK matches for species Molinia caerulea: TVKs=['NBNSYS0000002499', 'NHMSYS0000460747', 'NHMSYS0000460748'], status=valid;synonym
+2026-01-24 23:55:46,195 - DEBUG - Multiple TVK matches for species Puccinellia distans: TVKs=['NBNSYS0000002538', 'NHMSYS0000462132', 'NHMSYS0000462133'], status=valid;synonym
+2026-01-24 23:55:46,196 - DEBUG - Multiple TVK matches for species Schedonorus arundinaceus: TVKs=['NHMSYS0000463273', 'NHMSYS0000458758'], status=valid;synonym
+2026-01-24 23:55:46,196 - DEBUG - Multiple TVK matches for species Schedonorus giganteus: TVKs=['NHMSYS0000463274', 'NHMSYS0000458771'], status=valid;synonym
+2026-01-24 23:55:46,196 - DEBUG - Multiple TVK matches for species Schedonorus pratensis: TVKs=['NHMSYS0000463276', 'NHMSYS0000458788'], status=valid;synonym
+2026-01-24 23:55:46,196 - DEBUG - Multiple TVK matches for species Vulpia ciliata: TVKs=['NBNSYS0000014885', 'NHMSYS0000464940'], status=valid;synonym
+2026-01-24 23:55:46,197 - DEBUG - Multiple TVK matches for species Sparganium erectum: TVKs=['NBNSYS0000002361', 'NHMSYS0000463845'], status=valid;synonym
+2026-01-24 23:55:46,197 - DEBUG - Multiple TVK matches for species Fumaria capreolata: TVKs=['NBNSYS0000002783', 'NHMSYS0000458906'], status=valid;synonym
+2026-01-24 23:55:46,197 - DEBUG - Multiple TVK matches for species Fumaria muralis: TVKs=['NHMSYS0000458911', 'NHMSYS0000458912', 'NHMSYS0000458913', 'NBNSYS0000002790'], status=valid;synonym
+2026-01-24 23:55:46,197 - DEBUG - Multiple TVK matches for species Fumaria officinalis: TVKs=['NBNSYS0000002793', 'NHMSYS0000458914', 'NHMSYS0000458915'], status=valid;synonym
+2026-01-24 23:55:46,198 - DEBUG - Multiple TVK matches for species Papaver cambricum: TVKs=['NHMSYS0100002292', 'NHMSYS0000460627'], status=valid;synonym
+2026-01-24 23:55:46,198 - DEBUG - Multiple TVK matches for species Papaver lecoqii: TVKs=['NBNSYS0000153184', 'NBNSYS0000002766'], status=valid;synonym
+2026-01-24 23:55:46,198 - DEBUG - Multiple TVK matches for species Papaver somniferum: TVKs=['NBNSYS0000002769', 'NHMSYS0000461493'], status=valid;synonym
+2026-01-24 23:55:46,198 - DEBUG - Multiple TVK matches for species Roemeria hybrida: TVKs=['NBNSYS0000002773', 'NHMSYS0000461487'], status=valid;synonym
+2026-01-24 23:55:46,198 - DEBUG - Multiple TVK matches for species Aconitum napellus: TVKs=['NHMSYS0000455574', 'NHMSYS0000455578'], status=valid;synonym
+2026-01-24 23:55:46,198 - DEBUG - Multiple TVK matches for species Ficaria verna: TVKs=['NHMSYS0100001603', 'NHMSYS0021240654', 'NHMSYS0021240659'], status=valid;synonym
+2026-01-24 23:55:46,199 - DEBUG - Multiple TVK matches for species Ranunculus acris: TVKs=['NBNSYS0000002708', 'NHMSYS0021240734', 'NHMSYS0021240739'], status=valid;synonym
+2026-01-24 23:55:46,199 - DEBUG - Multiple TVK matches for species Ranunculus flammula: TVKs=['NBNSYS0000002718', 'NHMSYS0000462247', 'NHMSYS0000462248', 'NHMSYS0000462250'], status=valid;synonym
+2026-01-24 23:55:46,199 - DEBUG - Multiple TVK matches for species Ranunculus penicillatus: TVKs=['NBNSYS0000002733', 'NHMSYS0000462261', 'NHMSYS0000462262'], status=valid;synonym
+2026-01-24 23:55:46,201 - DEBUG - Multiple TVK matches for species Alchemilla filicaulis: TVKs=['NBNSYS0000034246', 'NHMSYS0000455724', 'NHMSYS0000455725'], status=valid;synonym
+2026-01-24 23:55:46,201 - DEBUG - Multiple TVK matches for species Comarum palustre: TVKs=['NBNSYS0000144930', 'NBNSYS0000003338'], status=valid;synonym
+2026-01-24 23:55:46,202 - DEBUG - Multiple TVK matches for species Dasiphora fruticosa: TVKs=['NHMSYS0021873792', 'NBNSYS0000003337'], status=valid;synonym
+2026-01-24 23:55:46,203 - DEBUG - Multiple TVK matches for species Potentilla anserina: TVKs=['NBNSYS0000003341', 'NHMSYS0021060392'], status=valid;synonym
+2026-01-24 23:55:46,203 - DEBUG - Multiple TVK matches for species Potentilla erecta: TVKs=['NBNSYS0000003349', 'NHMSYS0000462031', 'NHMSYS0000462032'], status=valid;synonym
+2026-01-24 23:55:46,203 - DEBUG - Multiple TVK matches for species Poterium sanguisorba: TVKs=['NHMSYS0000462046', 'NHMSYS0021127653'], status=valid;synonym
+2026-01-24 23:55:46,203 - DEBUG - Multiple TVK matches for species Prunus domestica: TVKs=['NBNSYS0000003413', 'NHMSYS0000462083', 'NBNSYS0000003415', 'NBNSYS0000014169'], status=valid;synonym
+2026-01-24 23:55:46,205 - DEBUG - Multiple TVK matches for species Rosa tomentella: TVKs=['NBNSYS0000156024', 'NBNSYS0000003404'], status=valid;synonym
+2026-01-24 23:55:46,212 - DEBUG - Multiple TVK matches for species Urtica dioica: TVKs=['NBNSYS0000003807', 'NHMSYS0000464736', 'NHMSYS0021874632'], status=valid;synonym
+2026-01-24 23:55:46,214 - DEBUG - Multiple TVK matches for species Hylotelephium telephium: TVKs=['NHMSYS0000459840', 'NBNSYS0000003467'], status=valid;synonym
+2026-01-24 23:55:46,214 - DEBUG - Multiple TVK matches for species Petrosedum forsterianum: TVKs=['NHMSYS0000461640', 'NHMSYS0000463386'], status=valid;synonym
+2026-01-24 23:55:46,214 - DEBUG - Multiple TVK matches for species Rhodiola rosea: TVKs=['NHMSYS0100002682', 'NBNSYS0000003466'], status=valid;synonym
+2026-01-24 23:55:46,217 - DEBUG - Multiple TVK matches for species Micranthes nivalis: TVKs=['NHMSYS0021870612', 'NBNSYS0000003489'], status=valid;synonym
+2026-01-24 23:55:46,217 - DEBUG - Multiple TVK matches for species Micranthes stellaris: TVKs=['NHMSYS0021870622', 'NBNSYS0000003490'], status=valid;synonym
+2026-01-24 23:55:46,218 - DEBUG - Multiple TVK matches for species Saxifraga rosacea: TVKs=['NBNSYS0000033860', 'NBNSYS0000003504'], status=valid;synonym
+2026-01-24 23:55:46,218 - DEBUG - Multiple TVK matches for species Calystegia sepium: TVKs=['NHMSYS0000456325', 'NBNSYS0000004691', 'NHMSYS0000456329'], status=valid;synonym
+2026-01-24 23:55:46,221 - DEBUG - Multiple TVK matches for species Asplenium scolopendrium: TVKs=['NBNSYS0000142466', 'NBNSYS0000002039'], status=valid;synonym
+2026-01-24 23:55:46,221 - DEBUG - Multiple TVK matches for species Asplenium trichomanes: TVKs=['NBNSYS0000002046', 'NHMSYS0000456213', 'NHMSYS0000456214', 'NHMSYS0000456216'], status=valid;synonym
+2026-01-24 23:55:46,222 - DEBUG - Multiple TVK matches for species Dryopteris affinis: TVKs=['NHMSYS0000458170', 'NHMSYS0000458171', 'NHMSYS0021118653'], status=valid;synonym
+2026-01-24 23:55:46,223 - INFO - Processed 79201 UKSI species, 14016 matched to JNCC designations
+2026-01-24 23:55:46,224 - INFO -   - Valid TVK matches only: 13463
+2026-01-24 23:55:46,224 - INFO -   - Synonym TVK matches only: 8
+2026-01-24 23:55:46,224 - INFO -   - Both valid and synonym matches: 545
+2026-01-24 23:55:46,224 - WARNING - JNCC rows not matched to any UKSI species: 263 of 14395
+2026-01-24 23:55:46,225 - INFO - Logging unmatched JNCC rows to error log...
+2026-01-24 23:55:46,225 - ERROR - JNCC row not matched to UKSI: row 287, name: 'Acanthis cabaret', TVKs: NHMSYS0021004312;NHMSYS0021933619
+2026-01-24 23:55:46,225 - ERROR - JNCC row not matched to UKSI: row 288, name: 'Acanthis flammea', TVKs: NHMSYS0021004317;NHMSYS0021933624
+2026-01-24 23:55:46,225 - ERROR - JNCC row not matched to UKSI: row 289, name: 'Acanthis hornemanni', TVKs: NHMSYS0021004332;NHMSYS0021933634
+2026-01-24 23:55:46,225 - ERROR - JNCC row not matched to UKSI: row 306, name: 'Alaudala rufescens', TVKs: NHMSYS0021275201;NHMSYS0021373129
+2026-01-24 23:55:46,225 - ERROR - JNCC row not matched to UKSI: row 325, name: 'Anser fabialis/serrirostris', TVKs: NHMSYS0021621879
+2026-01-24 23:55:46,225 - ERROR - JNCC row not matched to UKSI: row 645, name: 'Oenanthe hispanica/melanoleuca', TVKs: NHMSYS0021274916
+2026-01-24 23:55:46,225 - ERROR - JNCC row not matched to UKSI: row 766, name: 'Thalasseus albididorsalis/maximus', TVKs: NHMSYS0021274166
+2026-01-24 23:55:46,225 - ERROR - JNCC row not matched to UKSI: row 1011, name: 'Cryptops cf. hispanus', TVKs: NHMSYS0021131328
+2026-01-24 23:55:46,225 - ERROR - JNCC row not matched to UKSI: row 1017, name: 'Geophilus carpophagus', TVKs: NHMSYS0020969584
+2026-01-24 23:55:46,226 - ERROR - JNCC row not matched to UKSI: row 1075, name: 'Diphasiastrum complanatum', TVKs: NBNSYS0000146189;NHMSYS0000458106
+2026-01-24 23:55:46,226 - ERROR - JNCC row not matched to UKSI: row 1103, name: 'Haliclystus auricula', TVKs: NBNSYS0000175629
+2026-01-24 23:55:46,226 - ERROR - JNCC row not matched to UKSI: row 1155, name: 'Chaetophiloscia sp.', TVKs: NHMSYS0020302560
+2026-01-24 23:55:46,226 - ERROR - JNCC row not matched to UKSI: row 1163, name: 'Gabunillo sp.', TVKs: NHMSYS0020977805
+2026-01-24 23:55:46,226 - ERROR - JNCC row not matched to UKSI: row 1168, name: 'Haplophthalmus mengii', TVKs: NHMSYS0020322384
+2026-01-24 23:55:46,226 - ERROR - JNCC row not matched to UKSI: row 1205, name: 'Pseudotyphloscia sp.', TVKs: NHMSYS0020977817
+2026-01-24 23:55:46,226 - ERROR - JNCC row not matched to UKSI: row 1218, name: 'Trichoniscoides sarsi', TVKs: NHMSYS0020322385
+2026-01-24 23:55:46,226 - ERROR - JNCC row not matched to UKSI: row 1220, name: 'Trichoniscus pusillus', TVKs: NHMSYS0020322386
+2026-01-24 23:55:46,226 - ERROR - JNCC row not matched to UKSI: row 1238, name: 'Neobisium carpenteri agg.', TVKs: NBNSYS0000013823
+2026-01-24 23:55:46,226 - ERROR - JNCC row not matched to UKSI: row 1241, name: 'Asplenium adiantum-nigrum', TVKs: NBNSYS0000002040
+2026-01-24 23:55:46,226 - ERROR - JNCC row not matched to UKSI: row 1246, name: 'Asplenium ruta-muraria x septentrionale = A. x murbeckii', TVKs: NHMSYS0001754709
+2026-01-24 23:55:46,226 - ERROR - JNCC row not matched to UKSI: row 1267, name: 'Dryopteris affinis', TVKs: NHMSYS0021118903
+2026-01-24 23:55:46,226 - ERROR - JNCC row not matched to UKSI: row 1274, name: 'Dryopteris carthusiana x expansa = D. x sarvelae', TVKs: NHMSYS0001754732
+2026-01-24 23:55:46,227 - ERROR - JNCC row not matched to UKSI: row 1277, name: 'Dryopteris cristata x carthusiana = D. x uliginosa', TVKs: NHMSYS0001754433
+2026-01-24 23:55:46,227 - ERROR - JNCC row not matched to UKSI: row 1296, name: 'Ophioglossum vulgatum', TVKs: NBNSYS0000002095
+2026-01-24 23:55:46,227 - ERROR - JNCC row not matched to UKSI: row 1304, name: 'Polypodium vulgare', TVKs: NHMSYS0000494763
+2026-01-24 23:55:46,227 - ERROR - JNCC row not matched to UKSI: row 1330, name: 'Agrostis canina', TVKs: NHMSYS0000494978
+2026-01-24 23:55:46,227 - ERROR - JNCC row not matched to UKSI: row 1342, name: 'Ajuga reptans x pyramidalis = A. x pseudopyramidalis', TVKs: NHMSYS0001754602
+2026-01-24 23:55:46,227 - ERROR - JNCC row not matched to UKSI: row 1382, name: 'Anagallis arvensis', TVKs: NBNSYS0000003943;NHMSYS0021876307
+2026-01-24 23:55:46,227 - ERROR - JNCC row not matched to UKSI: row 1404, name: 'Aphanes arvensis agg.', TVKs: NHMSYS0000455991
+2026-01-24 23:55:46,227 - ERROR - JNCC row not matched to UKSI: row 1426, name: 'Arenaria serpyllifolia', TVKs: NBNSYS0000003059
+2026-01-24 23:55:46,227 - ERROR - JNCC row not matched to UKSI: row 1449, name: 'Asperula cynanchica subsp. occidentalis', TVKs: NBNSYS0000034394;NHMSYS0021875432
+2026-01-24 23:55:46,227 - ERROR - JNCC row not matched to UKSI: row 1490, name: 'Brachypodium pinnatum s.l.', TVKs: NHMSYS0021123603
+2026-01-24 23:55:46,227 - ERROR - JNCC row not matched to UKSI: row 1522, name: 'Calamagrostis canescens x stricta = C. x gracilescens', TVKs: NHMSYS0001754642
+2026-01-24 23:55:46,227 - ERROR - JNCC row not matched to UKSI: row 1534, name: 'Callitriche stagnalis', TVKs: NHMSYS0000523179
+2026-01-24 23:55:46,227 - ERROR - JNCC row not matched to UKSI: row 1563, name: 'Carex acuta x elata = C. x prolixa', TVKs: NHMSYS0001754734
+2026-01-24 23:55:46,227 - ERROR - JNCC row not matched to UKSI: row 1565, name: 'Carex acutiformis x riparia = C. x sooi', TVKs: NHMSYS0001754609
+2026-01-24 23:55:46,227 - ERROR - JNCC row not matched to UKSI: row 1566, name: 'Carex acutiformis x vesicaria = C. x ducellieri', TVKs: NBNSYS0000161465
+2026-01-24 23:55:46,227 - ERROR - JNCC row not matched to UKSI: row 1569, name: 'Carex aquatilis x acuta', TVKs: NHMSYS0000456830
+2026-01-24 23:55:46,227 - ERROR - JNCC row not matched to UKSI: row 1570, name: 'Carex aquatilis x bigelowii = C. x limula', TVKs: NHMSYS0001754733
+2026-01-24 23:55:46,228 - ERROR - JNCC row not matched to UKSI: row 1571, name: 'Carex aquatilis x nigra = C. x hibernica', TVKs: NHMSYS0001754670
+2026-01-24 23:55:46,228 - ERROR - JNCC row not matched to UKSI: row 1595, name: 'Carex echinata x curta = C. x biharica', TVKs: NHMSYS0000456916;NHMSYS0001754464
+2026-01-24 23:55:46,228 - ERROR - JNCC row not matched to UKSI: row 1596, name: 'Carex echinata x dioica = C. x gaudiniana', TVKs: NHMSYS0001754481
+2026-01-24 23:55:46,228 - ERROR - JNCC row not matched to UKSI: row 1604, name: 'Carex flava x viridula = C. x alsatica', TVKs: NBNSYS0000005424;NHMSYS0001754825
+2026-01-24 23:55:46,228 - ERROR - JNCC row not matched to UKSI: row 1609, name: 'Carex lachenalii x curta = C. x helvola', TVKs: NHMSYS0000456923;NHMSYS0001754465
+2026-01-24 23:55:46,228 - ERROR - JNCC row not matched to UKSI: row 1611, name: 'Carex laevigata x binervis = C. x deserta', TVKs: NHMSYS0001754412
+2026-01-24 23:55:46,228 - ERROR - JNCC row not matched to UKSI: row 1613, name: 'Carex lasiocarpa x riparia = C. x evoluta', TVKs: NHMSYS0001754746
+2026-01-24 23:55:46,228 - ERROR - JNCC row not matched to UKSI: row 1630, name: 'Carex paniculata x appropinquata = C. x rotae', TVKs: NHMSYS0001754380
+2026-01-24 23:55:46,228 - ERROR - JNCC row not matched to UKSI: row 1631, name: 'Carex paniculata x curta = C. x ludibunda', TVKs: NHMSYS0000456926;NHMSYS0001754466
+2026-01-24 23:55:46,228 - ERROR - JNCC row not matched to UKSI: row 1632, name: 'Carex paniculata x diandra = C. x beckmannii', TVKs: NHMSYS0001754480
+2026-01-24 23:55:46,228 - ERROR - JNCC row not matched to UKSI: row 1637, name: 'Carex pseudocyperus x rostrata = C. x justi-schmidtii', TVKs: NHMSYS0001754763
+2026-01-24 23:55:46,229 - ERROR - JNCC row not matched to UKSI: row 1644, name: 'Carex riparia x rostrata', TVKs: NBNSYS0500000381;NHMSYS0100000943
+2026-01-24 23:55:46,229 - ERROR - JNCC row not matched to UKSI: row 1645, name: 'Carex riparia x vesicaria = C. x csomadensis', TVKs: NHMSYS0001754800
+2026-01-24 23:55:46,229 - ERROR - JNCC row not matched to UKSI: row 1656, name: 'Carex vesicaria x saxatilis = C. x grahamii', TVKs: NHMSYS0001754617
+2026-01-24 23:55:46,229 - ERROR - JNCC row not matched to UKSI: row 1679, name: 'Centaurea nigra sens. lat. (=nigra/debauxii)', TVKs: NHMSYS0021232322
+2026-01-24 23:55:46,229 - ERROR - JNCC row not matched to UKSI: row 1715, name: 'Chenopodium album agg.', TVKs: NBNSYS0000003091
+2026-01-24 23:55:46,229 - ERROR - JNCC row not matched to UKSI: row 1753, name: 'Cochlearia officinalis', TVKs: NBNSYS0000042402;NHMSYS0000457398
+2026-01-24 23:55:46,229 - ERROR - JNCC row not matched to UKSI: row 1803, name: 'Dactylorhiza ebudensis', TVKs: NHMSYS0020110554;NHMSYS0021874827
+2026-01-24 23:55:46,229 - ERROR - JNCC row not matched to UKSI: row 1843, name: 'Dipsacus fullonum', TVKs: NHMSYS0000523214
+2026-01-24 23:55:46,229 - ERROR - JNCC row not matched to UKSI: row 1852, name: 'Drosera rotundifolia x intermedia = D. x belezeana', TVKs: NHMSYS0001754523;NHMSYS0021873197
+2026-01-24 23:55:46,230 - ERROR - JNCC row not matched to UKSI: row 1890, name: 'Epipactis leptochila agg.', TVKs: NBNSYS0000002291
+2026-01-24 23:55:46,230 - ERROR - JNCC row not matched to UKSI: row 1914, name: 'Erophila verna', TVKs: NBNSYS0000042604
+2026-01-24 23:55:46,230 - ERROR - JNCC row not matched to UKSI: row 1947, name: 'Euphrasia officinalis agg.', TVKs: NHMSYS0000458671
+2026-01-24 23:55:46,230 - ERROR - JNCC row not matched to UKSI: row 1970, name: 'Festuca ovina agg.', TVKs: NHMSYS0000458783
+2026-01-24 23:55:46,230 - ERROR - JNCC row not matched to UKSI: row 1972, name: 'Festuca rubra agg.', TVKs: NHMSYS0000523323
+2026-01-24 23:55:46,230 - ERROR - JNCC row not matched to UKSI: row 2022, name: 'Galeopsis tetrahit agg.', TVKs: NBNSYS0000004252
+2026-01-24 23:55:46,230 - ERROR - JNCC row not matched to UKSI: row 2035, name: 'Galium pumilum', TVKs: NHMSYS0000523328
+2026-01-24 23:55:46,230 - ERROR - JNCC row not matched to UKSI: row 2096, name: 'Gymnadenia conopsea agg.', TVKs: NHMSYS0021118921
+2026-01-24 23:55:46,230 - ERROR - JNCC row not matched to UKSI: row 2099, name: 'Hedera helix', TVKs: NHMSYS0021118909
+2026-01-24 23:55:46,230 - ERROR - JNCC row not matched to UKSI: row 2451, name: 'Juncus bufonius agg.', TVKs: NBNSYS0100003621;NHMSYS0000352722
+2026-01-24 23:55:46,230 - ERROR - JNCC row not matched to UKSI: row 2522, name: 'Limonium binervosum agg.', TVKs: NHMSYS0000523253
+2026-01-24 23:55:46,230 - ERROR - JNCC row not matched to UKSI: row 2593, name: 'Malus sylvestris', TVKs: NBNSYS0000003463
+2026-01-24 23:55:46,230 - ERROR - JNCC row not matched to UKSI: row 2765, name: 'Petrorhagia prolifera', TVKs: NBNSYS0500000041
+2026-01-24 23:55:46,230 - ERROR - JNCC row not matched to UKSI: row 2777, name: 'Phleum pratense', TVKs: NBNSYS0000004652
+2026-01-24 23:55:46,230 - ERROR - JNCC row not matched to UKSI: row 2817, name: 'Poa pratensis', TVKs: NBNSYS0000002554
+2026-01-24 23:55:46,230 - ERROR - JNCC row not matched to UKSI: row 2832, name: 'Polygonum aviculare agg.', TVKs: NBNSYS0000003743
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 2844, name: 'Potamogeton alpinus x crispus = P. x olivaceus', TVKs: NHMSYS0001754682
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 2846, name: 'Potamogeton berchtoldii x acutifolius = P. x sudermanicus', TVKs: NHMSYS0001754350
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 2848, name: 'Potamogeton coloratus x gramineus = P. x billupsii', TVKs: NHMSYS0001754735
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 2853, name: 'Potamogeton friesii', TVKs: NHMSYS0021048735;NHMSYS0100002572
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 2858, name: 'Potamogeton natans x lucens = P. x fluitans', TVKs: NHMSYS0001754545
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 2859, name: 'Potamogeton natans x nodosus = P. x schreberi', TVKs: NHMSYS0001754567
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 2860, name: 'Potamogeton natans x polygonifolius = P. x gessnacensis', TVKs: NHMSYS0001754738
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 2864, name: 'Potamogeton pectinatus x vaginatus = P. x bottnicus', TVKs: NHMSYS0001754631;NHMSYS0021872462
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 2868, name: 'Potamogeton praelongus x crispus = P. x undulatus', TVKs: NHMSYS0001754456
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 2869, name: 'Potamogeton praelongus x perfoliatus = P. x cognatus', TVKs: NHMSYS0001754588
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 2874, name: 'Potamogeton trichoides x crispus = P. x bennettii', TVKs: NHMSYS0001754452
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 2923, name: 'Pyrus communis', TVKs: NBNSYS0000042610
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 2932, name: 'Ranunculus aquatilis', TVKs: NHMSYS0000523332
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 2982, name: 'Rorippa nasturtium-aquaticum agg.', TVKs: NBNSYS0000002893;NBNSYS0000042612
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 2984, name: 'Rorippa palustris x amphibia = R. x erythrocaulis', TVKs: NHMSYS0001754371
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 3015, name: 'Rubus fruticosus agg.', TVKs: NBNSYS0000003328
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 3067, name: 'Sagina apetala', TVKs: NHMSYS0021118915
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 3094, name: 'Salix euxina x alba = S. x fragilis', TVKs: NHMSYS0021164515
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 3137, name: 'Schoenoplectus lacustris x triqueter = S. x carinatus', TVKs: NBNSYS0000162060
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 3139, name: 'Schoenoplectus tabernaemontani x triqueter = S. x kuekenthalianus', TVKs: NBNSYS0000162061
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 3214, name: 'Sorbus × motleyi', TVKs: NHMSYS0021123488;NHMSYS0021873722
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 3218, name: 'Sorbus aria x bristoliensis (S. x houstoniae)', TVKs: NHMSYS0021240754
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 3219, name: 'Sorbus aria x eminens (S. x robertsonii)', TVKs: NHMSYS0021240759
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 3223, name: 'Sorbus avonensis', TVKs: NHMSYS0021240764;NHMSYS0021873687
+2026-01-24 23:55:46,231 - ERROR - JNCC row not matched to UKSI: row 3304, name: 'Taraxacum agg.', TVKs: NBNSYS0100005722
+2026-01-24 23:55:46,233 - ERROR - JNCC row not matched to UKSI: row 3470, name: 'Trichophorum caespitosum', TVKs: NHMSYS0021007976
+2026-01-24 23:55:46,233 - ERROR - JNCC row not matched to UKSI: row 3500, name: 'Tripleurospermum maritimum', TVKs: NBNSYS0100005911
+2026-01-24 23:55:46,233 - ERROR - JNCC row not matched to UKSI: row 3526, name: 'Utricularia intermedia', TVKs: NBNSYS0000004189;NHMSYS0000464743
+2026-01-24 23:55:46,233 - ERROR - JNCC row not matched to UKSI: row 3531, name: 'Utricularia vulgaris', TVKs: NBNSYS0000042407;NHMSYS0000464750
+2026-01-24 23:55:46,233 - ERROR - JNCC row not matched to UKSI: row 3606, name: 'Viola rupestris x riviniana = V. x burnatii', TVKs: NBNSYS0000162147
+2026-01-24 23:55:46,233 - ERROR - JNCC row not matched to UKSI: row 3649, name: 'Arrhenia peltigerina', TVKs: NHMSYS0001474910;NHMSYS0021843341
+2026-01-24 23:55:46,233 - ERROR - JNCC row not matched to UKSI: row 3800, name: 'Clavaria zollingeri', TVKs: NBNSYS0000020751;NHMSYS0021937894
+2026-01-24 23:55:46,233 - ERROR - JNCC row not matched to UKSI: row 3853, name: 'Didymocyrtis epiphyscia', TVKs: BMSSYS0000044964;NHMSYS0021843366
+2026-01-24 23:55:46,234 - ERROR - JNCC row not matched to UKSI: row 3872, name: 'Entoloma bloxamii s. lat.', TVKs: NHMSYS0021576643
+2026-01-24 23:55:46,234 - ERROR - JNCC row not matched to UKSI: row 4036, name: 'Microglossum olivaceum', TVKs: NBNSYS0000017521
+2026-01-24 23:55:46,234 - ERROR - JNCC row not matched to UKSI: row 4122, name: 'Phellodon niger', TVKs: BMSSYS0000049357;NHMSYS0001493166
+2026-01-24 23:55:46,234 - ERROR - JNCC row not matched to UKSI: row 4392, name: 'Phaeoceros laevis', TVKs: NHMSYS0000310891
+2026-01-24 23:55:46,234 - ERROR - JNCC row not matched to UKSI: row 4394, name: 'Equisetum arvense x telmateia = E. x robertsii', TVKs: NHMSYS0001754624
+2026-01-24 23:55:46,234 - ERROR - JNCC row not matched to UKSI: row 4396, name: 'Equisetum fluviatile x telmateia = E. x willmotii', TVKs: NHMSYS0001754623
+2026-01-24 23:55:46,234 - ERROR - JNCC row not matched to UKSI: row 4402, name: 'Equisetum sylvaticum x telmateia = E. x bowmanii', TVKs: NHMSYS0001754696
+2026-01-24 23:55:46,234 - ERROR - JNCC row not matched to UKSI: row 4673, name: 'Aphodius (Nialus) ?varians', TVKs: NHMSYS0001716946
+2026-01-24 23:55:46,234 - ERROR - JNCC row not matched to UKSI: row 5010, name: 'Cantharis flavilabris (=nigra auctt.)', TVKs: NHMSYS0001717484
+2026-01-24 23:55:46,234 - ERROR - JNCC row not matched to UKSI: row 5104, name: 'Chaetarthria seminulum/simillima', TVKs: NHMSYS0021486547
+2026-01-24 23:55:46,234 - ERROR - JNCC row not matched to UKSI: row 5446, name: 'Enochrus fuscipennis/halophilus/quadripunctatus', TVKs: NHMSYS0021486552
+2026-01-24 23:55:46,234 - ERROR - JNCC row not matched to UKSI: row 5832, name: 'Leiopus linnei/nebulosus', TVKs: NHMSYS0021478843
+2026-01-24 23:55:46,234 - ERROR - JNCC row not matched to UKSI: row 5927, name: 'Longitarsus tabidus', TVKs: NHMSYS0020148456;NHMSYS0021048735
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 6001, name: 'Megasternum concinnum/immaculatum', TVKs: NHMSYS0021486562
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 6090, name: 'Mordellistena parvula', TVKs: NHMSYS0020148463;NHMSYS0021048735
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 6094, name: 'Mordellistena pumila', TVKs: NHMSYS0020152719;NHMSYS0021048735
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 6111, name: 'Mycetoporus baudueri', TVKs: NHMSYS0001719057;NHMSYS0021048735
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 6120, name: 'Mycetoporus nanus', TVKs: NBNSYS0000151972;NHMSYS0021048735
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 6221, name: 'Ocys harpaloides/tachysoides', TVKs: NHMSYS0021239553
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 6318, name: 'Oulema duftschmidi/melanopus', TVKs: NHMSYS0021486732
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 6751, name: 'Sepedophilus testaceus', TVKs: NHMSYS0001720079;NHMSYS0021048735
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 7402, name: 'Forficula auricularia', TVKs: NHMSYS0001387317;NHMSYS0021898013
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 7446, name: 'Andrena proxima', TVKs: NHMSYS0021232238
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 9307, name: 'Lasiambia palposa agg.', TVKs: NHMSYS0021122984
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 9425, name: 'Meromyza femorata agg.', TVKs: NHMSYS0021123186
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 9431, name: 'Meromyza sp. indet.', TVKs: NBNSYS0000029947
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 9442, name: 'Microdon mutabilis', TVKs: NHMSYS0021239778
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 10067, name: 'Tephritis sp. nov.', TVKs: NBNSYS0000012927
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 10141, name: 'Trachysiphonella indet.', TVKs: NBNSYS0100005866
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 10307, name: 'Aspicilia cinerea s. lat.', TVKs: BMSSYS0000533569
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 10308, name: 'Aspicilia cinerea s. str.', TVKs: NHMSYS0000364601
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 10310, name: 'Aspicilia contorta subsp. hoffmanniana', TVKs: NHMSYS0020989755;NHMSYS0021646665
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 10480, name: 'Caloplaca citrina s. str.', TVKs: NHMSYS0020105990;NHMSYS0021843381
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 10490, name: 'Caloplaca ferruginea s. lat.', TVKs: BMSSYS0000533619;NHMSYS0021797757
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 10497, name: 'Caloplaca herbidella s. lat.', TVKs: BMSSYS0000043345;NHMSYS0021795117
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 10498, name: 'Caloplaca holocarpa s. lat.', TVKs: BMSSYS0000043346;NHMSYS0021843361
+2026-01-24 23:55:46,235 - ERROR - JNCC row not matched to UKSI: row 10499, name: 'Caloplaca holocarpa s. str.', TVKs: NHMSYS0020987564;NHMSYS0021843356
+2026-01-24 23:55:46,236 - ERROR - JNCC row not matched to UKSI: row 10583, name: 'Cetrelia olivetorum s. lat.', TVKs: BMSSYS0000533644
+2026-01-24 23:55:46,236 - ERROR - JNCC row not matched to UKSI: row 10584, name: 'Cetrelia olivetorum s. str.', TVKs: NHMSYS0020105991
+2026-01-24 23:55:46,236 - ERROR - JNCC row not matched to UKSI: row 10605, name: 'Cladonia arbuscula subsp. arbuscula', TVKs: NBNSYS0000018346;NHMSYS0001477597
+2026-01-24 23:55:46,236 - ERROR - JNCC row not matched to UKSI: row 10606, name: 'Cladonia arbuscula subsp. squarrosa', TVKs: NBNSYS0000018346;NBNSYS0000100702
+2026-01-24 23:55:46,236 - ERROR - JNCC row not matched to UKSI: row 10618, name: 'Cladonia chlorophaea s. lat.', TVKs: BMSSYS0000533657
+2026-01-24 23:55:46,236 - ERROR - JNCC row not matched to UKSI: row 10619, name: 'Cladonia chlorophaea s. str.', TVKs: NHMSYS0020105992
+2026-01-24 23:55:46,236 - ERROR - JNCC row not matched to UKSI: row 10622, name: 'Cladonia coccifera s. lat.', TVKs: BMSSYS0000533659
+2026-01-24 23:55:46,236 - ERROR - JNCC row not matched to UKSI: row 10642, name: 'Cladonia grayi s. lat.', TVKs: NHMSYS0021576563
+2026-01-24 23:55:46,236 - ERROR - JNCC row not matched to UKSI: row 10727, name: 'Collema undulatum var. undulatum', TVKs: BMSSYS0000046963;NHMSYS0001478326
+2026-01-24 23:55:46,236 - ERROR - JNCC row not matched to UKSI: row 10846, name: 'Graphis scripta', TVKs: NBNSYS0000016935;NHMSYS0021794957
+2026-01-24 23:55:46,236 - ERROR - JNCC row not matched to UKSI: row 10930, name: 'Lathagrium undulatum var. granulosum', TVKs: NHMSYS0021048735;NHMSYS0021576923
+2026-01-24 23:55:46,236 - ERROR - JNCC row not matched to UKSI: row 10977, name: 'Lecanora chlarotera', TVKs: NBNSYS0000018579
+2026-01-24 23:55:46,236 - ERROR - JNCC row not matched to UKSI: row 11017, name: 'Lecanora rupicola var. efflorens', TVKs: NBNSYS0000018620;NHMSYS0021645865
+2026-01-24 23:55:46,236 - ERROR - JNCC row not matched to UKSI: row 11018, name: 'Lecanora rupicola var. rupicola', TVKs: NHMSYS0001486447;NHMSYS0021645870
+2026-01-24 23:55:46,236 - ERROR - JNCC row not matched to UKSI: row 11045, name: 'Lecidea fuscoatra s. lat.', TVKs: BMSSYS0000289986
+2026-01-24 23:55:46,236 - ERROR - JNCC row not matched to UKSI: row 11050, name: 'Lecidea lactea s. lat.', TVKs: BMSSYS0000533883
+2026-01-24 23:55:46,236 - ERROR - JNCC row not matched to UKSI: row 11051, name: 'Lecidea lactea s. str.', TVKs: NHMSYS0000364668
+2026-01-24 23:55:46,236 - ERROR - JNCC row not matched to UKSI: row 11054, name: 'Lecidea lichenicola', TVKs: NBNSYS0000018684;NHMSYS0020000048
+2026-01-24 23:55:46,236 - ERROR - JNCC row not matched to UKSI: row 11111, name: 'Lepraria incana s. lat.', TVKs: BMSSYS0000533914
+2026-01-24 23:55:46,236 - ERROR - JNCC row not matched to UKSI: row 11164, name: 'Lobarion community', TVKs: NHMSYS0020516981
+2026-01-24 23:55:46,236 - ERROR - JNCC row not matched to UKSI: row 11168, name: 'Loxospora elatina', TVKs: NHMSYS0001488586;NHMSYS0021843386
+2026-01-24 23:55:46,236 - ERROR - JNCC row not matched to UKSI: row 11232, name: 'Micarea prasina s. str.', TVKs: NHMSYS0020103730
+2026-01-24 23:55:46,236 - ERROR - JNCC row not matched to UKSI: row 11248, name: 'Mine site community', TVKs: NHMSYS0020516983
+2026-01-24 23:55:46,238 - ERROR - JNCC row not matched to UKSI: row 11315, name: 'Ochrolechia turneri s. lat.', TVKs: BMSSYS0000534007
+2026-01-24 23:55:46,238 - ERROR - JNCC row not matched to UKSI: row 11357, name: 'Parmelia saxatilis s. lat.', TVKs: BMSSYS0000534050
+2026-01-24 23:55:46,238 - ERROR - JNCC row not matched to UKSI: row 11380, name: 'Pectenia plumbea s. lat.', TVKs: BMSSYS0000534062
+2026-01-24 23:55:46,238 - ERROR - JNCC row not matched to UKSI: row 11381, name: 'Pectenia plumbea s. str.', TVKs: BMSSYS0000534061
+2026-01-24 23:55:46,238 - ERROR - JNCC row not matched to UKSI: row 11401, name: 'Pertusaria albescens var. albescens', TVKs: BMSSYS0000598520;NHMSYS0001492275
+2026-01-24 23:55:46,238 - ERROR - JNCC row not matched to UKSI: row 11402, name: 'Pertusaria albescens var. corallina', TVKs: BMSSYS0000598521;NHMSYS0001492276
+2026-01-24 23:55:46,238 - ERROR - JNCC row not matched to UKSI: row 11586, name: 'Pseudevernia furfuracea var. ceratea', TVKs: NHMSYS0001495159;NHMSYS0020102992
+2026-01-24 23:55:46,238 - ERROR - JNCC row not matched to UKSI: row 11587, name: 'Pseudevernia furfuracea var. furfuracea', TVKs: NHMSYS0001495160;NHMSYS0020102992
+2026-01-24 23:55:46,238 - ERROR - JNCC row not matched to UKSI: row 11612, name: 'Punctelia subrudecta s. lat.', TVKs: BMSSYS0000534141
+2026-01-24 23:55:46,238 - ERROR - JNCC row not matched to UKSI: row 11781, name: 'Solorina bispora s. lat.', TVKs: NHMSYS0001596564
+2026-01-24 23:55:46,238 - ERROR - JNCC row not matched to UKSI: row 11838, name: 'Sticta fuliginosa s. lat.', TVKs: BMSSYS0000534236
+2026-01-24 23:55:46,238 - ERROR - JNCC row not matched to UKSI: row 11849, name: 'Strigula stigmatella var. alpestris', TVKs: NHMSYS0001499162;NHMSYS0021649025
+2026-01-24 23:55:46,238 - ERROR - JNCC row not matched to UKSI: row 11850, name: 'Strigula stigmatella var. stigmatella', TVKs: NHMSYS0001499163;NHMSYS0021649050
+2026-01-24 23:55:46,238 - ERROR - JNCC row not matched to UKSI: row 11881, name: 'Thelocarpon epibolum var. epibolum', TVKs: NHMSYS0001499647;NHMSYS0020103100
+2026-01-24 23:55:46,239 - ERROR - JNCC row not matched to UKSI: row 11882, name: 'Thelocarpon epibolum var. epithallinum', TVKs: NBNSYS0000019078;NHMSYS0020103100
+2026-01-24 23:55:46,239 - ERROR - JNCC row not matched to UKSI: row 11923, name: 'Trapelia glebulosa s. lat.', TVKs: BMSSYS0000728281
+2026-01-24 23:55:46,239 - ERROR - JNCC row not matched to UKSI: row 11955, name: 'Usnea cornuta', TVKs: NHMSYS0001501160;NHMSYS0021646105
+2026-01-24 23:55:46,239 - ERROR - JNCC row not matched to UKSI: row 11980, name: 'Verrucaria baldensis', TVKs: NHMSYS0001501536;NHMSYS0021645960
+2026-01-24 23:55:46,239 - ERROR - JNCC row not matched to UKSI: row 11993, name: 'Verrucaria elaeomelaena s. lat.', TVKs: BMSSYS0000052458
+2026-01-24 23:55:46,239 - ERROR - JNCC row not matched to UKSI: row 12053, name: 'Xanthoria candelaria s. str.', TVKs: BMSSYS0000534105;NHMSYS0020105998
+2026-01-24 23:55:46,239 - ERROR - JNCC row not matched to UKSI: row 12072, name: 'Anastrophyllum joergensenii', TVKs: NHMSYS0020636801
+2026-01-24 23:55:46,239 - ERROR - JNCC row not matched to UKSI: row 12094, name: 'Calypogeia neesiana', TVKs: NHMSYS0000310857
+2026-01-24 23:55:46,239 - ERROR - JNCC row not matched to UKSI: row 12122, name: 'Chiloscyphus polyanthos', TVKs: NHMSYS0000310861
+2026-01-24 23:55:46,239 - ERROR - JNCC row not matched to UKSI: row 12128, name: 'Conocephalum conicum', TVKs: NHMSYS0020636802
+2026-01-24 23:55:46,239 - ERROR - JNCC row not matched to UKSI: row 12146, name: 'Fossombronia pusilla', TVKs: NHMSYS0000310873
+2026-01-24 23:55:46,239 - ERROR - JNCC row not matched to UKSI: row 12214, name: 'Marsupella boeckii', TVKs: NHMSYS0020636826
+2026-01-24 23:55:46,239 - ERROR - JNCC row not matched to UKSI: row 12231, name: 'Mesoptychia rutheana', TVKs: NHMSYS0021597872
+2026-01-24 23:55:46,239 - ERROR - JNCC row not matched to UKSI: row 12243, name: 'Moerckia hibernica', TVKs: NHMSYS0020636804
+2026-01-24 23:55:46,239 - ERROR - JNCC row not matched to UKSI: row 12269, name: 'Plagiochila asplenioides', TVKs: NHMSYS0000310893
+2026-01-24 23:55:46,240 - ERROR - JNCC row not matched to UKSI: row 12278, name: 'Plagiochila spinulosa', TVKs: NHMSYS0000310896
+2026-01-24 23:55:46,240 - ERROR - JNCC row not matched to UKSI: row 12369, name: 'Cetacea', TVKs: NHMSYS0000376171;NHMSYS0021036336
+2026-01-24 23:55:46,240 - ERROR - JNCC row not matched to UKSI: row 12425, name: 'Cylindroiulus londinensis', TVKs: NHMSYS0000528625
+2026-01-24 23:55:46,240 - ERROR - JNCC row not matched to UKSI: row 12432, name: 'Eutrichodesmus sp.', TVKs: NHMSYS0020977769
+2026-01-24 23:55:46,240 - ERROR - JNCC row not matched to UKSI: row 12466, name: 'Siphonophoridae sp.', TVKs: NHMSYS0020977763
+2026-01-24 23:55:46,240 - ERROR - JNCC row not matched to UKSI: row 12525, name: 'Capellinia fustifera', TVKs: NHMSYS0021324486
+2026-01-24 23:55:46,240 - ERROR - JNCC row not matched to UKSI: row 12542, name: 'Cochlicopa cf. lubrica', TVKs: NHMSYS0020528146
+2026-01-24 23:55:46,240 - ERROR - JNCC row not matched to UKSI: row 12543, name: 'Cochlicopa cf. lubricella', TVKs: NHMSYS0001701971
+2026-01-24 23:55:46,240 - ERROR - JNCC row not matched to UKSI: row 12683, name: 'Stagnicola palustris/fuscus/corvus', TVKs: NHMSYS0021233289
+2026-01-24 23:55:46,240 - ERROR - JNCC row not matched to UKSI: row 12692, name: 'Testacella (Testacella) scutulum agg.', TVKs: NHMSYS0021009977
+2026-01-24 23:55:46,240 - ERROR - JNCC row not matched to UKSI: row 12708, name: 'Vallonia cf. excentrica', TVKs: NHMSYS0001702255
+2026-01-24 23:55:46,240 - ERROR - JNCC row not matched to UKSI: row 12741, name: 'Aloina aloides', TVKs: NHMSYS0000310849
+2026-01-24 23:55:46,240 - ERROR - JNCC row not matched to UKSI: row 12920, name: 'Dichodontium pellucidum', TVKs: NHMSYS0000310864
+2026-01-24 23:55:46,240 - ERROR - JNCC row not matched to UKSI: row 12930, name: 'Dicranella varia', TVKs: NBNSYS0000036213;NHMSYS0021635335
+2026-01-24 23:55:46,240 - ERROR - JNCC row not matched to UKSI: row 12973, name: 'Ditrichum flexicaule', TVKs: NHMSYS0000310869
+2026-01-24 23:55:46,241 - ERROR - JNCC row not matched to UKSI: row 13005, name: 'Ephemerum serratum', TVKs: NHMSYS0021195599
+2026-01-24 23:55:46,241 - ERROR - JNCC row not matched to UKSI: row 13026, name: 'Fissidens pusillus', TVKs: NHMSYS0000310871
+2026-01-24 23:55:46,241 - ERROR - JNCC row not matched to UKSI: row 13031, name: 'Fissidens viridulus', TVKs: NHMSYS0000310872
+2026-01-24 23:55:46,241 - ERROR - JNCC row not matched to UKSI: row 13075, name: 'Hedwigia ciliata', TVKs: NHMSYS0000310882
+2026-01-24 23:55:46,241 - ERROR - JNCC row not matched to UKSI: row 13087, name: 'Heterocladium heteropterum', TVKs: NHMSYS0021597952
+2026-01-24 23:55:46,241 - ERROR - JNCC row not matched to UKSI: row 13107, name: 'Hymenostylium recurvirostrum', TVKs: NHMSYS0000309278
+2026-01-24 23:55:46,241 - ERROR - JNCC row not matched to UKSI: row 13111, name: 'Hypnum cupressiforme', TVKs: NHMSYS0000310884
+2026-01-24 23:55:46,241 - ERROR - JNCC row not matched to UKSI: row 13119, name: 'Isothecium myosuroides', TVKs: NHMSYS0021597947
+2026-01-24 23:55:46,241 - ERROR - JNCC row not matched to UKSI: row 13138, name: 'Leucobryum glaucum', TVKs: NHMSYS0021597992
+2026-01-24 23:55:46,241 - ERROR - JNCC row not matched to UKSI: row 13139, name: 'Leucobryum juniperoideum', TVKs: NHMSYS0021597997
+2026-01-24 23:55:46,241 - ERROR - JNCC row not matched to UKSI: row 13153, name: 'Microbryum starckeanum', TVKs: NHMSYS0001682651
+2026-01-24 23:55:46,241 - ERROR - JNCC row not matched to UKSI: row 13182, name: 'Oncophorus virens', TVKs: NHMSYS0021239474
+2026-01-24 23:55:46,241 - ERROR - JNCC row not matched to UKSI: row 13197, name: 'Orthotrichum pumilum', TVKs: NHMSYS0021239484
+2026-01-24 23:55:46,241 - ERROR - JNCC row not matched to UKSI: row 13208, name: 'Oxystegus tenuirostris', TVKs: NHMSYS0021239409;NHMSYS0021769720
+2026-01-24 23:55:46,241 - ERROR - JNCC row not matched to UKSI: row 13210, name: 'Palustriella commutata', TVKs: NHMSYS0021593122
+2026-01-24 23:55:46,242 - ERROR - JNCC row not matched to UKSI: row 13282, name: 'Polytrichum commune s.l.', TVKs: NHMSYS0021600182
+2026-01-24 23:55:46,242 - ERROR - JNCC row not matched to UKSI: row 13298, name: 'Pseudoleskeella catenulata', TVKs: NHMSYS0000310903
+2026-01-24 23:55:46,242 - ERROR - JNCC row not matched to UKSI: row 13315, name: 'Racomitrium canescens', TVKs: NHMSYS0000310906
+2026-01-24 23:55:46,242 - ERROR - JNCC row not matched to UKSI: row 13321, name: 'Racomitrium heterostichum', TVKs: NHMSYS0000310908
+2026-01-24 23:55:46,242 - ERROR - JNCC row not matched to UKSI: row 13355, name: 'Schistidium apocarpum', TVKs: NHMSYS0000309281
+2026-01-24 23:55:46,242 - ERROR - JNCC row not matched to UKSI: row 13369, name: 'Schistidium rivulare', TVKs: NHMSYS0000310914
+2026-01-24 23:55:46,242 - ERROR - JNCC row not matched to UKSI: row 13397, name: 'Seligeria trifaria', TVKs: NHMSYS0020636805
+2026-01-24 23:55:46,242 - ERROR - JNCC row not matched to UKSI: row 13407, name: 'Sphagnum capillifolium', TVKs: NHMSYS0021600417
+2026-01-24 23:55:46,242 - ERROR - JNCC row not matched to UKSI: row 13411, name: 'Sphagnum denticulatum', TVKs: NHMSYS0000310916
+2026-01-24 23:55:46,242 - ERROR - JNCC row not matched to UKSI: row 13416, name: 'Sphagnum fuscum', TVKs: NHMSYS0021239446
+2026-01-24 23:55:46,242 - ERROR - JNCC row not matched to UKSI: row 13436, name: 'Sphagnum subsecundum', TVKs: NHMSYS0000310920
+2026-01-24 23:55:46,242 - ERROR - JNCC row not matched to UKSI: row 13455, name: 'Syntrichia ruralis', TVKs: NHMSYS0000310921
+2026-01-24 23:55:46,242 - ERROR - JNCC row not matched to UKSI: row 13511, name: 'Trichostomum brachydontium', TVKs: NHMSYS0021618717
+2026-01-24 23:55:46,242 - ERROR - JNCC row not matched to UKSI: row 13543, name: 'Zygodon viridissimus', TVKs: NBNSYS0000189253
+2026-01-24 23:55:46,242 - ERROR - JNCC row not matched to UKSI: row 13576, name: 'Craterium aureonucleatum', TVKs: NBNSYS0000015252
+2026-01-24 23:55:46,242 - ERROR - JNCC row not matched to UKSI: row 13577, name: 'Cribraria minutissima', TVKs: NBNSYS0000015084
+2026-01-24 23:55:46,243 - ERROR - JNCC row not matched to UKSI: row 13578, name: 'Dianema nivale', TVKs: NBNSYS0000015104
+2026-01-24 23:55:46,243 - ERROR - JNCC row not matched to UKSI: row 13579, name: 'Diderma asteroides', TVKs: NBNSYS0000015326
+2026-01-24 23:55:46,243 - ERROR - JNCC row not matched to UKSI: row 13580, name: 'Diderma fallax', TVKs: NHMSYS0020535364
+2026-01-24 23:55:46,243 - ERROR - JNCC row not matched to UKSI: row 13581, name: 'Diderma lucidum', TVKs: NBNSYS0000015336
+2026-01-24 23:55:46,243 - ERROR - JNCC row not matched to UKSI: row 13582, name: 'Diderma sauteri', TVKs: NBNSYS0000015340
+2026-01-24 23:55:46,243 - ERROR - JNCC row not matched to UKSI: row 13583, name: 'Lamproderma atrosporum', TVKs: BMSSYS0000047898;NBNSYS0000015190
+2026-01-24 23:55:46,243 - ERROR - JNCC row not matched to UKSI: row 13584, name: 'Lamproderma sauteri', TVKs: NBNSYS0000015195
+2026-01-24 23:55:46,243 - ERROR - JNCC row not matched to UKSI: row 13585, name: 'Lepidoderma trevelyanii', TVKs: BMSSYS0000047316
+2026-01-24 23:55:46,243 - ERROR - JNCC row not matched to UKSI: row 13586, name: 'Listerella paradoxa', TVKs: NBNSYS0000015099
+2026-01-24 23:55:46,243 - ERROR - JNCC row not matched to UKSI: row 13587, name: 'Meriderma carestiae', TVKs: BMSSYS0000047898
+2026-01-24 23:55:46,243 - ERROR - JNCC row not matched to UKSI: row 13588, name: 'Meriderma cribrarioides', TVKs: BMSSYS0000047899
+2026-01-24 23:55:46,243 - ERROR - JNCC row not matched to UKSI: row 13589, name: 'Physarum confertum', TVKs: NBNSYS0000015278
+2026-01-24 23:55:46,243 - ERROR - JNCC row not matched to UKSI: row 13590, name: 'Physarum globuliferum', TVKs: NBNSYS0000015286
+2026-01-24 23:55:46,243 - ERROR - JNCC row not matched to UKSI: row 13591, name: 'Physarum mucosum', TVKs: NBNSYS0000015295
+2026-01-24 23:55:46,243 - ERROR - JNCC row not matched to UKSI: row 13592, name: 'Physarum nudum', TVKs: NBNSYS0000015301
+2026-01-24 23:55:46,243 - ERROR - JNCC row not matched to UKSI: row 13593, name: 'Physarum penetrale', TVKs: NBNSYS0000015306
+2026-01-24 23:55:46,243 - ERROR - JNCC row not matched to UKSI: row 13594, name: 'Physarum scoticum', TVKs: NBNSYS0000015313
+2026-01-24 23:55:46,244 - ERROR - JNCC row not matched to UKSI: row 13595, name: 'Trichia fimicola', TVKs: NBNSYS0000015156
+2026-01-24 23:55:46,244 - ERROR - JNCC row not matched to UKSI: row 13986, name: 'Orchestina sp.', TVKs: NHMSYS0000355803
+2026-01-24 23:55:46,244 - ERROR - JNCC row not matched to UKSI: row 14366, name: 'Pipistrellus pipistrellus', TVKs: NHMSYS0020001356
+2026-01-24 23:55:46,244 - INFO - JNCC annotation complete. Output written to: C:\GitHub\mind-the-gap\uksi_processing\jncc_annotation\v2\uksi_valid_species_jncc_annotated.tsv

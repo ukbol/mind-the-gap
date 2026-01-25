@@ -3,15 +3,15 @@
 uksi_jncc_annotation_v2.py
 
 Annotates UKSI valid species list with JNCC conservation designations.
-Matches UKSI taxon_version_key against the semicolon-separated values in
-the JNCC 'included_tvk_list' column.
+Matches UKSI taxon_version_key and synonym_tvk_list against the semicolon-separated 
+values in the JNCC 'included_tvk_list' column.
 
 Usage:
     python uksi_jncc_annotation_v2.py --input uksi_species.tsv --jncc jncc_designations.tsv [--output-dir /path/to/output]
 
 Outputs:
     - uksi_valid_species_jncc_annotated.tsv
-    - uksi_jncc_annotation.log (includes errors for unmatched JNCC TVKs)
+    - uksi_jncc_annotation.log (includes errors for unmatched JNCC rows)
 """
 
 import argparse
@@ -57,6 +57,7 @@ JNCC_TVK_LIST_COLUMN = "included_tvk_list"
 # Column names for matching info in output
 JNCC_MATCHING_TVK_COL = "jncc_matching_tvk"
 JNCC_ROW_INDEX_COL = "jncc_row_index"
+TVK_MATCH_STATUS_COL = "tvk_match_status"
 
 
 def setup_logging(log_file: Path) -> logging.Logger:
@@ -79,8 +80,7 @@ def setup_logging(log_file: Path) -> logging.Logger:
     return logger
 
 
-
-def load_jncc_data(jncc_file: Path, logger: logging.Logger) -> Tuple[Dict[str, List[dict]], Set[str]]:
+def load_jncc_data(jncc_file: Path, logger: logging.Logger) -> Tuple[Dict[str, List[dict]], Dict[int, dict], int]:
     """
     Load JNCC conservation designations indexed by individual TVK.
     
@@ -91,10 +91,11 @@ def load_jncc_data(jncc_file: Path, logger: logging.Logger) -> Tuple[Dict[str, L
         Tuple of:
         - Dict mapping individual TVK -> list of dicts containing designation data and row info
           (list because same TVK might appear in multiple rows)
-        - Set of all unique TVKs found in the JNCC file
+        - Dict mapping row_index -> row data (for tracking unmatched rows)
+        - Total number of JNCC rows processed
     """
     tvk_to_designations = defaultdict(list)
-    all_jncc_tvks = set()
+    all_jncc_rows = {}  # row_index -> row_data
     
     with open(jncc_file, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f, delimiter='\t')
@@ -107,6 +108,7 @@ def load_jncc_data(jncc_file: Path, logger: logging.Logger) -> Tuple[Dict[str, L
         if missing_cols:
             logger.warning(f"JNCC file missing designation columns: {missing_cols}")
         
+        row_idx = 1  # Initialize for case of empty file
         for row_idx, row in enumerate(reader, start=2):  # start=2 because row 1 is header
             tvk_list_str = row.get(JNCC_TVK_LIST_COLUMN, "").strip()
             if not tvk_list_str:
@@ -125,16 +127,22 @@ def load_jncc_data(jncc_file: Path, logger: logging.Logger) -> Tuple[Dict[str, L
                 'designations': designations,
                 'row_index': row_idx,
                 'recommended_name': row.get('Recommended_taxon_name', '').strip(),
-                'source_tvk_list': tvk_list_str
+                'source_tvk_list': tvk_list_str,
+                'tvks': tvks  # Store all TVKs for this row
             }
+            
+            # Store in all_jncc_rows for tracking
+            all_jncc_rows[row_idx] = row_data
             
             # Map each individual TVK to this row's data
             for tvk in tvks:
                 tvk_to_designations[tvk].append(row_data)
-                all_jncc_tvks.add(tvk)
     
-    logger.info(f"Loaded {len(all_jncc_tvks)} unique TVKs from JNCC file (from {row_idx - 1} rows)")
-    return dict(tvk_to_designations), all_jncc_tvks
+    total_tvks = sum(len(r['tvks']) for r in all_jncc_rows.values())
+    logger.info(f"Loaded {total_tvks} TVKs from {len(all_jncc_rows)} JNCC rows")
+    return dict(tvk_to_designations), all_jncc_rows, row_idx - 1
+
+
 
 
 def merge_designations(designation_list: List[Dict[str, str]]) -> Dict[str, str]:
@@ -163,22 +171,69 @@ def merge_designations(designation_list: List[Dict[str, str]]) -> Dict[str, str]
     return merged
 
 
+def find_jncc_matches(
+    valid_tvk: str,
+    synonym_tvks: List[str],
+    tvk_to_designations: Dict[str, List[dict]]
+) -> Tuple[List[dict], List[str], str]:
+    """
+    Find JNCC designation matches for a species by checking both valid TVK and synonym TVKs.
+    
+    Args:
+        valid_tvk: The UKSI taxon_version_key
+        synonym_tvks: List of TVKs from synonym_tvk_list
+        tvk_to_designations: Mapping from TVK to JNCC row data
+    
+    Returns:
+        Tuple of:
+        - List of matching row data dicts
+        - List of matching TVKs
+        - Match status string: 'valid', 'synonym', 'valid;synonym', or ''
+    """
+    matching_rows = []
+    matching_tvks = []
+    statuses = []
+    seen_row_indices = set()  # Avoid duplicate rows
+    
+    # Check valid TVK first
+    if valid_tvk and valid_tvk in tvk_to_designations:
+        for row_data in tvk_to_designations[valid_tvk]:
+            if row_data['row_index'] not in seen_row_indices:
+                matching_rows.append(row_data)
+                seen_row_indices.add(row_data['row_index'])
+        matching_tvks.append(valid_tvk)
+        statuses.append("valid")
+    
+    # Check synonym TVKs
+    for syn_tvk in synonym_tvks:
+        if syn_tvk and syn_tvk in tvk_to_designations:
+            for row_data in tvk_to_designations[syn_tvk]:
+                if row_data['row_index'] not in seen_row_indices:
+                    matching_rows.append(row_data)
+                    seen_row_indices.add(row_data['row_index'])
+            matching_tvks.append(syn_tvk)
+            if "synonym" not in statuses:
+                statuses.append("synonym")
+    
+    status_str = ";".join(statuses) if statuses else ""
+    return matching_rows, matching_tvks, status_str
+
 
 def process_species(
     input_file: Path,
     tvk_to_designations: Dict[str, List[dict]],
     output_file: Path,
     logger: logging.Logger
-) -> Set[str]:
+) -> Set[int]:
     """
     Process UKSI species file and annotate with JNCC designations.
     
-    Matches UKSI taxon_version_key against JNCC included_tvk_list entries.
+    Matches UKSI taxon_version_key and synonym_tvk_list against JNCC included_tvk_list entries.
     
     Returns:
-        Set of JNCC TVKs that were matched to UKSI species
+        Set of JNCC row indices that were matched to UKSI species
     """
-    matched_jncc_tvks = set()
+    matched_jncc_rows = set()  # Track matched JNCC row indices
     
     with open(input_file, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f, delimiter='\t')
@@ -187,6 +242,7 @@ def process_species(
         # Build output fieldnames: input columns + matching info + JNCC designation columns
         output_fieldnames = input_fieldnames + [
             JNCC_MATCHING_TVK_COL,
+            TVK_MATCH_STATUS_COL,
             JNCC_ROW_INDEX_COL
         ] + JNCC_DESIGNATION_COLUMNS
         
@@ -196,6 +252,9 @@ def process_species(
             
             species_count = 0
             matched_count = 0
+            valid_match_count = 0
+            synonym_match_count = 0
+            both_match_count = 0
             
             for row in reader:
                 species_count += 1
@@ -203,35 +262,56 @@ def process_species(
                 # Get the UKSI taxon_version_key
                 uksi_tvk = row.get('taxon_version_key', '').strip()
                 
+                # Get synonym TVKs (semicolon-separated)
+                synonym_tvk_str = row.get('synonym_tvk_list', '').strip()
+                synonym_tvks = [t.strip() for t in synonym_tvk_str.split(';') if t.strip()]
+                
                 # Build output row starting with input data
                 output_row = dict(row)
                 
-                # Check if this TVK exists in JNCC data
-                if uksi_tvk and uksi_tvk in tvk_to_designations:
+                # Find matches in both valid TVK and synonym TVKs
+                matching_rows, matching_tvks, match_status = find_jncc_matches(
+                    uksi_tvk, synonym_tvks, tvk_to_designations
+                )
+                
+                if matching_rows:
                     matched_count += 1
-                    matched_jncc_tvks.add(uksi_tvk)
                     
-                    # Get all matching row data (could be multiple JNCC rows)
-                    matching_rows = tvk_to_designations[uksi_tvk]
+                    # Track match types for statistics
+                    if match_status == "valid":
+                        valid_match_count += 1
+                    elif match_status == "synonym":
+                        synonym_match_count += 1
+                    elif match_status == "valid;synonym":
+                        both_match_count += 1
+                    
+                    # Add all matched JNCC row indices to the set
+                    for row_data in matching_rows:
+                        matched_jncc_rows.add(row_data['row_index'])
                     
                     # Collect row indices for reference
-                    row_indices = [str(r['row_index']) for r in matching_rows]
+                    row_indices = list(set(str(r['row_index']) for r in matching_rows))
                     
                     # Merge designations from all matching rows
                     designation_dicts = [r['designations'] for r in matching_rows]
                     merged = merge_designations(designation_dicts)
                     
-                    output_row[JNCC_MATCHING_TVK_COL] = uksi_tvk
-                    output_row[JNCC_ROW_INDEX_COL] = ';'.join(row_indices)
+                    output_row[JNCC_MATCHING_TVK_COL] = ';'.join(matching_tvks)
+                    output_row[TVK_MATCH_STATUS_COL] = match_status
+                    output_row[JNCC_ROW_INDEX_COL] = ';'.join(sorted(row_indices, key=int))
                     
                     for col in JNCC_DESIGNATION_COLUMNS:
                         output_row[col] = merged.get(col, "")
                     
-                    if len(matching_rows) > 1:
-                        logger.debug(f"Multiple JNCC rows matched for TVK {uksi_tvk}: rows {row_indices}")
+                    if len(matching_tvks) > 1:
+                        logger.debug(
+                            f"Multiple TVK matches for species {row.get('species', 'unknown')}: "
+                            f"TVKs={matching_tvks}, status={match_status}"
+                        )
                 else:
                     # No match - empty strings for all JNCC columns
                     output_row[JNCC_MATCHING_TVK_COL] = ""
+                    output_row[TVK_MATCH_STATUS_COL] = ""
                     output_row[JNCC_ROW_INDEX_COL] = ""
                     for col in JNCC_DESIGNATION_COLUMNS:
                         output_row[col] = ""
@@ -239,38 +319,40 @@ def process_species(
                 writer.writerow(output_row)
     
     logger.info(f"Processed {species_count} UKSI species, {matched_count} matched to JNCC designations")
-    return matched_jncc_tvks
+    logger.info(f"  - Valid TVK matches only: {valid_match_count}")
+    logger.info(f"  - Synonym TVK matches only: {synonym_match_count}")
+    logger.info(f"  - Both valid and synonym matches: {both_match_count}")
+    return matched_jncc_rows
 
 
 
-def log_unmatched_jncc_tvks(
-    all_jncc_tvks: Set[str],
-    matched_tvks: Set[str],
-    tvk_to_designations: Dict[str, List[dict]],
+
+def log_unmatched_jncc_rows(
+    all_jncc_rows: Dict[int, dict],
+    matched_row_indices: Set[int],
     logger: logging.Logger
 ) -> None:
     """
-    Log JNCC TVKs that were not found in the UKSI file.
+    Log JNCC rows that were not matched to any UKSI species.
     
-    These are TVKs from the included_tvk_list that don't match any UKSI taxon_version_key.
+    A JNCC row is considered matched if ANY of its TVKs in included_tvk_list
+    matched a UKSI taxon_version_key or synonym_tvk_list entry.
     """
-    unmatched = all_jncc_tvks - matched_tvks
+    unmatched_indices = set(all_jncc_rows.keys()) - matched_row_indices
     
-    if unmatched:
-        logger.warning(f"JNCC TVKs not found in UKSI file: {len(unmatched)} of {len(all_jncc_tvks)}")
-        logger.info("Logging unmatched JNCC TVKs to error log...")
+    if unmatched_indices:
+        logger.warning(f"JNCC rows not matched to any UKSI species: {len(unmatched_indices)} of {len(all_jncc_rows)}")
+        logger.info("Logging unmatched JNCC rows to error log...")
         
-        for tvk in sorted(unmatched):
-            # Get info about where this TVK came from
-            row_data_list = tvk_to_designations.get(tvk, [])
-            for row_data in row_data_list:
-                logger.error(
-                    f"JNCC TVK not found in UKSI: {tvk} "
-                    f"(from JNCC row {row_data['row_index']}, "
-                    f"name: '{row_data['recommended_name']}')"
-                )
+        for row_idx in sorted(unmatched_indices):
+            row_data = all_jncc_rows[row_idx]
+            logger.error(
+                f"JNCC row not matched to UKSI: row {row_idx}, "
+                f"name: '{row_data['recommended_name']}', "
+                f"TVKs: {row_data['source_tvk_list']}"
+            )
     else:
-        logger.info("All JNCC TVKs matched to UKSI species")
+        logger.info("All JNCC rows matched to UKSI species")
 
 
 def parse_args() -> argparse.Namespace:
@@ -288,9 +370,11 @@ Examples:
 
 Matching logic:
     - Looks up UKSI taxon_version_key in JNCC included_tvk_list
+    - Also looks up each TVK in UKSI synonym_tvk_list
     - included_tvk_list contains semicolon-separated TVKs
     - If multiple JNCC rows contain the same TVK, designations are merged
-    - Unmatched JNCC TVKs are logged as errors
+    - tvk_match_status indicates if match was to 'valid', 'synonym', or 'valid;synonym'
+    - Unmatched JNCC rows (where none of their TVKs matched) are logged as errors
         """
     )
     
@@ -325,7 +409,6 @@ Matching logic:
     return parser.parse_args()
 
 
-
 def main():
     """Main entry point."""
     args = parse_args()
@@ -357,23 +440,24 @@ def main():
     logger.info(f"JNCC input file: {args.jncc}")
     logger.info(f"Output file: {output_file}")
     logger.info(f"Log file: {log_file}")
+    logger.info(f"Matching against both taxon_version_key and synonym_tvk_list")
     
     try:
         # Load JNCC data - creates mapping from individual TVKs to designations
         logger.info("Loading JNCC conservation designations...")
-        tvk_to_designations, all_jncc_tvks = load_jncc_data(args.jncc, logger)
+        tvk_to_designations, all_jncc_rows, total_rows = load_jncc_data(args.jncc, logger)
         
         # Process UKSI species and annotate with JNCC designations
         logger.info("Processing UKSI species file...")
-        matched_tvks = process_species(
+        matched_row_indices = process_species(
             args.input,
             tvk_to_designations,
             output_file,
             logger
         )
         
-        # Log unmatched JNCC TVKs as errors
-        log_unmatched_jncc_tvks(all_jncc_tvks, matched_tvks, tvk_to_designations, logger)
+        # Log unmatched JNCC rows as errors
+        log_unmatched_jncc_rows(all_jncc_rows, matched_row_indices, logger)
         
         logger.info(f"JNCC annotation complete. Output written to: {output_file}")
         
