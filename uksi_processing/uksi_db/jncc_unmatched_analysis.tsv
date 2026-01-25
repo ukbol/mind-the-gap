@@ -1,0 +1,634 @@
+informal_group	jncc_name	jncc_tvk	resolved_name	resolved_tvk	resolved_in_taxa
+alga	Cosmarium sphagnicolum	NHMSYS0000601657	Cosmarium sphagnicola	NHMSYS0021895703	YES
+bird	Acanthis cabaret	NHMSYS0021004312	Acanthis flammea cabaret	NHMSYS0021933619	YES
+bird	Acanthis flammea	NHMSYS0021004317	Acanthis flammea flammea/rostrata	NHMSYS0021933624	YES
+bird	Acanthis hornemanni	NHMSYS0021004332	Acanthis flammea exilipes/hornemanni	NHMSYS0021933634	YES
+bird	Accipiter gentilis	NHMSYS0000530119	Astur gentilis	NHMSYS0021933489	YES
+bird	Alaudala rufescens	NHMSYS0021275201	Alaudala cheleensis/rufescens/heinei	NHMSYS0021373129	YES
+bird	Bubulcus ibis	NHMSYS0000530216	Ardea ibis	NHMSYS0021933544	YES
+bird	Charadrius alexandrinus	NBNSYS0000000159	Anarhynchus alexandrinus	NHMSYS0021813951	YES
+bird	Charadrius asiaticus	NHMSYS0000530273	Anarhynchus asiaticus	NHMSYS0021813961	YES
+bird	Charadrius leschenaultii	NBNSYS0000000175	Anarhynchus leschenaultii	NHMSYS0021813976	YES
+bird	Charadrius mongolus	NHMSYS0000530274	Anarhynchus atrifrons/mongolus	NHMSYS0021813971	YES
+bird	Charadrius morinellus	NBNSYS0000000176	Eudromias morinellus	NBNSYS0000162769	YES
+bird	Ixobrychus minutus	NHMSYS0000530414	Botaurus minutus	NHMSYS0021933554	YES
+bony fish (Actinopterygii)	Cottus gobio	NHMSYS0000544660	Cottus perifretum	NHMSYS0020755076	YES
+bony fish (Actinopterygii)	Gasterosteus gymnurus	NHMSYS0020755078	Gasterosteus aculeatus	NBNSYS0000188612	YES
+clubmoss	Diphasiastrum complanatum	NHMSYS0000458106	Diphasiastrum alpinum x complanatum = D. x issleri	NBNSYS0000146189	YES
+fern	Ceterach officinarum	NHMSYS0100001007	Asplenium ceterach	NBNSYS0000142464	YES
+fern	Phyllitis scolopendrium	NBNSYS0000002039	Asplenium scolopendrium	NBNSYS0000142466	YES
+flowering plant	Alopecurus borealis	NBNSYS0000002662	Alopecurus magellanicus	NBNSYS0200001716	YES
+flowering plant	Anagallis arvensis	NBNSYS0000003943	Lysimachia arvensis	NHMSYS0021876307	YES
+flowering plant	Anagallis arvensis subsp. arvensis	NBNSYS0000014076	Lysimachia arvensis	NHMSYS0021872677	YES
+flowering plant	Anagallis arvensis subsp. foemina	NHMSYS0000455900	Lysimachia foemina	NHMSYS0021872662	YES
+flowering plant	Anagallis tenella	NBNSYS0000003942	Lysimachia tenella	NHMSYS0100001991	YES
+flowering plant	Anchusa arvensis	NHMSYS0000455907	Lycopsis arvensis	NBNSYS0000150919	YES
+flowering plant	Apium graveolens subsp. graveolens	NHMSYS0021240644	Apium graveolens var. graveolens	NBNSYS0500000159	YES
+flowering plant	Apium inundatum	NHMSYS0000455995	Helosciadium inundatum	NHMSYS0021871262	YES
+flowering plant	Apium nodiflorum	NBNSYS0000003666	Helosciadium nodiflorum	NHMSYS0021872397	YES
+flowering plant	Apium repens	NBNSYS0000003668	Helosciadium repens	NHMSYS0021873337	YES
+flowering plant	Arabis glabra	NBNSYS0000002892	Turritis glabra	NBNSYS0000158729	YES
+flowering plant	Arenaria serpyllifolia subsp. leptoclados	NHMSYS0000456053	Arenaria leptoclados	NHMSYS0000456046	YES
+flowering plant	Armeria maritima	NHMSYS0021060385	Armeria maritima	NHMSYS0000456077	YES
+flowering plant	Asperula cynanchica subsp. occidentalis	NBNSYS0000034394	Asperula cynanchica subsp. cynanchica var. densiflora	NHMSYS0021875432	YES
+flowering plant	Aster linosyris	NBNSYS0000004435	Galatella linosyris	NHMSYS0021870527	YES
+flowering plant	Aster tripolium	NBNSYS0000004422	Tripolium pannonicum	NHMSYS0021872072	YES
+flowering plant	Bromus commutatus	NHMSYS0000456661	Bromus racemosus subsp. commutatus	NHMSYS0100000822	YES
+flowering plant	Bromus sterilis	NBNSYS0000143226	Anisantha sterilis	NBNSYS0000002575	YES
+flowering plant	Callitriche hamulata	NBNSYS0000042400	Callitriche brutia subsp. hamulata	NHMSYS0000456301	YES
+flowering plant	Callitriche hamulata	NHMSYS0000456302	Callitriche brutia subsp. hamulata	NHMSYS0000456301	YES
+flowering plant	Carex echinata x curta = C. x biharica	NHMSYS0001754464	Carex echinata x canescens = C. x biharica	NHMSYS0000456916	YES
+flowering plant	Carex flava x viridula = C. x alsatica	NHMSYS0001754825	Carex flava x demissa = C. x alsatica	NBNSYS0000005424	YES
+flowering plant	Carex lachenalii x curta = C. x helvola	NHMSYS0001754465	Carex lachenalii x canescens = C. x helvola	NHMSYS0000456923	YES
+flowering plant	Carex paniculata x curta = C. x ludibunda	NHMSYS0001754466	Carex paniculata x canescens = C. x ludibunda	NHMSYS0000456926	YES
+flowering plant	Carex riparia x rostrata	NBNSYS0500000381	Carex riparia x rostrata = C. x beckmanniana	NHMSYS0100000943	YES
+flowering plant	Carex viridula subsp. brachyrrhyncha	NHMSYS0000456906	Carex lepidocarpa	NBNSYS0000143732	YES
+flowering plant	Carex viridula subsp. oedocarpa	NHMSYS0000456908	Carex demissa	NHMSYS0000456842	YES
+flowering plant	Carum verticillatum	NHMSYS0000456960	Trocdaris verticillata	NHMSYS0021870902	YES
+flowering plant	Catapodium rigidum var. rigidum	NBNSYS0100002210	Catapodium rigidum subsp. rigidum	NHMSYS0021128365	YES
+flowering plant	Centaurium scilloides	NHMSYS0000457036	Centaurium portense	NBNSYS0000143864	YES
+flowering plant	Centunculus minimus	NBNSYS0000143890	Lysimachia minima	NHMSYS0021873662	YES
+flowering plant	Chamerion angustifolium	NBNSYS0000003598	Chamaenerion angustifolium	NHMSYS0100001010	YES
+flowering plant	Chenopodium bonus-henricus	NBNSYS0000003088	Blitum bonus-henricus	NHMSYS0021873182	YES
+flowering plant	Chenopodium chenopodioides	NBNSYS0000003103	Oxybasis chenopodioides	NHMSYS0021669628	YES
+flowering plant	Chenopodium glaucum	NBNSYS0000003104	Oxybasis glauca	NHMSYS0021669633	YES
+flowering plant	Chenopodium hybridum	NBNSYS0000003101	Chenopodiastrum hybridum	NHMSYS0021353873	YES
+flowering plant	Chenopodium murale	NBNSYS0000003099	Chenopodiastrum murale	NHMSYS0021873392	YES
+flowering plant	Chenopodium polyspermum	NBNSYS0000003089	Lipandra polysperma	NHMSYS0021870862	YES
+flowering plant	Chenopodium rubrum	NBNSYS0000003102	Oxybasis rubra	NHMSYS0021669623	YES
+flowering plant	Chenopodium urbicum	NBNSYS0000003100	Oxybasis urbica	NHMSYS0021669643	YES
+flowering plant	Clinopodium calamintha	NBNSYS0000004215	Clinopodium nepeta	NBNSYS0000144633	YES
+flowering plant	Cochlearia officinalis	NBNSYS0000042402	Cochlearia officinalis	NHMSYS0000457398	YES
+flowering plant	Coeloglossum viride	NHMSYS0000457408	Dactylorhiza viridis	NHMSYS0000457959	YES
+flowering plant	Dactylorhiza ebudensis	NHMSYS0020110554	Dactylorhiza traunsteinerioides subsp. francis-drucei var. ebudensis	NHMSYS0021874827	YES
+flowering plant	Dactylorhiza purpurella subsp. cambrensis	NHMSYS0020193660	Dactylorhiza purpurella var. cambrensis	NHMSYS0021875057	YES
+flowering plant	Deschampsia flexuosa	NBNSYS0000002623	Avenella flexuosa	NHMSYS0021873492	YES
+flowering plant	Deschampsia setacea	NHMSYS0000458051	Aristavena setacea	NHMSYS0021872392	YES
+flowering plant	Dioscorea communis	NHMSYS0020823747	Tamus communis	NBNSYS0000002282	YES
+flowering plant	Draba muralis	NBNSYS0000002866	Drabella muralis	NHMSYS0021872167	YES
+flowering plant	Drosera rotundifolia x intermedia = D. x belezeana	NHMSYS0001754523	Drosera intermedia x rotundifolia = D. x eloisiana	NHMSYS0021873197	YES
+flowering plant	Eleocharis palustris subsp. vulgaris	NBNSYS0000002398	Eleocharis palustris subsp. waltersii	NHMSYS0021874052	YES
+flowering plant	Elytrigia atherica	NHMSYS0000458356	Elymus athericus	NHMSYS0000458335	YES
+flowering plant	Elytrigia campestris	NHMSYS0000458357	Elymus repens subsp. arenosus	NHMSYS0000465599	YES
+flowering plant	Elytrigia juncea	NBNSYS0000002597	Elymus junceiformis	NHMSYS0021870967	YES
+flowering plant	Elytrigia repens	NHMSYS0100001391	Elymus repens	NHMSYS0000458346	YES
+flowering plant	Epipactis youngiana	NHMSYS0000458462	Epipactis helleborine var. youngiana	NHMSYS0021875442	YES
+flowering plant	Erophila verna	NBNSYS0000002867	Erophila verna	NHMSYS0000458582	YES
+flowering plant	Euphorbia serrulata	NBNSYS0000039527	Euphorbia stricta	NHMSYS0100001505	YES
+flowering plant	Festuca altissima	NBNSYS0000002511	Drymochloa sylvatica	NHMSYS0100001321	YES
+flowering plant	Festuca arundinacea	NHMSYS0000458758	Schedonorus arundinaceus	NHMSYS0000463273	YES
+flowering plant	Festuca gigantea	NHMSYS0000458771	Schedonorus giganteus	NHMSYS0000463274	YES
+flowering plant	Festuca pratensis	NHMSYS0000458788	Schedonorus pratensis	NHMSYS0000463276	YES
+flowering plant	Ficaria verna var. bulbifer	NHMSYS0100001604	Ficaria verna subsp. verna	NHMSYS0021240659	YES
+flowering plant	Filago gallica	NBNSYS0000004406	Logfia gallica	NHMSYS0000460422	YES
+flowering plant	Filago minima	NHMSYS0000458842	Logfia minima	NBNSYS0000150750	YES
+flowering plant	Filago vulgaris	NBNSYS0000004403	Filago germanica	NHMSYS0000465647	YES
+flowering plant	Galium mollugo subsp. erectum	NBNSYS0000004740	Galium album subsp. erectum	NHMSYS0021874707	YES
+flowering plant	Galium pumilum subsp. fleurotii	NHMSYS0021240674	Galium fleurotii	NBNSYS0000014180	YES
+flowering plant	Galium verum subsp. verum	NHMSYS0021240684	Galium verum var. verum	NBNSYS0100003237	YES
+flowering plant	Gentianella anglica	NHMSYS0000459021	Gentianella amarella subsp. anglica	NHMSYS0021605727	YES
+flowering plant	Gentianella ciliata	NBNSYS0000039919	Gentianopsis ciliata	NHMSYS0021240694	YES
+flowering plant	Gentianella uliginosa	NHMSYS0000459028	Gentianella amarella subsp. occidentalis	NHMSYS0021874422	YES
+flowering plant	Glaux maritima	NBNSYS0000003946	Lysimachia maritima	NHMSYS0020823763	YES
+flowering plant	Gnaphalium luteoalbum	NBNSYS0000004412	Laphangium luteoalbum	NHMSYS0021870182	YES
+flowering plant	Gnaphalium norvegicum	NHMSYS0000459100	Omalotheca norvegica	NHMSYS0000461173	YES
+flowering plant	Gnaphalium supinum	NBNSYS0000004410	Omalotheca supina	NHMSYS0100002170	YES
+flowering plant	Gnaphalium sylvaticum	NBNSYS0000004408	Omalotheca sylvatica	NHMSYS0000461174	YES
+flowering plant	Helictotrichon pratense	NBNSYS0000002616	Helictochloa pratensis	NHMSYS0021873287	YES
+flowering plant	Helictotrichon pubescens	NHMSYS0000459280	Avenula pubescens	NHMSYS0000456377	YES
+flowering plant	Hieracium acroleucum	NHMSYS0021118707	Hieracium pseudacroleucum	NHMSYS0021653755	YES
+flowering plant	Hieracium argenteum	NHMSYS0021118677	Hieracium argenteum	NHMSYS0000459340	YES
+flowering plant	Hieracium caesionigrescens	NHMSYS0000459358	Hieracium lintonense	NHMSYS0021653730	YES
+flowering plant	Hieracium caesitium	NHMSYS0021118683	Hieracium caesitium	NHMSYS0020442360	YES
+flowering plant	Hieracium crinellum	NHMSYS0020755108	Hieracium subcrinellum	NHMSYS0021653780	YES
+flowering plant	Hieracium diaphanum	NHMSYS0000459407	Hieracium breviglandulosum	NHMSYS0021870662	YES
+flowering plant	Hieracium integratum	NHMSYS0000459465	Hieracium pseudintegratum	NHMSYS0021653760	YES
+flowering plant	Hieracium latobrigorum	NHMSYS0000840779	Hieracium lanceolatifolium	NHMSYS0021873497	YES
+flowering plant	Hieracium prolixum	NHMSYS0000459563	Hieracium benhopense	NHMSYS0021653685	YES
+flowering plant	Hieracium rhomboides	NHMSYS0021118689	Hieracium rhombicum	NHMSYS0021653770	YES
+flowering plant	Hieracium stenstroemii	NHMSYS0000459648	Hieracium cambrense	NHMSYS0021653690	YES
+flowering plant	Hieracium triviale	NHMSYS0021118695	Hieracium neopinnatifidum	NHMSYS0021872077	YES
+flowering plant	Hieracium vulgatum	NHMSYS0021118701	Hieracium triviale	NHMSYS0021870657	YES
+flowering plant	Inula crithmoides	NBNSYS0000004398	Limbarda crithmoides	NHMSYS0100001945	YES
+flowering plant	Juncus ambiguus	NBNSYS0000002218	Juncus ranarius	NHMSYS0000459988	YES
+flowering plant	Juncus bufonius agg.	NHMSYS0000352722	Juncus bufonius	NBNSYS0100003621	YES
+flowering plant	Juncus bulbosus subsp. bulbosus	NHMSYS0021128422	Juncus bulbosus subsp. bulbosus	NBNSYS0100003622	YES
+flowering plant	Kobresia simpliciuscula	NHMSYS0000460031	Carex simpliciuscula	NHMSYS0100000930	YES
+flowering plant	Koeleria macrantha	NBNSYS0000002607	Koeleria macrantha	NHMSYS0000460038	YES
+flowering plant	Lavatera cretica	NBNSYS0000003138	Malva multiflora	NHMSYS0021873222	YES
+flowering plant	Lithospermum arvense	NBNSYS0000004017	Buglossoides arvensis	NHMSYS0000456718	YES
+flowering plant	Lithospermum purpureocaeruleum	NBNSYS0000004015	Aegonychon purpureocaeruleum	NHMSYS0000455618	YES
+flowering plant	Meconopsis cambrica	NHMSYS0000460627	Papaver cambricum	NHMSYS0100002292	YES
+flowering plant	Minuartia hybrida	NHMSYS0000460730	Sabulina tenuifolia	NHMSYS0021872947	YES
+flowering plant	Minuartia rubella	NBNSYS0000003053	Sabulina rubella	NHMSYS0021605742	YES
+flowering plant	Minuartia sedoides	NBNSYS0000003056	Cherleria sedoides	NBNSYS0000144262	YES
+flowering plant	Minuartia stricta	NBNSYS0000003054	Sabulina stricta	NHMSYS0021872052	YES
+flowering plant	Minuartia verna	NBNSYS0000003052	Sabulina verna	NHMSYS0021873242	YES
+flowering plant	Myosotis stricta	NHMSYS0021605732	Myosotis stricta	NHMSYS0021873427	YES
+flowering plant	Myosoton aquaticum	NBNSYS0000003028	Stellaria aquatica	NBNSYS0000157227	YES
+flowering plant	Orobanche purpurea	NBNSYS0000004172	Phelipanche purpurea	NHMSYS0021870782	YES
+flowering plant	Otanthus maritimus	NHMSYS0000461412	Achillea maritima	NHMSYS0021240634	YES
+flowering plant	Papaver argemone	NBNSYS0000002768	Roemeria argemone	NHMSYS0000462423	YES
+flowering plant	Papaver bivalve subsp. hybridum	NHMSYS0000461487	Roemeria hybrida	NBNSYS0000002773	YES
+flowering plant	Papaver dubium subsp. lecoqii	NBNSYS0000002766	Papaver lecoqii	NBNSYS0000153184	YES
+flowering plant	Papaver hybridum	NBNSYS0000002767	Roemeria hispida	NHMSYS0021872352	YES
+flowering plant	Persicaria bistorta	NBNSYS0000003750	Bistorta officinalis	NHMSYS0000456490	YES
+flowering plant	Persicaria vivipara	NHMSYS0000461615	Bistorta vivipara	NHMSYS0000456491	YES
+flowering plant	Petroselinum segetum	NHMSYS0000461643	Sison segetum	NHMSYS0100002986	YES
+flowering plant	Peucedanum ostruthium	NHMSYS0000461648	Imperatoria ostruthium	NHMSYS0100001813	YES
+flowering plant	Picris echioides	NBNSYS0000004525	Helminthotheca echioides	NHMSYS0100001729	YES
+flowering plant	Potamogeton filiformis	NBNSYS0000002145	Stuckenia filiformis	NHMSYS0021872172	YES
+flowering plant	Potamogeton pectinatus	NBNSYS0000002146	Stuckenia pectinata	NHMSYS0021060372	YES
+flowering plant	Potamogeton pectinatus x vaginatus = P. x bottnicus	NHMSYS0001754631	Stuckenia pectinata x vaginata = S. x bottnica	NHMSYS0021872462	YES
+flowering plant	Potentilla anserina	NHMSYS0021060392	Potentilla anserina	NBNSYS0000003341	YES
+flowering plant	Potentilla fruticosa	NBNSYS0000003337	Dasiphora fruticosa	NHMSYS0021873792	YES
+flowering plant	Potentilla palustris	NBNSYS0000003338	Comarum palustre	NBNSYS0000144930	YES
+flowering plant	Potentilla tabernaemontani	NHMSYS0000455482	Potentilla verna	NHMSYS0100002587	YES
+flowering plant	Radiola linoides	NBNSYS0000003146	Linum radiola	NHMSYS0021872927	YES
+flowering plant	Rorippa microphylla	NHMSYS0000462434	Nasturtium microphyllum	NHMSYS0000460932	YES
+flowering plant	Rorippa nasturtium-aquaticum	NBNSYS0000002894	Nasturtium officinale	NHMSYS0000460933	YES
+flowering plant	Rorippa nasturtium-aquaticum agg.	NBNSYS0000042612	Nasturtium officinale	NBNSYS0000002893	YES
+flowering plant	Rosa caesia subsp. caesia	NHMSYS0000462447	Rosa caesia	NHMSYS0000462446	YES
+flowering plant	Rosa caesia subsp. vosagiaca	NHMSYS0000462449	Rosa vosagiaca	NHMSYS0000462493	YES
+flowering plant	Rosa obtusifolia	NBNSYS0000003404	Rosa tomentella	NBNSYS0000156024	YES
+flowering plant	Ruppia cirrhosa	NHMSYS0021060369	Ruppia spiralis	NHMSYS0000463024	YES
+flowering plant	Ruppia maritima	NHMSYS0021060370	Ruppia maritima	NBNSYS0000002149	YES
+flowering plant	Sagina apetala subsp. apetala	NHMSYS0000463045	Sagina apetala	NBNSYS0000004655	YES
+flowering plant	Sagina apetala subsp. erecta	NHMSYS0000463046	Sagina filicaulis	NHMSYS0000463048	YES
+flowering plant	Salicornia nitens	NHMSYS0000463070	Salicornia emerici	NHMSYS0100002800	YES
+flowering plant	Salicornia pusilla	NHMSYS0000463075	Salicornia disarticulata	NHMSYS0100002805	YES
+flowering plant	Salsola kali subsp. kali	NHMSYS0000463182	Salsola kali	NBNSYS0000014348	YES
+flowering plant	Saxifraga nivalis	NBNSYS0000003489	Micranthes nivalis	NHMSYS0021870612	YES
+flowering plant	Saxifraga stellaris	NBNSYS0000003490	Micranthes stellaris	NHMSYS0021870622	YES
+flowering plant	Sedum forsterianum	NHMSYS0000463386	Petrosedum forsterianum	NHMSYS0000461640	YES
+flowering plant	Sedum rosea	NBNSYS0000003466	Rhodiola rosea	NHMSYS0100002682	YES
+flowering plant	Sedum telephium	NBNSYS0000003467	Hylotelephium telephium	NHMSYS0000459840	YES
+flowering plant	Seriphidium maritimum	NHMSYS0000463463	Artemisia maritima	NBNSYS0000142316	YES
+flowering plant	Silene flos-cuculi	NBNSYS0000156751	Silene flos-cuculi	NHMSYS0100002969	YES
+flowering plant	Sorbus avonensis	NHMSYS0021240764	Sorbus aria x porrigentiformis = S. x avonensis	NHMSYS0021873687	YES
+flowering plant	Sorbus × motleyi	NHMSYS0021123488	Sorbus aucuparia x leyana = S. x motleyi	NHMSYS0021873722	YES
+flowering plant	Stachys officinalis	NHMSYS0000463975	Betonica officinalis	NBNSYS0000142939	YES
+flowering plant	Symphytum officinale subsp. bohemicum	NHMSYS0021128533	Symphytum officinale subsp. bohemicum	NHMSYS0000464114	YES
+flowering plant	Taraxacum dahlstedtii	NHMSYS0000464201	Taraxacum stenoglossum	NHMSYS0021872087	YES
+flowering plant	Taraxacum xiphoideum	NHMSYS0000464348	Taraxacum clovense	NHMSYS0000464191	YES
+flowering plant	Thlaspi caerulescens	NHMSYS0000464422	Noccaea caerulescens	NHMSYS0000461068	YES
+flowering plant	Thlaspi perfoliatum	NBNSYS0000002843	Microthlaspi perfoliatum	NHMSYS0000460713	YES
+flowering plant	Thymus polytrichus	NHMSYS0000464447	Thymus drucei	NHMSYS0000464446	YES
+flowering plant	Thyselium palustre	NHMSYS0021240774	Thysselinum palustre	NHMSYS0021871017	YES
+flowering plant	Trichophorum germanicum	NHMSYS0021007988	Trichophorum germanicum	NHMSYS0100003134	YES
+flowering plant	Trientalis europaea	NBNSYS0000003941	Lysimachia europaea	NHMSYS0021872682	YES
+flowering plant	Triglochin maritimum	NBNSYS0000002121	Triglochin maritima	NBNSYS0000158561	YES
+flowering plant	Triglochin palustre	NBNSYS0000002120	Triglochin palustris	NBNSYS0000158562	YES
+flowering plant	Urtica dioica subsp. galeopsifolia	NHMSYS0100003185	Urtica dioica subsp. subinermis	NHMSYS0021874632	YES
+flowering plant	Utricularia intermedia	NBNSYS0000004189	Utricularia intermedia	NHMSYS0000464743	YES
+flowering plant	Utricularia vulgaris	NBNSYS0000042407	Utricularia vulgaris	NHMSYS0000464750	YES
+flowering plant	Valerianella locusta subsp. locusta	NHMSYS0021240784	Valerianella locusta var. locusta	NBNSYS0100005947	YES
+flowering plant	Vicia hirsuta	NBNSYS0000003280	Ervilia hirsuta	NHMSYS0021870502	YES
+flowering plant	Vicia parviflora	NBNSYS0000003282	Ervum gracile	NHMSYS0021870162	YES
+flowering plant	Vicia sylvatica	NBNSYS0000003289	Ervilia sylvatica	NHMSYS0021870157	YES
+flowering plant	Vicia tetrasperma	NHMSYS0000464865	Ervum tetraspermum	NHMSYS0100001491	YES
+flowering plant	Viola canina subsp. montana	NHMSYS0000464883	Viola canina subsp. ruppii	NHMSYS0021873927	YES
+flowering plant	Viola persicifolia	NHMSYS0000464895	Viola stagnina	NBNSYS0000159008	YES
+flowering plant	Zannichellia palustris subsp. pedicellata	NHMSYS0021128555	Zannichellia palustris subsp. pedicellata	NHMSYS0000465218	YES
+flowering plant	Zostera (Zostera) marina	NHMSYS0021060376	Zostera marina	NBNSYS0000002123	YES
+flowering plant	Zostera (Zosterella) noltei	NHMSYS0021060379	Zostera noltei	NBNSYS0100006056	YES
+fungus	Acremonium lichenicola	NHMSYS0001472844	Cylindromonium lichenicola	NHMSYS0021700335	YES
+fungus	Antrodia ramentacea	NHMSYS0001474714	Fomitopsis ramentacea	NHMSYS0021750405	YES
+fungus	Armillaria ectypa	BMSSYS0000020524	Desarmillaria ectypa	BMSSYS0000731113	YES
+fungus	Arrhenia peltigerina	NHMSYS0001474910	Arrhenia peltigerina s. lat.	NHMSYS0021843341	YES
+fungus	Arthopyrenia cinereopruinosa	NHMSYS0001442482	Alloarthopyrenia italica	NHMSYS0021797657	YES
+fungus	Arthopyrenia fraxini	NHMSYS0001474993	Naetrocymbe fraxini	BMSSYS0000011893	YES
+fungus	Arthopyrenia punctiformis	NHMSYS0001475001	Naetrocymbe punctiformis	BMSSYS0000011894	YES
+fungus	Bankera fuligineoalba	NBNSYS0000021216	Phellodon fuligineoalbus	BMSSYS0000049356	YES
+fungus	Boletus appendiculatus	NHMSYS0001475888	Butyriboletus appendiculatus	BMSSYS0000043237	YES
+fungus	Boletus armeniacus	BMSSYS0000002638	Rheubarbariboletus armeniacus	BMSSYS0000050563	YES
+fungus	Boletus badius	NHMSYS0001475893	Imleria badia	BMSSYS0000046598	YES
+fungus	Boletus bubalinus	NHMSYS0020535086	Hortiboletus bubalinus	BMSSYS0000046287	YES
+fungus	Boletus calopus	NHMSYS0001475903	Caloboletus calopus	BMSSYS0000043319	YES
+fungus	Boletus chrysenteron	NHMSYS0001475918	Xerocomellus chrysenteron	BMSSYS0000052612	YES
+fungus	Boletus cisalpinus	NHMSYS0001475920	Xerocomellus cisalpinus	BMSSYS0000052613	YES
+fungus	Boletus declivitatum	NHMSYS0020811799	Hortiboletus engelii	BMSSYS0000046288	YES
+fungus	Boletus depilatus	NHMSYS0020531024	Hemileccinum depilatum	BMSSYS0000046179	YES
+fungus	Boletus fechtneri	NHMSYS0001475959	Butyriboletus fechtneri	BMSSYS0000043238	YES
+fungus	Boletus ferrugineus	BMSSYS0000039648	Xerocomus ferrugineus	NHMSYS0001501958	YES
+fungus	Boletus fragrans	NBNSYS0000038210	Lanmaoa fragrans	BMSSYS0000046926	YES
+fungus	Boletus immutatus	NHMSYS0001475982	Neoboletus praestigiator	BMSSYS0000731015	YES
+fungus	Boletus impolitus	NBNSYS0000037356	Hemileccinum impolitum	BMSSYS0000046180	YES
+fungus	Boletus legaliae	BMSSYS0000043105	Rubroboletus legaliae	BMSSYS0000050747	YES
+fungus	Boletus luridiformis	BMSSYS0000002712	Neoboletus praestigiator	BMSSYS0000731015	YES
+fungus	Boletus luridiformis var. discolor	NHMSYS0001476001	Neoboletus xanthopus	BMSSYS0000598384	YES
+fungus	Boletus luridus	NHMSYS0001476004	Suillellus luridus	BMSSYS0000051716	YES
+fungus	Boletus moravicus	NBNSYS0000038784	Aureoboletus moravicus	BMSSYS0000042790	YES
+fungus	Boletus porosporus	BMSSYS0000043112	Xerocomellus porosporus	BMSSYS0000052615	YES
+fungus	Boletus pruinatus	NHMSYS0001476036	Xerocomellus pruinatus	BMSSYS0000052616	YES
+fungus	Boletus pseudoregius	BMSSYS0000043114	Butyriboletus fuscoroseus	NHMSYS0021905573	YES
+fungus	Boletus pseudosulphureus	NBNSYS0000039200	Neoboletus praestigiator	BMSSYS0000731015	YES
+fungus	Boletus pulverulentus	NBNSYS0000039411	Cyanoboletus pulverulentus	BMSSYS0000044581	YES
+fungus	Boletus queletii	NHMSYS0001476045	Suillellus queletii	BMSSYS0000051718	YES
+fungus	Boletus radicans	NBNSYS0000143053	Caloboletus radicans	BMSSYS0000043320	YES
+fungus	Boletus reticulatus	NHMSYS0001476055	Boletus aestivalis	NHMSYS0001475880	YES
+fungus	Boletus rhodopurpureus	NBNSYS0000039347	Imperator rhodopurpureus	BMSSYS0000046603	YES
+fungus	Boletus rhodoxanthus	NBNSYS0000143056	Rubroboletus rhodoxanthus	NHMSYS0021648870	YES
+fungus	Boletus ripariellus	NHMSYS0001476056	Xerocomellus ripariellus	BMSSYS0000052617	YES
+fungus	Boletus rubellus	NBNSYS0000143057	Hortiboletus rubellus	BMSSYS0000046289	YES
+fungus	Boletus satanas	NHMSYS0001476066	Rubroboletus satanas	BMSSYS0000050748	YES
+fungus	Boletus subappendiculatus	NHMSYS0001476078	Butyriboletus subappendiculatus	BMSSYS0000043241	YES
+fungus	Boletus subtomentosus	NHMSYS0001476081	Xerocomus subtomentosus	NHMSYS0001501973	YES
+fungus	Boletus torosus	NHMSYS0001476091	Imperator torosus	BMSSYS0000046604	YES
+fungus	Calocybe onychina	NBNSYS0000162269	Rugosomyces onychinus	BMSSYS0000050762	YES
+fungus	Camarophyllopsis atropuncta	NHMSYS0001476737	Hodophilus atropunctus	BMSSYS0000728898	YES
+fungus	Camarophyllopsis foetens	NHMSYS0001476738	Hodophilus foetens	BMSSYS0000728899	YES
+fungus	Camarophyllopsis micacea	NHMSYS0001476740	Hodophilus micaceus	BMSSYS0000728901	YES
+fungus	Cantharellus melanoxeros	BMSSYS0000003298	Craterellus melanoxeros	BMSSYS0000728876	YES
+fungus	Clavaria zollingeri	NBNSYS0000020751	Clavaria zollingeri s. lat.	NHMSYS0021937894	YES
+fungus	Clypeococcum hypocenomycis	NHMSYS0001478149	Clypeococcum hypocenomyces	NHMSYS0021645440	YES
+fungus	Cornutispora ciliata	BMSSYS0000004778	Spirographa ciliata	NHMSYS0021699760	YES
+fungus	Cornutispora lichenicola	BMSSYS0000004779	Spirographa lichenicola	NHMSYS0021797622	YES
+fungus	Dactylospora amygdalariae	BMSSYS0000005637	Sclerococcum amygdalariae	NHMSYS0021699755	YES
+fungus	Dactylospora athallina	NHMSYS0001480205	Sclerococcum athallinum	BMSSYS0000731196	YES
+fungus	Dactylospora attendenda	NHMSYS0001480206	Sclerococcum attendendum	BMSSYS0000731197	YES
+fungus	Dactylospora australis	BMSSYS0000005639	Sclerococcum australe	BMSSYS0000731198	YES
+fungus	Dactylospora frigida	NBNSYS0000018463	Sclerococcum frigidum	BMSSYS0000731199	YES
+fungus	Dactylospora lobariella	NBNSYS0000018465	Sclerococcum lobariellum	BMSSYS0000731200	YES
+fungus	Dactylospora microspora	NHMSYS0001480210	Sclerococcum microsporum	BMSSYS0000731201	YES
+fungus	Dactylospora parasitica	NHMSYS0001480212	Sclerococcum parasiticum	BMSSYS0000731203	YES
+fungus	Dactylospora parellaria	NBNSYS0000018468	Sclerococcum parellarium	BMSSYS0000731204	YES
+fungus	Dactylospora purpurascens	BMSSYS0000005642	Sclerococcum purpurascens	BMSSYS0000731205	YES
+fungus	Dactylospora saxatilis	NHMSYS0001480213	Sclerococcum saxatile	BMSSYS0000731206	YES
+fungus	Dactylospora tegularum	NHMSYS0020535341	Sclerococcum tegularum	BMSSYS0000731208	YES
+fungus	Dactylospora urceolata	NBNSYS0000018471	Sclerococcum urceolatum	BMSSYS0000731209	YES
+fungus	Didymocyrtis epiphyscia	BMSSYS0000044964	Didymocyrtis epiphyscia s. lat.	NHMSYS0021843366	YES
+fungus	Endococcus fusiger	NHMSYS0020102976	Endococcus fusiger	NHMSYS0020990188	YES
+fungus	Fusarium peltigerae	BMSSYS0000006942	Scolecofusarium ciliatum	NHMSYS0021699165	YES
+fungus	Geastrum triplex	NBNSYS0000041480	Geastrum michelianum	NHMSYS0001482829	YES
+fungus	Geoglossum atropurpureum	NHMSYS0001482868	Microglossum atropurpureum	NHMSYS0001489514	YES
+fungus	Hawksworthiana peltigericola	BMSSYS0000007675	Hawksworthiana peltigerae	NHMSYS0021843016	YES
+fungus	Helvella leucomelaena	NBNSYS0000019584	Dissingia leucomelaena	NHMSYS0021663021	YES
+fungus	Heterocephalacria bachmannii	BMSSYS0000046239	Zyzygomyces bachmannii	NHMSYS0021645855	YES
+fungus	Heterocephalacria physciacearum	BMSSYS0000046240	Zyzygomyces physciacearum	NHMSYS0021645860	YES
+fungus	Hygrocybe lacmus	NHMSYS0001484479	Cuphophyllus lacmus	NHMSYS0001479904	YES
+fungus	Hygrocybe lilacina	NHMSYS0001484485	Chromosera lilacina	BMSSYS0000043686	YES
+fungus	Hygrocybe xanthochroa	NHMSYS0001484541	Chromosera xanthochroa	BMSSYS0000043688	YES
+fungus	Kalaallia reactiva	BMSSYS0000009057	Opegrapha reactiva	NHMSYS0020990665	YES
+fungus	Leccinum crocipodium	NBNSYS0000037977	Leccinellum crocipodium	BMSSYS0000047067	YES
+fungus	Leccinum pseudoscabrum	NHMSYS0001486536	Leccinellum pseudoscabrum	NHMSYS0021647645	YES
+fungus	Muellerella polyspora	NHMSYS0001489992	Muellerella haplotella	NHMSYS0001489990	YES
+fungus	Opegrapha glaucomaria	NHMSYS0001443021	Phacographa glaucomaria	NHMSYS0020990762	YES
+fungus	Opegrapha physciaria	BMSSYS0000012446	Phacothecium varium	NHMSYS0020990765	YES
+fungus	Opegrapha zwackhii	NHMSYS0001491430	Phacographa zwackhii	NHMSYS0020990763	YES
+fungus	Otidea cantharella	NHMSYS0001491550	Otidea concinna	BMSSYS0000012533	YES
+fungus	Phellodon niger	NHMSYS0001493166	Phellodon niger agg.	BMSSYS0000049357	YES
+fungus	Phoma lobariae	BMSSYS0000013986	Abrothallus lobariae	BMSSYS0000728643	YES
+fungus	Piptoporus quercinus	BMSSYS0000014509	Buglossoporus quercinus	NBNSYS0000189320	YES
+fungus	Porpoloma metapodium	NBNSYS0000037943	Pseudotricholoma metapodium	BMSSYS0000050225	YES
+fungus	Puccinia moliniae	NBNSYS0000155420	Puccinia prunellarum-moliniae	BMSSYS0000597732	YES
+fungus	Refractohilum achromaticum	BMSSYS0000016127	Gyalectiphila achromatica	NHMSYS0021843236	YES
+fungus	Refractohilum pluriseptatum	BMSSYS0000016129	Gyalectiphila pluriseptata	NHMSYS0021843241	YES
+fungus	Rubinoboletus rubinus	NHMSYS0001496606	Chalciporus rubinus	BMSSYS0000003705	YES
+fungus	Sarcopyrenia gibba var. geisleri	NHMSYS0001497074	Sarcopyrenia geisleri	NHMSYS0021797607	YES
+fungus	Scutula aggregata	BMSSYS0000016840	Scutula epiblastematica	NBNSYS0000019037	YES
+fungus	Squamanita paradoxa	BMSSYS0000017806	Dissoderma paradoxum	NHMSYS0021645485	YES
+fungus	Squamanita pearsonii	BMSSYS0000017807	Dissoderma pearsonii	NHMSYS0021645490	YES
+fungus	Tephrocybe osmophora	BMSSYS0000039444	Lyophyllum osmophorum	NHMSYS0021782190	YES
+fungus	Toninia episema	BMSSYS0000018646	Kiliasia episema	NBNSYS0000149720	YES
+fungus	Zwackhiomyces immersae	BMSSYS0000019890	Zwackhiomyces socialis	BMSSYS0000052697	YES
+insect - beetle (Coleoptera)	Mycetoporus erichsonanus	NBNSYS0000023591	Mycetoporus piceolus (= erichsonanus)	NHMSYS0021832836	YES
+insect - beetle (Coleoptera)	Mycetoporus piceolus	NHMSYS0001719064	Mycetoporus 'species A'	NHMSYS0021832831	YES
+insect - beetle (Coleoptera)	Ochthebius viridis ssp. fallaciosus	NHMSYS0020750783	Ochthebius fallaciosus	NHMSYS0021832821	YES
+insect - dragonfly (Odonata)	Anaciaeschna isoceles	NHMSYS0021009091	Aeshna isoceles	NHMSYS0021689820	YES
+insect - earwig (Dermaptera)	Forficula auricularia	NHMSYS0001387317	Forficula auricularia/dentata agg.	NHMSYS0021898013	YES
+insect - moth	Aporophyla lutulenta	NHMSYS0021144770	Aporophyla lueneburgensis	NBNSYS0000005281	YES
+insect - stonefly (Plecoptera)	Perla bipunctata	NBNSYS0000022443	Perla carlukiana	NBNSYS0000153420	YES
+insect - true fly (Diptera)	Cephalops carinatus	NBNSYS0000028850	Semicephalops carinatus	NHMSYS0021818961	YES
+insect - true fly (Diptera)	Cephalops pannonicus	NBNSYS0100002240	Beckerias pannonicus	NBNSYS0100022890	YES
+insect - true fly (Diptera)	Cephalops perspicuus	NBNSYS0000028856	Semicephalops perspicuus	NHMSYS0021818971	YES
+insect - true fly (Diptera)	Cephalops straminipes	NHMSYS0021005829	Semicephalops straminipes	NHMSYS0021818981	YES
+insect - true fly (Diptera)	Clistoabdominalis ruralis	NHMSYS0021005859	Eudorylas ruralis	NBNSYS0000028877	YES
+insect - true fly (Diptera)	Cnemacantha muscaria	NBNSYS0000029009	Homoneura muscaria	NHMSYS0021819011	YES
+insect - true fly (Diptera)	Coenosia pulicaria	NBNSYS0000030972	Coenosia acuminata	NHMSYS0021819076	YES
+insect - true fly (Diptera)	Conisternum decipiens	NBNSYS0100002555	Scathophaga decipiens	NHMSYS0021819061	YES
+insect - true fly (Diptera)	Conisternum tinctinerve	NBNSYS0100002557	Scathophaga tinctinervis	NHMSYS0020442463	YES
+insect - true fly (Diptera)	Cordilura hyalinipennis	NBNSYS0000030374	Cordilura ustulata	NBNSYS0000030381	YES
+insect - true fly (Diptera)	Eloeophila apicata	NBNSYS0100002949	Idioptera apicata	NHMSYS0021818626	YES
+insect - true fly (Diptera)	Eloeophila mundata	NBNSYS0100002951	Idioptera mundata	NHMSYS0021818636	YES
+insect - true fly (Diptera)	Eloeophila trimaculata	NBNSYS0100002953	Idioptera trimaculata	NHMSYS0021818646	YES
+insect - true fly (Diptera)	Eloeophila verralli	NBNSYS0100002954	Idioptera verralli	NHMSYS0021818651	YES
+insect - true fly (Diptera)	Eudorylas fusculus	NBNSYS0000033114	Clistoabdominalis fusculus	NHMSYS0021819001	YES
+insect - true fly (Diptera)	Hydrophorus rufibarbis	NBNSYS0000012653	Hydrophorus pilipes	NHMSYS0021763935	YES
+insect - true fly (Diptera)	Lispocephala spuria	NBNSYS0100003788	Lispocephala vitripennis	NBNSYS0100025775	YES
+insect - true fly (Diptera)	Melanostoma dubium	NBNSYS0000006865	Melanostoma certum	NHMSYS0021764005	YES
+insect - true fly (Diptera)	Parallelomma paridis	NBNSYS0000030416	Leptopa vittata	NHMSYS0021819046	YES
+insect - true fly (Diptera)	Parallelomma vittatum	NBNSYS0000030417	Leptopa vittata	NHMSYS0021819046	YES
+insect - true fly (Diptera)	Periscelis winnertzi	NBNSYS0000029327	Periscelis laszloi	NHMSYS0021763945	YES
+insect - true fly (Diptera)	Phaonia scutellata	NBNSYS0000030816	Phaonia tuguriorum	NHMSYS0021819081	YES
+insect - true fly (Diptera)	Rhamphomyia sulcatina	NBNSYS0000012391	Rhamphomyia trilineata	NHMSYS0021818736	YES
+insect - true fly (Diptera)	Sapromyza albiceps	NBNSYS0000028998	Paralauxania albiceps	NHMSYS0021819026	YES
+insect - true fly (Diptera)	Sapromyza basalis	NBNSYS0000028999	Nannomyza basalis	NHMSYS0021819021	YES
+insect - true fly (Diptera)	Scathophaga scybalaria	NBNSYS0000030408	Scatomyza scybalaria	NHMSYS0021819056	YES
+insect - true fly (Diptera)	Tachydromia lundstroemi	NBNSYS0000012217	Tachydromia enecator	NHMSYS0021818731	YES
+lichen	Acarospora anomala	BMSSYS0000000050	Acarospora fusca	NBNSYS0000140859	YES
+lichen	Acarospora durietzii	NBNSYS0000041599	Acarospora admissa	NHMSYS0001472768	YES
+lichen	Acarospora nitrophila	NBNSYS0000018156	Acarospora muddii	NHMSYS0001472783	YES
+lichen	Anaptychia ciliaris subsp. ciliaris	NHMSYS0001474601	Anaptychia ciliaris	NHMSYS0001474600	YES
+lichen	Anaptychia ciliaris subsp. mamillata	NBNSYS0000018174	Anaptychia mamillata	BMSSYS0000001446	YES
+lichen	Arthonia anombrophila	NHMSYS0001474923	Reichlingia anombrophila	NHMSYS0021554359	YES
+lichen	Arthonia cinnabarina	NBNSYS0000015516	Coniocarpon cinnabarinum	NHMSYS0001478561	YES
+lichen	Arthonia muscigena	BMSSYS0000001680	Bryostigma lapidicola	NHMSYS0021576548	YES
+lichen	Arthonia zwackhii	NBNSYS0000015518	Reichlingia zwackhii	BMSSYS0000050522	YES
+lichen	Arthopyrenia atractospora	BMSSYS0000001703	Naetrocymbe atractospora	BMSSYS0000533995	YES
+lichen	Arthopyrenia carneobrunneola	NBNSYS0000039568	Naetrocymbe carneobrunneola	NHMSYS0021843326	YES
+lichen	Arthopyrenia nitescens	NBNSYS0000039567	Naetrocymbe nitescens	BMSSYS0000048350	YES
+lichen	Arthopyrenia saxicola	NBNSYS0000142338	Naetrocymbe saxicola	BMSSYS0000011895	YES
+lichen	Aspicilia caesiocinerea	NBNSYS0000018181	Circinaria caesiocinerea	BMSSYS0000043741	YES
+lichen	Aspicilia calcarea	NHMSYS0000361491	Circinaria calcarea	BMSSYS0000043742	YES
+lichen	Aspicilia contorta subsp. contorta	NHMSYS0001475254	Circinaria contorta	BMSSYS0000043743	YES
+lichen	Aspicilia contorta subsp. hoffmanniana	NHMSYS0020989755	Circinaria hoffmanniana	NHMSYS0021646665	YES
+lichen	Aspicilia intermutans	NBNSYS0000018193	Aspiciliella intermutans	BMSSYS0000728645	YES
+lichen	Aspicilia leprosescens	NBNSYS0000018195	Circinaria leprosescens	BMSSYS0000043746	YES
+lichen	Aspicilia melanaspis	NBNSYS0000018199	Lobothallia melanaspis	NHMSYS0001488486	YES
+lichen	Aspicilia radiosa	BMSSYS0000002006	Lobothallia radiosa	NHMSYS0001488487	YES
+lichen	Aspicilia recedens	NBNSYS0000018202	Lobothallia recedens	BMSSYS0000047623	YES
+lichen	Aspicilia simoensis	BMSSYS0000597833	Sagedia simoensis	BMSSYS0000597957	YES
+lichen	Aspicilia tuberculosa	NBNSYS0000039577	Circinaria tuberculosa	NHMSYS0021794932	YES
+lichen	Bacidia auerswaldii	NBNSYS0000018211	Scutula effusa	BMSSYS0000731211	YES
+lichen	Bacidia circumspecta	NBNSYS0000018220	Scutula circumspecta	BMSSYS0000731210	YES
+lichen	Bacidia friesiana	NBNSYS0000018225	Bacidina friesiana	NHMSYS0021634940	YES
+lichen	Bacidia igniarii	NBNSYS0000041604	Scutula igniarii	NHMSYS0021842696	YES
+lichen	Bacidia incompta	NHMSYS0001475427	Bellicidia incompta	BMSSYS0000731148	YES
+lichen	Bacidia subcircumspecta	NBNSYS0000039579	Bibbya subcircumspecta	BMSSYS0000731150	YES
+lichen	Bacidia vermifera	NBNSYS0000162161	Bibbya vermifera	BMSSYS0000731151	YES
+lichen	Belonia nidarosiensis	NHMSYS0001475571	Clathroporinopsis nidarosiensis	NHMSYS0021797627	YES
+lichen	Buellia badia	BMSSYS0000002938	Monerolechia badia	NHMSYS0020990619	YES
+lichen	Buellia insignis	NHMSYS0000361445	Tetramelas insignis	NHMSYS0001499483	YES
+lichen	Buellia papillata	NHMSYS0001476333	Tetramelas papillatus	NHMSYS0001499484	YES
+lichen	Buellia pulverulenta	NBNSYS0000018280	Tetramelas pulverulentus	NHMSYS0020991124	YES
+lichen	Caloplaca albolutescens	NHMSYS0001476620	Kuettlingeria albolutescens	NHMSYS0021647535	YES
+lichen	Caloplaca alociza	NHMSYS0001476621	Pyrenodesmia alociza	NHMSYS0020990773	YES
+lichen	Caloplaca approximata	NBNSYS0000039592	Amundsenia approximata	BMSSYS0000042462	YES
+lichen	Caloplaca aractina	NBNSYS0000020512	Sanguineodiscus aractinus	NHMSYS0021648885	YES
+lichen	Caloplaca arcis	NHMSYS0020039002	Flavoplaca arcis	NHMSYS0020990207	YES
+lichen	Caloplaca arenaria	NHMSYS0001476623	Rufoplaca arenaria	BMSSYS0000534181	YES
+lichen	Caloplaca arnoldii subsp. oblitterata	NHMSYS0020989880	Calogaya oblitterata	NHMSYS0021842971	YES
+lichen	Caloplaca asserigena	NHMSYS0020989881	Marchantiana asserigena	BMSSYS0000728322	YES
+lichen	Caloplaca atroflava	NBNSYS0000020515	Kuettlingeria atroflava	NHMSYS0021647540	YES
+lichen	Caloplaca aurantia	NHMSYS0000361648	Variospora aurantia	BMSSYS0000052410	YES
+lichen	Caloplaca britannica	NHMSYS0001476629	Haloplaca britannica	NHMSYS0020990270	YES
+lichen	Caloplaca ceracea	NHMSYS0001476631	Kuettlingeria ceracea	NHMSYS0021843031	YES
+lichen	Caloplaca cerinella	NBNSYS0000020520	Athallia cerinella	NHMSYS0020989760	YES
+lichen	Caloplaca cerinelloides	NHMSYS0001442574	Athallia cerinelloides	NHMSYS0020989761	YES
+lichen	Caloplaca chalybaea	NBNSYS0000020521	Pyrenodesmia chalybaea	NHMSYS0020990774	YES
+lichen	Caloplaca chrysodeta	BMSSYS0000003127	Leproplaca chrysodeta	BMSSYS0000533917	YES
+lichen	Caloplaca chrysophthalma	NBNSYS0000020523	Solitaria chrysophthalma	BMSSYS0000051249	YES
+lichen	Caloplaca cinnamomea	NBNSYS0000039594	Blastenia ammiospila	BMSSYS0000043010	YES
+lichen	Caloplaca cirrochroa	NHMSYS0001476634	Leproplaca cirrochroa	NHMSYS0020990501	YES
+lichen	Caloplaca citrina s. str.	NHMSYS0020105990	Flavoplaca citrina s. str.	NHMSYS0021843381	YES
+lichen	Caloplaca coralliza	NHMSYS0020989889	Blastenia coralliza	NHMSYS0020989823	YES
+lichen	Caloplaca crenularia	NBNSYS0000020528	Blastenia crenularia	NHMSYS0020989824	YES
+lichen	Caloplaca crenulatella	NBNSYS0000020529	Xanthocarpia crenulatella	NHMSYS0020991038	YES
+lichen	Caloplaca dalmatica	NHMSYS0001476640	Flavoplaca itiana	NHMSYS0021842996	YES
+lichen	Caloplaca decipiens	NBNSYS0000020530	Calogaya decipiens	NHMSYS0020989877	YES
+lichen	Caloplaca demissa	BMSSYS0000043341	Olegblumia demissa	NHMSYS0021647940	YES
+lichen	Caloplaca dichroa	NHMSYS0001596576	Flavoplaca dichroa	NHMSYS0020990211	YES
+lichen	Caloplaca diffusa	NHMSYS0020989891	Xanthocarpia diffusa	BMSSYS0000534315	YES
+lichen	Caloplaca ferruginea s. lat.	BMSSYS0000533619	Blastenia ferruginea s. lat.	NHMSYS0021797757	YES
+lichen	Caloplaca flavescens	NHMSYS0001476645	Variospora flavescens	BMSSYS0000052412	YES
+lichen	Caloplaca flavocitrina	BMSSYS0000003136	Flavoplaca flavocitrina	NHMSYS0020990212	YES
+lichen	Caloplaca flavorubescens	NBNSYS0000020534	Gyalolechia flavorubescens	NHMSYS0020990256	YES
+lichen	Caloplaca flavovirescens	NBNSYS0000020535	Gyalolechia flavovirescens	NHMSYS0020990257	YES
+lichen	Caloplaca granulosa	NBNSYS0000020537	Flavoplaca granulosa	NHMSYS0020990213	YES
+lichen	Caloplaca haematites	NBNSYS0000020538	Sanguineodiscus haematites	NHMSYS0021648890	YES
+lichen	Caloplaca herbidella s. lat.	BMSSYS0000043345	Blastenia herbidella s. lat.	NHMSYS0021795117	YES
+lichen	Caloplaca holocarpa s. lat.	BMSSYS0000043346	Athallia holocarpa s. lat.	NHMSYS0021843361	YES
+lichen	Caloplaca holocarpa s. str.	NHMSYS0020987564	Athallia holocarpa s. str.	NHMSYS0021843356	YES
+lichen	Caloplaca irrubescens	NBNSYS0000020541	Squamulea subsoluta	NHMSYS0021843271	YES
+lichen	Caloplaca limonia	NHMSYS0020989894	Flavoplaca limonia	NHMSYS0020990214	YES
+lichen	Caloplaca luteoalba	NBNSYS0000020545	Cerothallia luteoalba	NHMSYS0020990045	YES
+lichen	Caloplaca marina	NHMSYS0001476653	Flavoplaca marina	NHMSYS0020990215	YES
+lichen	Caloplaca maritima	NHMSYS0020989895	Flavoplaca maritima	NHMSYS0020990216	YES
+lichen	Caloplaca marmorata	NHMSYS0020989896	Xanthocarpia fulva	NHMSYS0021843116	YES
+lichen	Caloplaca microthallina	NBNSYS0000020547	Flavoplaca microthallina	NHMSYS0020990217	YES
+lichen	Caloplaca oasis	NHMSYS0020535109	Flavoplaca oasis	NHMSYS0020990218	YES
+lichen	Caloplaca obliterans	NBNSYS0000020549	Leproplaca obliterans	NHMSYS0020990502	YES
+lichen	Caloplaca ochracea	NBNSYS0000020551	Xanthocarpia ochracea	BMSSYS0000052594	YES
+lichen	Caloplaca phlogina	BMSSYS0000003150	Scythioria phlogina	BMSSYS0000534200	YES
+lichen	Caloplaca pollinii	NBNSYS0000020553	Huneckia pollinii	BMSSYS0000533796	YES
+lichen	Caloplaca pyracea	BMSSYS0000003153	Athallia pyracea	NHMSYS0020989763	YES
+lichen	Caloplaca ruderum	NHMSYS0001476658	Flavoplaca ruderum	NHMSYS0021843001	YES
+lichen	Caloplaca saxicola	NBNSYS0000020556	Calogaya pusilla	BMSSYS0000043328	YES
+lichen	Caloplaca scopularis	NBNSYS0000020557	Athallia scopularis	NHMSYS0020989764	YES
+lichen	Caloplaca soralifera	NHMSYS0019999444	Kuettlingeria soralifera	NHMSYS0021647550	YES
+lichen	Caloplaca sorediella	NHMSYS0020039008	Haloplaca sorediella	NHMSYS0020990271	YES
+lichen	Caloplaca suaedae	NHMSYS0001476661	Haloplaca suaedae	NHMSYS0020990272	YES
+lichen	Caloplaca teicholyta	NBNSYS0000020560	Kuettlingeria teicholyta	NHMSYS0021647555	YES
+lichen	Caloplaca thallincola	NBNSYS0000020561	Variospora thallincola	BMSSYS0000052413	YES
+lichen	Caloplaca ulcerosa	NHMSYS0001476662	Coppinsiella ulcerosa	NHMSYS0021797787	YES
+lichen	Caloplaca variabilis	NHMSYS0001476663	Pyrenodesmia variabilis	NHMSYS0020990775	YES
+lichen	Caloplaca verruculifera	NBNSYS0000020565	Polycauliona verruculifera	BMSSYS0000534109	YES
+lichen	Caloplaca vitellinula	NHMSYS0001476666	Athallia vitellinula	NHMSYS0020989765	YES
+lichen	Caloplaca xantholyta	BMSSYS0000003160	Leproplaca xantholyta	NHMSYS0001487406	YES
+lichen	Catillaria chalybeia var. chloropoliza	NHMSYS0001476914	Catillaria baliola	NHMSYS0021554734	YES
+lichen	Catillaria contristans	NBNSYS0000018313	Gilbertaria contristans	NHMSYS0021645525	YES
+lichen	Cavernularia hultenii	NBNSYS0000018327	Hypogymnia hultenii	BMSSYS0000598513	YES
+lichen	Chaenotheca brachypoda	NBNSYS0000015567	Coniocybe brachypoda	BMSSYS0000044083	YES
+lichen	Chaenotheca furfuracea	NBNSYS0000015563	Coniocybe furfuracea	NBNSYS0000144946	YES
+lichen	Cladonia polydactyla var. polydactyla	NHMSYS0001477661	Cladonia polydactyla	NHMSYS0001477660	YES
+lichen	Cladonia polydactyla var. umbricola	BMSSYS0000003971	Cladonia umbricola	NHMSYS0001477682	YES
+lichen	Collema auriforme	NHMSYS0001478230	Lathagrium auriforme	BMSSYS0000046957	YES
+lichen	Collema bachmanianum	NBNSYS0000018427	Enchylium bachmanianum	BMSSYS0000045188	YES
+lichen	Collema callopismum var. callopismum	NHMSYS0001478232	Scytinium callopismum	BMSSYS0000051049	YES
+lichen	Collema ceraniscum	NBNSYS0000018430	Rostania ceranisca	BMSSYS0000050728	YES
+lichen	Collema confertum	NBNSYS0000018431	Enchylium confertum	BMSSYS0000045189	YES
+lichen	Collema conglomeratum	NBNSYS0000018432	Enchylium conglomeratum	BMSSYS0000045190	YES
+lichen	Collema crispum var. crispum	BMSSYS0000004369	Blennothallia crispa	BMSSYS0000533587	YES
+lichen	Collema crispum var. metzleri	NBNSYS0000018434	Blennothallia crispa	BMSSYS0000533587	YES
+lichen	Collema cristatum var. cristatum	NHMSYS0001478252	Lathagrium cristatum	BMSSYS0000046958	YES
+lichen	Collema dichotomum	NBNSYS0000018437	Lathagrium dichotomum	BMSSYS0000046959	YES
+lichen	Collema fragile	NBNSYS0000018440	Scytinium fragile	BMSSYS0000051050	YES
+lichen	Collema fragrans	NBNSYS0000018441	Scytinium fragrans	BMSSYS0000051051	YES
+lichen	Collema fuscovirens	NBNSYS0000018443	Lathagrium fuscovirens	BMSSYS0000046961	YES
+lichen	Collema latzelii	NBNSYS0000039620	Lathagrium latzelii	BMSSYS0000046962	YES
+lichen	Collema limosum	NBNSYS0000018445	Enchylium limosum	BMSSYS0000045192	YES
+lichen	Collema multipartitum	NBNSYS0000018446	Callome multipartita	BMSSYS0000043302	YES
+lichen	Collema occultatum	NBNSYS0000018448	Rostania occultata	BMSSYS0000050729	YES
+lichen	Collema parvum	NBNSYS0000039621	Scytinium parvum	BMSSYS0000051059	YES
+lichen	Collema polycarpon	NBNSYS0000018449	Enchylium polycarpon	BMSSYS0000045193	YES
+lichen	Collema tenax var. corallinum	NHMSYS0001478318	Enchylium tenax var. tenax	NHMSYS0021646070	YES
+lichen	Collema tenax var. tenax	NHMSYS0001478319	Enchylium tenax	NHMSYS0001481345	YES
+lichen	Collema tenax var. vulgare	NHMSYS0001478320	Enchylium tenax var. tenax	NHMSYS0021646070	YES
+lichen	Collema undulatum var. undulatum	NHMSYS0001478326	Lathagrium undulatum var. undulatum	BMSSYS0000046963	YES
+lichen	Cresporhaphis wienkampii	NHMSYS0001479690	Leptosillia wienkampii	NHMSYS0021697035	YES
+lichen	Cryptothele rhodosticta	NHMSYS0001479847	Phylliscum rhodostictum	NHMSYS0021843066	YES
+lichen	Dimerella lutea	NHMSYS0001480879	Coenogonium luteum	NHMSYS0001478184	YES
+lichen	Dimerella pineti	NHMSYS0001480880	Coenogonium pineti	NHMSYS0020990108	YES
+lichen	Fellhanera christiansenii	NHMSYS0020327865	Byssoloma llimonae	NHMSYS0021552749	YES
+lichen	Fulgensia bracteata var. alpina	BMSSYS0000006890	Gyalolechia bracteata	BMSSYS0000045954	YES
+lichen	Fulgensia fulgens	NBNSYS0000020569	Gyalolechia fulgens	NHMSYS0020990258	YES
+lichen	Fulvophyton sorediatum	BMSSYS0000045555	Ingaderia sorediata	NHMSYS0021645550	YES
+lichen	Graphina pauciloculata	NBNSYS0000016932	Allographa pauciloculata	NHMSYS0021794937	YES
+lichen	Graphis ruiziana	NHMSYS0001483182	Allographa anomala	NHMSYS0021789175	YES
+lichen	Graphis scripta	NBNSYS0000016935	Graphis scripta s. lat.	NHMSYS0021794957	YES
+lichen	Gyalecta flotowii	NBNSYS0000016966	Gyalecta flotovii	NHMSYS0020990251	YES
+lichen	Gyalecta jenensis var. jenensis	NHMSYS0001483302	Secoliga jenensis	NHMSYS0021797602	YES
+lichen	Gyalecta jenensis var. macrospora	NHMSYS0001483303	Secoliga macrospora	NHMSYS0021797652	YES
+lichen	Gyalecta ulmi	NBNSYS0000016972	Phialopsis ulmi	NHMSYS0021797647	YES
+lichen	Ionaspis lacustris	NHMSYS0001485520	Hymenelia lacustris	NHMSYS0001484714	YES
+lichen	Ionaspis obtecta	NHMSYS0001485521	Hymenelia obtecta	NHMSYS0001484715	YES
+lichen	Ionaspis odora	NHMSYS0001485522	Hymenelia odora	NHMSYS0021843021	YES
+lichen	Ionaspis suaveolens	NHMSYS0001485524	Hymenelia suaveolens	NHMSYS0021843026	YES
+lichen	Lecania subfuscula	NHMSYS0001486288	Bacidina subfuscula	NHMSYS0021645400	YES
+lichen	Lecanographa dialeuca	NHMSYS0020039021	Lecanographa atlantica	NHMSYS0021761070	YES
+lichen	Lecanographa dilleniana	BMSSYS0000046983	Psoronactis dilleniana	BMSSYS0000050266	YES
+lichen	Lecanora achariana	NBNSYS0000018560	Protoparmeliopsis achariana	NHMSYS0001494845	YES
+lichen	Lecanora carpinea	NBNSYS0000018576	Glaucomaria carpinea	NHMSYS0021645535	YES
+lichen	Lecanora muralis	NBNSYS0000018604	Protoparmeliopsis muralis	NHMSYS0001494846	YES
+lichen	Lecanora poliophaea	NBNSYS0000018610	Myriolecis poliophaea	NHMSYS0021645645	YES
+lichen	Lecanora populicola	NBNSYS0000018612	Myriolecis populicola	NHMSYS0021645650	YES
+lichen	Lecanora rupicola var. efflorens	NBNSYS0000018620	Glaucomaria rupicola var. efflorens	NHMSYS0021645865	YES
+lichen	Lecanora rupicola var. rupicola	NHMSYS0001486447	Glaucomaria rupicola var. rupicola	NHMSYS0021645870	YES
+lichen	Lecanora swartzii	NHMSYS0001486482	Glaucomaria swartzii	NHMSYS0021645540	YES
+lichen	Lecidea alpestris	NHMSYS0001486577	Protomicarea alpestris	NHMSYS0021554144	YES
+lichen	Lecidea commaculans	NBNSYS0000018656	Protomicarea commaculans	NHMSYS0021645745	YES
+lichen	Lecidea exigua	NHMSYS0001486702	Traponora varians	NHMSYS0021645830	YES
+lichen	Lecidea lichenicola	NBNSYS0000018684	Trapelia glebulosa s. str.	NHMSYS0020000048	YES
+lichen	Lempholemma botryosum	NBNSYS0000018753	Synalissina botryosa	NHMSYS0021843276	YES
+lichen	Lempholemma cladodes	NBNSYS0000018757	Synalissina cladodes	NHMSYS0021843286	YES
+lichen	Lempholemma intricatum	NBNSYS0000018758	Synalissina intricata	NHMSYS0021843281	YES
+lichen	Leprocaulon microscopicum	NHMSYS0001487394	Leprocaulon quisquiliare	NHMSYS0021554709	YES
+lichen	Leptogium biatorinum	NBNSYS0000018768	Scytinium biatorinum	BMSSYS0000051048	YES
+lichen	Leptogium byssinum	NBNSYS0000018772	Epiphloea byssina	NHMSYS0020990198	YES
+lichen	Leptogium diffractum	NBNSYS0000018776	Pseudoleptogium diffractum	BMSSYS0000050196	YES
+lichen	Leptogium gelatinosum	NHMSYS0001487425	Scytinium gelatinosum	BMSSYS0000051052	YES
+lichen	Leptogium imbricatum	NHMSYS0001487427	Scytinium imbricatum	BMSSYS0000051053	YES
+lichen	Leptogium intermedium	NBNSYS0000018784	Scytinium intermedium	BMSSYS0000051054	YES
+lichen	Leptogium lichenoides	NBNSYS0000018782	Scytinium lichenoides	BMSSYS0000051055	YES
+lichen	Leptogium massiliense	NBNSYS0000018783	Scytinium massiliense	BMSSYS0000051057	YES
+lichen	Leptogium palmatum	NBNSYS0000150331	Scytinium palmatum	BMSSYS0000051058	YES
+lichen	Leptogium plicatile	NBNSYS0000018786	Scytinium plicatile	BMSSYS0000051060	YES
+lichen	Leptogium pulvinatum	NHMSYS0020535622	Scytinium pulvinatum	BMSSYS0000051061	YES
+lichen	Leptogium schraderi	NBNSYS0000018788	Scytinium schraderi	BMSSYS0000534201	YES
+lichen	Leptogium subtile	NHMSYS0001487441	Scytinium subtile	BMSSYS0000051063	YES
+lichen	Leptogium subtorulosum	BMSSYS0000010340	Scytinium subtorulosum	BMSSYS0000534202	YES
+lichen	Leptogium tenuissimum	NBNSYS0000018789	Scytinium tenuissimum	BMSSYS0000534203	YES
+lichen	Leptogium teretiusculum	NHMSYS0001487442	Scytinium teretiusculum	BMSSYS0000051066	YES
+lichen	Leptogium turgidum	NBNSYS0000018791	Scytinium turgidum	BMSSYS0000051067	YES
+lichen	Lichenomphalia umbellifera	NHMSYS0001488367	Lichenomphalia ericetorum	NHMSYS0021797642	YES
+lichen	Llimonaea sorediata	NHMSYS0020327873	Ingaderia vandenboomii	NHMSYS0021645555	YES
+lichen	Lobaria amplissima	NBNSYS0000019310	Ricasolia amplissima	NHMSYS0001496455	YES
+lichen	Lobaria scrobiculata	NBNSYS0000019312	Lobarina scrobiculata	BMSSYS0000010725	YES
+lichen	Lobaria virens	NBNSYS0000019313	Ricasolia virens	BMSSYS0000534170	YES
+lichen	Loxospora elatina	NHMSYS0001488586	Loxospora elatina s. lat.	NHMSYS0021843386	YES
+lichen	Megaspora verrucosa	NBNSYS0000018855	Phlyctis agelaea	NHMSYS0001493251	YES
+lichen	Melaspilea granitophila	NHMSYS0001489299	Arthonia granitophila	NHMSYS0001474948	YES
+lichen	Micarea erratica	NHMSYS0001489449	Leimonis erratica	BMSSYS0000047272	YES
+lichen	Micarea lynceola	NHMSYS0001489457	Leimonis lynceola	NHMSYS0021645585	YES
+lichen	Micarea prasinella	NHMSYS0020535694	Micarea inopinula	NHMSYS0021553569	YES
+lichen	Opegrapha atra	NBNSYS0000019199	Arthonia atra	NHMSYS0020989718	YES
+lichen	Opegrapha calcarea	NBNSYS0000019201	Arthonia calcarea	BMSSYS0000533560	YES
+lichen	Opegrapha corticola	NHMSYS0001491371	Thelopsis corticola	NHMSYS0021554554	YES
+lichen	Opegrapha gyrocarpa	NBNSYS0000019207	Gyrographa gyrocarpa	BMSSYS0000045985	YES
+lichen	Opegrapha herbarum	NBNSYS0000019208	Alyxoria culmigena	NHMSYS0020989700	YES
+lichen	Opegrapha mougeotii	NHMSYS0001491388	Alyxoria mougeotii	BMSSYS0000042401	YES
+lichen	Opegrapha ochrocheila	NBNSYS0000019216	Alyxoria ochrocheila	NHMSYS0020989703	YES
+lichen	Opegrapha prosodea	NBNSYS0000019220	Zwackhia prosodea	NHMSYS0020991048	YES
+lichen	Opegrapha saxigena	NBNSYS0000019227	Gyrographa saxigena	BMSSYS0000045986	YES
+lichen	Opegrapha sorediifera	NHMSYS0001491416	Zwackhia sorediifera	BMSSYS0000052695	YES
+lichen	Opegrapha subelevata	NBNSYS0000019229	Alyxoria subelevata	NHMSYS0020989704	YES
+lichen	Opegrapha varia	NBNSYS0000019210	Alyxoria varia	NHMSYS0020989705	YES
+lichen	Opegrapha viridipruinosa	NHMSYS0020990670	Alyxoria viridipruinosa	BMSSYS0000533552	YES
+lichen	Opegrapha viridis	NBNSYS0000019232	Zwackhia viridis	BMSSYS0000534325	YES
+lichen	Parmeliella triptophylla	NHMSYS0001491903	Parmeliella thriptophylla	NHMSYS0021645700	YES
+lichen	Parmelinopsis horrescens	NBNSYS0000153257	Hypotrachyna horrescens	NHMSYS0020990291	YES
+lichen	Parmelinopsis minarum	NHMSYS0001491907	Hypotrachyna minarum	NHMSYS0020990292	YES
+lichen	Pertusaria albescens var. albescens	NHMSYS0001492275	Lepra albescens var. albescens	BMSSYS0000598520	YES
+lichen	Pertusaria albescens var. corallina	NHMSYS0001492276	Lepra albescens var. corallina	BMSSYS0000598521	YES
+lichen	Pertusaria amara f. amara	NHMSYS0001492278	Lepra amara	BMSSYS0000598522	YES
+lichen	Pertusaria amara f. pulvinata	NBNSYS0000019410	Lepra pulvinata	BMSSYS0000598531	YES
+lichen	Pertusaria aspergilla	BMSSYS0000013239	Lepra aspergilla	BMSSYS0000598523	YES
+lichen	Pertusaria corallina	NBNSYS0000019387	Lepra corallina	BMSSYS0000598524	YES
+lichen	Pertusaria dactylina	NBNSYS0000019389	Lepra dactylina	BMSSYS0000598525	YES
+lichen	Pertusaria excludens	NBNSYS0000019391	Lepra excludens	BMSSYS0000598526	YES
+lichen	Pertusaria melanochlora	NBNSYS0000019401	Lepra melanochlora	BMSSYS0000598527	YES
+lichen	Pertusaria monogona	NBNSYS0000019402	Lepra monogona	BMSSYS0000598528	YES
+lichen	Pertusaria multipuncta	NBNSYS0000019403	Lepra multipuncta	BMSSYS0000598529	YES
+lichen	Pertusaria ophthalmiza	NBNSYS0000019405	Lepra ophthalmiza	BMSSYS0000598530	YES
+lichen	Polysporina ferruginea	NHMSYS0001494551	Acarospora subfuscescens	NHMSYS0021576493	YES
+lichen	Polysporina simplex	NHMSYS0001494552	Acarospora privigna	NHMSYS0021646075	YES
+lichen	Porina chlorotica f. chlorotica	BMSSYS0000015229	Porina chlorotica f. chlorotica	NHMSYS0020990979	YES
+lichen	Protoparmelia atriseda	NBNSYS0000018570	Miriquidica atriseda	NHMSYS0021645620	YES
+lichen	Protoparmelia nephaea	NHMSYS0001494842	Miriquidica nephaea	NHMSYS0021645625	YES
+lichen	Pseudocyphellaria aurata	NHMSYS0001495191	Crocodia aurata	BMSSYS0000044504	YES
+lichen	Psorotichia schaereri	NBNSYS0000018972	Collemopsis schaereri	NHMSYS0021846614	YES
+lichen	Pterygiopsis concordatula	NHMSYS0020535994	Forssellia concordatula	NHMSYS0021843211	YES
+lichen	Pterygiopsis lacustris	NHMSYS0001495459	Thelignya lacustris	NHMSYS0021843291	YES
+lichen	Pyrenopsis grumulifera	NBNSYS0000039735	Allopyrenis grumulifera	NHMSYS0021843201	YES
+lichen	Pyrenopsis impolita	NHMSYS0001495906	Allopyrenis impolita	NHMSYS0021843206	YES
+lichen	Ramonia chrysophaea	NHMSYS0001496084	Karstenia chrysophaea	NHMSYS0021797637	YES
+lichen	Ramonia dictyospora	NBNSYS0000039740	Karstenia dictyospora	NHMSYS0021797612	YES
+lichen	Ramonia interjecta	BMSSYS0000015988	Karstenia rhopaloides	BMSSYS0000046740	YES
+lichen	Ramonia nigra	NBNSYS0000039741	Karstenia nigra	NHMSYS0021797617	YES
+lichen	Rhizocarpon eupetraeoides	NHMSYS0001496261	Rhizocarpon atroalbescens	BMSSYS0000016199	YES
+lichen	Rhizocarpon oederi	NHMSYS0001496284	Haugania oederi	NHMSYS0021797597	YES
+lichen	Rinodina insularis	NHMSYS0020039057	Endohyalina insularis	NHMSYS0020990194	YES
+lichen	Rinodina orculariopsis	NHMSYS0001496503	Rinodina sicula	NHMSYS0021761710	YES
+lichen	Rinodina oxydata	NBNSYS0000019013	Mischoblastia oxydata	NHMSYS0021645630	YES
+lichen	Staurothele hymenogonia	NHMSYS0001498853	Nesothele hymenogonia	NHMSYS0021645660	YES
+lichen	Staurothele rugulosa	NBNSYS0000020643	Nesothele rugulosa	NHMSYS0021645665	YES
+lichen	Staurothele succedens	NBNSYS0000020645	Nesothele succedens	NHMSYS0021645670	YES
+lichen	Strigula confusa	NHMSYS0020105983	Swinscowia confusa	NHMSYS0021649035	YES
+lichen	Strigula jamesii	NBNSYS0000019906	Swinscowia jamesii	NHMSYS0021649040	YES
+lichen	Strigula muscicola	NHMSYS0020039060	Swinscowia muscicola	NHMSYS0021649045	YES
+lichen	Strigula phaea	NHMSYS0001499161	Dichoporis phaea	NHMSYS0021647170	YES
+lichen	Strigula stigmatella var. alpestris	NHMSYS0001499162	Swinscowia alpestris	NHMSYS0021649025	YES
+lichen	Strigula stigmatella var. stigmatella	NHMSYS0001499163	Swinscowia stigmatella	NHMSYS0021649050	YES
+lichen	Strigula tagananae	BMSSYS0000018126	Swinscowia tagananae	NHMSYS0021649055	YES
+lichen	Strigula taylorii	NBNSYS0000019909	Dichoporis taylorii	NHMSYS0021647175	YES
+lichen	Strigula thelopsidoides	NHMSYS0001499164	Swinscowia thelopsidoides	NHMSYS0021649060	YES
+lichen	Teloschistes chrysophthalmus	NBNSYS0000020577	Teloschistes chrysophthalmos	NHMSYS0021646100	YES
+lichen	Thelidium impressum	NBNSYS0000020652	Parabagliettoa impressa	NHMSYS0021645690	YES
+lichen	Toninia aromatica	NHMSYS0001499835	Toniniopsis aromatica	BMSSYS0000731219	YES
+lichen	Toninia coelestina	NHMSYS0001499838	Toniniopsis coelestina	BMSSYS0000731220	YES
+lichen	Toninia diffracta	NHMSYS0001499839	Thalloidima diffractum	BMSSYS0000731213	YES
+lichen	Toninia fusispora	NHMSYS0001499840	Toniniopsis fusispora	NHMSYS0021604907	YES
+lichen	Toninia mesoidea	NBNSYS0000019096	Toniniopsis mesoidea	BMSSYS0000731221	YES
+lichen	Toninia opuntioides	NBNSYS0000039802	Thalloidima opuntioides	BMSSYS0000731214	YES
+lichen	Toninia physaroides	NBNSYS0000039801	Thalloidima physaroides	BMSSYS0000731215	YES
+lichen	Toninia rosulata	NBNSYS0000039803	Thalloidima rosulatum	BMSSYS0000731216	YES
+lichen	Toninia sedifolia	NBNSYS0000158101	Thalloidima sedifolium	BMSSYS0000731217	YES
+lichen	Toninia squalescens	NHMSYS0001499843	Gilbertaria squalescens	NHMSYS0021645530	YES
+lichen	Toninia verrucarioides	BMSSYS0000018654	Toniniopsis verrucarioides	BMSSYS0000731223	YES
+lichen	Usnea cornuta	NHMSYS0001501160	Usnea cornuta s. lat.	NHMSYS0021646105	YES
+lichen	Usnea fragilescens var. fragilescens	NHMSYS0001501169	Usnea fragilescens	NBNSYS0000019142	YES
+lichen	Usnea fragilescens var. mollis	NHMSYS0001501170	Usnea fragilescens	NBNSYS0000019142	YES
+lichen	Verrucaria baldensis	NHMSYS0001501536	Bagliettoa parmigera s. lat.	NHMSYS0021645960	YES
+lichen	Verrucaria caerulea	NBNSYS0000020671	Verrucaria coerulea	BMSSYS0000290067	YES
+lichen	Verrucaria calciseda	NHMSYS0000364470	Bagliettoa calciseda	NHMSYS0020989786	YES
+lichen	Verrucaria cyanea	NBNSYS0000020675	Parabagliettoa cyanea	NHMSYS0020990693	YES
+lichen	Verrucaria dufourii	NBNSYS0000020678	Parabagliettoa dufourii	NHMSYS0020990694	YES
+lichen	Verrucaria latericola	NHMSYS0001501628	Verrucula latericola	NHMSYS0020991029	YES
+lichen	Verrucaria mucosa	NBNSYS0000020696	Wahlenbergiella mucosa	NHMSYS0020991034	YES
+lichen	Verrucaria parmigerella	NBNSYS0000039818	Bagliettoa parmigerella	NHMSYS0001475494	YES
+lichen	Verrucaria pinguicula	NBNSYS0000020702	Parabagliettoa pinguicula	NHMSYS0021645695	YES
+lichen	Verrucaria striatula	NBNSYS0000020708	Wahlenbergiella striatula	NHMSYS0020991035	YES
+lichen	Vestergrenopsis elaeina	NBNSYS0000039820	Tingiopsidium elaeinum	BMSSYS0000534257	YES
+lichen	Xanthoria candelaria s. str.	NHMSYS0020105998	Polycauliona candelaria s. str.	BMSSYS0000534105	YES
+lichen	Xanthoria elegans	NHMSYS0001501921	Rusavskia elegans	BMSSYS0000534184	YES
+lichen	Xanthoria fulva	NHMSYS0001501923	Xanthomendoza fulva	NHMSYS0001501912	YES
+lichen	Xanthoria polycarpa	NHMSYS0000364560	Polycauliona polycarpa	BMSSYS0000534107	YES
+lichen	Xanthoria ucrainica	BMSSYS0000019757	Polycauliona ucrainica	BMSSYS0000534108	YES
+lichen	Xanthoria ulophyllodes	NBNSYS0000020583	Xanthomendoza ulophyllodes	NHMSYS0001501913	YES
+liverwort	Cephaloziella massalongi	NHMSYS0000309602	Cephaloziella massalongoi	NBNSYS0100009936	YES
+marine mammal	Cetacea	NHMSYS0000376171	Cetacea	NHMSYS0021036336	YES
+millipede	Hylebainosoma nontronensis	NHMSYS0021118548	Maurieseuma nontronense	NHMSYS0021783500	YES
+mollusc	Duvaucelia odhneri	NHMSYS0021457344	Candiella odhneri	NHMSYS0021738218	YES
+mollusc	Mercuria anatina	NHMSYS0020755137	Mercuria tachoensis	NHMSYS0021666478	YES
+mollusc	Simnia patula	NBNSYS0000177977	Xandarovula patula	NHMSYS0021055450	YES
+moss	Atrichum undulatum	NBNSYS0000036148	Atrichum undulatum	NHMSYS0021600167	YES
+moss	Dicranella varia	NBNSYS0000036213	Dicranella varia	NHMSYS0021635335	YES
+moss	Fissidens bryoides s.l.	NHMSYS0021125871	Fissidens bryoides	NBNSYS0000036273	YES
+moss	Oxystegus tenuirostris	NHMSYS0021239409	Chionoloma tenuirostre s.l.	NHMSYS0021769720	YES
+slime mould	Lamproderma atrosporum	NBNSYS0000015190	Meriderma carestiae	BMSSYS0000047898	YES
+spider (Araneae)	Mastigusa arietina	NBNSYS0000008850	Mastigusa diversa	NHMSYS0021813346	YES
+spider (Araneae)	Mastigusa macrophthalma	NBNSYS0000008849	Mastigusa diversa	NHMSYS0021813346	YES
+stonewort	Chara intermedia	NHMSYS0000457194	Chara papillosa	NHMSYS0000465483	YES
+stonewort	Chara rudis	NHMSYS0000457210	Chara subspinosa	NHMSYS0021872482	YES
+terrestrial mammal	Eptesicus serotinus	NHMSYS0000528008	Cnephaeus serotinus	NHMSYS0021949415	YES

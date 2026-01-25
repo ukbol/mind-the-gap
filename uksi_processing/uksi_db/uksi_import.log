@@ -1,0 +1,74 @@
+[2026-01-25 11:16:10] 
+Checking input files...
+[2026-01-25 11:16:10]   names: OK (C:\GitHub\mind-the-gap\uksi_processing\uksi_20251203a_input_names.tsv)
+[2026-01-25 11:16:10]   taxa: OK (C:\GitHub\mind-the-gap\uksi_processing\uksi_20251203a_input_taxa.tsv)
+[2026-01-25 11:16:10]   pantheon: OK (C:\GitHub\mind-the-gap\uksi_processing\pantheon_mapping\output\pantheon_input_cleaned_matched.tsv)
+[2026-01-25 11:16:10]   jncc: OK (C:\GitHub\mind-the-gap\uksi_processing\jncc_mapping\20231206_jncc_conservation_designations_taxon.tsv)
+[2026-01-25 11:16:10] 
+Removing existing database: C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi.db
+[2026-01-25 11:16:10] 
+Creating database: C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi.db
+[2026-01-25 11:16:10] Creating database schema...
+[2026-01-25 11:16:10] Creating indexes...
+[2026-01-25 11:16:10] Schema created successfully
+[2026-01-25 11:16:10] 
+=== Importing Data ===
+[2026-01-25 11:16:10] Importing uksi_20251203a_input_names.tsv into names...
+[2026-01-25 11:16:10]   Processed 50,000 rows...
+[2026-01-25 11:16:11]   Processed 100,000 rows...
+[2026-01-25 11:16:11]   Processed 150,000 rows...
+[2026-01-25 11:16:12]   Processed 200,000 rows...
+[2026-01-25 11:16:12]   Processed 250,000 rows...
+[2026-01-25 11:16:13]   Processed 300,000 rows...
+[2026-01-25 11:16:14]   Imported 336,814 rows (0 errors)
+[2026-01-25 11:16:14] Importing uksi_20251203a_input_taxa.tsv into taxa...
+[2026-01-25 11:16:14]   Processed 50,000 rows...
+[2026-01-25 11:16:15]   Processed 100,000 rows...
+[2026-01-25 11:16:16]   Imported 124,397 rows (0 errors)
+[2026-01-25 11:16:16] Importing pantheon_input_cleaned_matched.tsv into pantheon...
+[2026-01-25 11:16:16]   Imported 12,745 rows (0 errors)
+[2026-01-25 11:16:16] Importing 20231206_jncc_conservation_designations_taxon.tsv into jncc...
+[2026-01-25 11:16:16]   Imported 14,395 rows (0 errors)
+[2026-01-25 11:16:16] 
+Creating utility views...
+[2026-01-25 11:16:16] Utility views created
+[2026-01-25 11:16:16] 
+=== Import Validation ===
+[2026-01-25 11:16:16] Names table: 336,814 total, 124,397 unique recommended TVKs
+[2026-01-25 11:16:16]   - Recommended names (R): 190,089
+[2026-01-25 11:16:16]   - Latin names: 294,036
+[2026-01-25 11:16:16] Taxa table: 124,397 total, 79,522 species, 61 unique ranks
+[2026-01-25 11:16:16]   Top ranks in taxa:
+[2026-01-25 11:16:16]     Species: 79,522
+[2026-01-25 11:16:16]     Genus: 22,941
+[2026-01-25 11:16:16]     Family: 5,179
+[2026-01-25 11:16:16]     Variety: 2,349
+[2026-01-25 11:16:16]     Subspecies: 2,119
+[2026-01-25 11:16:16]     Subgenus: 1,890
+[2026-01-25 11:16:16]     Subfamily: 1,651
+[2026-01-25 11:16:16]     Species hybrid: 1,383
+[2026-01-25 11:16:16]     Order: 1,199
+[2026-01-25 11:16:16]     Microspecies: 1,155
+[2026-01-25 11:16:16]     Tribe: 978
+[2026-01-25 11:16:16]     Superfamily: 761
+[2026-01-25 11:16:16]     Species aggregate: 556
+[2026-01-25 11:16:16]     Form: 431
+[2026-01-25 11:16:16]     Class: 303
+[2026-01-25 11:16:16]     Suborder: 283
+[2026-01-25 11:16:16]     Breed: 233
+[2026-01-25 11:16:16]     Subclass: 170
+[2026-01-25 11:16:16]     Species sensu lato: 166
+[2026-01-25 11:16:16]     Phylum: 113
+[2026-01-25 11:16:16] Pantheon table: 12,745 total, 12,745 matched to taxa
+[2026-01-25 11:16:16] JNCC table: 14,395 total
+[2026-01-25 11:16:16]   - Direct match to taxa: 13,762
+[2026-01-25 11:16:16]   - Resolved via names table: 14,395 (633 additional)
+[2026-01-25 11:16:16] 
+Names->Taxa linkage: 124,397 recommended TVKs link to taxa table
+[2026-01-25 11:16:16] 
+Optimizing database...
+[2026-01-25 11:16:18] 
+============================================================
+[2026-01-25 11:16:18] Import completed successfully!
+[2026-01-25 11:16:18] Database saved to: C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi.db
+[2026-01-25 11:16:18] ============================================================
