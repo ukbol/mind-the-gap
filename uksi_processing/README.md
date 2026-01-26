@@ -137,15 +137,6 @@ Synonyms are collected from three sources:
    - Generates "Genus epithet" as a synonym
    - These derived synonyms have empty TVKs in the synonym_tvk_list
 
-## File Locations
-
-- Script: `uksi_species_pipeline_v2.py`
-- Input TAXA: `uksi_20251203a_input_taxa.tsv`
-- Input NAMES: `uksi_20251203a_input_names.tsv`
-- Output valid: `uksi_valid_species_output.tsv`
-- Output invalid: `uksi_invalid_species_output.tsv`
-- Log: `uksi_pipeline_log.txt`
-
 ## Reference Documentation
 
 - Guide PDF: `uksi_guide.pdf` - Nameserver structure and SQL examples
