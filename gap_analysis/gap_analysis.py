@@ -47,9 +47,9 @@ class Taxon:
     
     @property
     def all_names(self) -> Set[str]:
-        """All names (valid + synonyms) as lowercase set."""
-        names = {self.valid_name.lower()}
-        names.update(s.lower() for s in self.synonyms)
+        """All names (valid + synonyms) as normalized lowercase set."""
+        names = {normalize_species_name(self.valid_name)}
+        names.update(normalize_species_name(s) for s in self.synonyms)
         return names
     
     @property
@@ -82,6 +82,25 @@ EMPTY_CLUSTER_VALUES = frozenset(['', 'none', 'null', 'na', 'n/a', '-', '.'])
 # Values to treat as empty/missing for species/subspecies names
 # BOLD data commonly uses "None" for unidentified specimens
 EMPTY_SPECIES_VALUES = frozenset(['', 'none', 'null', 'na', 'n/a', '-', '.'])
+
+
+def normalize_species_name(name: str) -> str:
+    """
+    Normalize a species name for matching.
+    
+    Handles differences between naming conventions:
+    - BOLD/UKSI use spaces: "Genus species"
+    - UNITE uses underscores: "Genus_species"
+    
+    Converts to lowercase and replaces underscores with spaces.
+    
+    Args:
+        name: Raw species name
+    
+    Returns:
+        Normalized lowercase name with spaces instead of underscores
+    """
+    return name.lower().replace('_', ' ')
 
 
 def is_valid_cluster_id(cluster_id: str) -> bool:
@@ -321,7 +340,7 @@ def build_indices_from_records(
                         otu_id_ids = parse_cluster_ids(row.get(otu_col, '').strip())
                     
                     # Process species name
-                    species_lower = species.lower()
+                    species_lower = normalize_species_name(species)
                     name_to_count[species_lower] += 1
                     unique_names.add(species_lower)
                     
@@ -342,7 +361,7 @@ def build_indices_from_records(
                     if has_subspecies:
                         subspecies = row.get('subspecies', '').strip()
                         if subspecies and is_valid_species_name(subspecies):
-                            subspecies_lower = subspecies.lower()
+                            subspecies_lower = normalize_species_name(subspecies)
                             name_to_count[subspecies_lower] += 1
                             unique_names.add(subspecies_lower)
                             
@@ -418,8 +437,8 @@ def analyze_taxon(
         TaxonResult with grade, status, and other metrics
     """
     result = TaxonResult(taxon=taxon)
-    taxon_names = taxon.all_names  # lowercase set
-    valid_name_lower = taxon.valid_name.lower()
+    taxon_names = taxon.all_names  # normalized lowercase set
+    valid_name_lower = normalize_species_name(taxon.valid_name)
     
     # Step 1: Count records and find which names are recorded
     for name in taxon_names:
