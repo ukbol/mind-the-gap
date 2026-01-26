@@ -2,6 +2,8 @@
   <img src="docs/boromir-gap-analysis.jpeg" alt="Mind the Gap Logo">
 </div>
 
+[![DOI](https://zenodo.org/badge/1139918985.svg)](https://doi.org/10.5281/zenodo.18378731)
+
 # [mind-the-gap](https://youtu.be/QExoX4ls9OM?si=EmPShkAIIfieSnqX)
 
 DNA reference library gap analysis and associated tools.
