@@ -10,7 +10,11 @@ Exports valid species with:
 
 Author: Generated for Ben Price, NHM London
 Date: 2025-01-25
-Version: 2.0
+Version: 2.1
+
+Changes in v2.1:
+- Filter to only Animalia, Plantae, Chromista, and Fungi kingdoms
+- Exclude Species aggregate, Species sensu lato, and Species hybrid ranks from valid output
 
 Changes in v2:
 - Filter invalid species (sp., spp., cf., ?, etc.)
@@ -43,9 +47,11 @@ HIGHER_RANKS = ['Kingdom', 'Phylum', 'Division', 'Class', 'Order', 'Family', 'Ge
 
 # Species-level ranks to include in output
 SPECIES_RANKS = [
-    'Species', 'Microspecies', 'Species hybrid', 'Species aggregate',
-    'Intergeneric hybrid', 'Species sensu lato', 'Species sensu stricto'
+    'Species', 'Microspecies', 'Intergeneric hybrid', 'Species sensu stricto'
 ]
+
+# Kingdoms to include in output
+VALID_KINGDOMS = ['Animalia', 'Plantae', 'Chromista', 'Fungi']
 
 # Ranks to include in synonyms (species + all infraspecific)
 SYNONYM_RANKS = {
@@ -579,6 +585,7 @@ def export_species(conn: sqlite3.Connection):
     
     valid_count = 0
     invalid_count = 0
+    kingdom_filtered_count = 0
     invalid_reasons = defaultdict(int)
     
     with open(OUTPUT_PATH, 'w', newline='', encoding='utf-8') as f_valid, \
@@ -601,11 +608,16 @@ def export_species(conn: sqlite3.Connection):
             freshwater = species[7] or ''
             marine = species[8] or ''
             
+            # Get higher taxonomy first (needed for kingdom filter)
+            higher_tax = get_higher_taxonomy(org_key, lineage_lookup)
+            
+            # Filter by kingdom - skip if not in valid kingdoms
+            if higher_tax['kingdom'] not in VALID_KINGDOMS:
+                kingdom_filtered_count += 1
+                continue
+            
             # Check if name is invalid
             is_invalid, reason = is_invalid_species_name(taxon_name)
-            
-            # Get higher taxonomy
-            higher_tax = get_higher_taxonomy(org_key, lineage_lookup)
             
             # Get synonyms (semicolon separated)
             syn_list = synonyms.get(tvk, [])
@@ -664,6 +676,7 @@ def export_species(conn: sqlite3.Connection):
     
     log(f"\n  Valid species exported: {valid_count:,}")
     log(f"  Invalid species filtered: {invalid_count:,}")
+    log(f"  Kingdom filtered (not Animalia/Plantae/Chromista/Fungi): {kingdom_filtered_count:,}")
     for reason, count in sorted(invalid_reasons.items(), key=lambda x: -x[1]):
         log(f"    - {reason}: {count:,}")
     
