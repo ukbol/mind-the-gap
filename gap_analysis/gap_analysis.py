@@ -260,6 +260,25 @@ def detect_cluster_column(fieldnames: List[str]) -> str:
         sys.exit(1)
 
 
+def detect_species_column_in_records(fieldnames: List[str]) -> str:
+    """
+    Detect which column to use for species name in records file.
+    
+    Prefers 'species' over 'organism' (NCBI files use 'organism').
+    Note: 'ORGANISM_KEY' in UKSI files is NOT a species name column.
+    
+    Returns column name to use, or None if not found.
+    """
+    # Prefer 'species' (BOLD format)
+    if 'species' in fieldnames:
+        return 'species'
+    # Fall back to 'organism' (NCBI format) - exact match only
+    elif 'organism' in fieldnames:
+        return 'organism'
+    else:
+        return None
+
+
 def build_indices_from_records(
     records_file: Path,
     chunk_size: int = 100000
@@ -314,6 +333,13 @@ def build_indices_from_records(
                 if has_otu_id:
                     logging.info(f"otu_id column detected ({otu_col})")
                 
+                # Detect species column (species or organism)
+                species_column = detect_species_column_in_records(fieldnames)
+                if species_column is None:
+                    logging.error("Records file must have 'species' or 'organism' column")
+                    sys.exit(1)
+                logging.info(f"Using '{species_column}' column for species names")
+                
                 # Check for subspecies column
                 has_subspecies = 'subspecies' in fieldnames
                 if has_subspecies:
@@ -323,7 +349,7 @@ def build_indices_from_records(
                     total_records += 1
                     
                     # Get species name - skip if empty or placeholder like "None"
-                    species = row.get('species', '').strip()
+                    species = row.get(species_column, '').strip()
                     if not species or not is_valid_species_name(species):
                         continue
                     
