@@ -82,6 +82,18 @@ INVALID_NAME_PATTERNS = [
     r'\(unidentified\)',    # (unidentified)
     r'\bindet\b',           # indet (indeterminate)
     r'/',                   # Slash (catches species aggregates like "species1/species2")
+    r'\bmoths\b',           # "moths"
+    r'_',                   # Underscore
+    r'\d',                  # Any digit
+    r'(?:^|\s)[a-zA-Z](?:\s|$)',  # Single letter surrounded by whitespace (or at start/end)
+    r'\btype\b',            # "type" as a word (with word boundary)
+    r'\bLength\b',          # "Length"
+    r'^\w+$',               # Single word (e.g. "Woodlouse")
+    r'\bsolitary\b',        # "solitary"
+    r'\bbee\b',             # "bee"
+    r'\bUnknown\b',         # "Unknown"
+    r'\band\b',             # "and" as a word (with word boundaries)
+    r'\bspecies\b',         # "species"
 ]
 INVALID_NAME_REGEX = re.compile('|'.join(INVALID_NAME_PATTERNS), re.IGNORECASE)
 
@@ -618,7 +630,6 @@ def _propagate_freshwater_to_children(conn: sqlite3.Connection, tvk_set: set, li
                 SELECT TAXON_VERSION_KEY, ORGANISM_KEY, RANK
                 FROM taxa
                 WHERE PARENT_KEY = ?
-                AND (REDUNDANT_FLAG IS NULL OR REDUNDANT_FLAG = '')
             """, (org_key,))
 
             for child_tvk, child_org, child_rank in cur.fetchall():
@@ -652,7 +663,6 @@ def _propagate_freshwater_to_children(conn: sqlite3.Connection, tvk_set: set, li
                     WHERE PARENT_KEY = ?
                     AND TAXON_NAME IN ({placeholders})
                     AND RANK IN ({','.join(['?' for _ in SPECIES_RANKS])})
-                    AND (REDUNDANT_FLAG IS NULL OR REDUNDANT_FLAG = '')
                 """, [agg['parent_key']] + candidate_names + SPECIES_RANKS)
 
                 for child_tvk, child_name, child_rank in cur.fetchall():
@@ -697,7 +707,6 @@ def export_species(conn: sqlite3.Connection):
             MARINE_FLAG
         FROM taxa
         WHERE RANK IN ({','.join(['?' for _ in SPECIES_RANKS])})
-        AND (REDUNDANT_FLAG IS NULL OR REDUNDANT_FLAG = '')
         ORDER BY TAXON_NAME
     """, SPECIES_RANKS)
     
