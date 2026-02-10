@@ -827,53 +827,49 @@ def write_results(
         sys.exit(1)
 
 
-def collect_relevant_names(
-    taxa: List[Taxon],
+def collect_relevant_cluster_ids(
     results: List[TaxonResult]
 ) -> Set[str]:
     """
-    Collect all normalized species names relevant to the analysis.
+    Collect all BIN/OTU cluster IDs associated with target taxa.
 
-    This includes:
-    - All names (valid + synonyms) from the input species list
-    - All "other names" discovered via BIN/OTU sharing during analysis
+    Gathers every bin_uri and otu_id found for each taxon (from records
+    matching valid names and synonyms). Any record in the records file
+    that carries one of these cluster IDs is part of the analysis.
 
     Returns:
-        Set of normalized (lowercase) species names
+        Set of cluster ID strings (bin_uri and otu_id values)
     """
-    relevant = set()
+    cluster_ids = set()
 
-    # All names from the input species list
-    for taxon in taxa:
-        relevant.update(taxon.all_names)
-
-    # Other names found via BIN/OTU sharing
     for result in results:
-        for name in result.other_names:
-            relevant.add(normalize_species_name(name))
+        cluster_ids.update(result.bin_uris)
+        cluster_ids.update(result.otu_ids)
 
-    return relevant
+    return cluster_ids
 
 
 def write_filtered_records(
     records_file: Path,
     output_file: Path,
-    relevant_names: Set[str],
+    relevant_cluster_ids: Set[str],
     bold_filters: Optional[BoldFilterSettings] = None
 ) -> None:
     """
     Write a filtered copy of the records file containing only records
-    whose species (or subspecies) name matches the set of relevant names.
+    that belong to BIN/OTU clusters associated with target taxa.
 
-    These are the records the gap analysis is based on: species list matches
-    plus records from other taxa that share BIN/OTUs with listed species.
+    A record is included if any of its bin_uri or otu_id values appear
+    in the set of relevant cluster IDs. This captures target species
+    records as well as other-name records sharing those same clusters,
+    while excluding unrelated records from those other names.
 
     All original columns are preserved.
 
     Args:
         records_file: Path to the input records TSV
         output_file: Path for the filtered output TSV
-        relevant_names: Set of normalized species names to keep
+        relevant_cluster_ids: Set of bin_uri/otu_id values to keep
         bold_filters: Optional BOLD filter settings (same as used for indexing)
     """
     logging.info(f"Writing filtered records to {output_file}")
@@ -899,14 +895,13 @@ def write_filtered_records(
 
                 fieldnames = reader.fieldnames or []
 
-                species_column = detect_species_column_in_records(fieldnames)
-                if species_column is None:
-                    logging.error("Records file must have 'species' or 'organism' column")
-                    sys.exit(1)
-
-                has_subspecies = 'subspecies' in fieldnames
                 has_marker_col = 'marker_code' in fieldnames
                 has_kingdom_col = 'kingdom' in fieldnames
+
+                # Detect which cluster columns exist
+                has_bin_uri = 'bin_uri' in fieldnames
+                has_otu_id = 'otu_id' in fieldnames or 'OTU_ID' in fieldnames
+                otu_col = 'otu_id' if 'otu_id' in fieldnames else 'OTU_ID' if 'OTU_ID' in fieldnames else None
 
                 writer = csv.DictWriter(fout, fieldnames=fieldnames, delimiter='\t',
                                         extrasaction='ignore')
@@ -929,22 +924,18 @@ def write_filtered_records(
                         if not kingdom_val or kingdom_val not in kingdom_set:
                             continue
 
-                    species = (row.get(species_column, '') or '').strip()
-                    if not species or not is_valid_species_name(species):
-                        if bold_mode and bold_filters.filter_species:
-                            continue
-                        # Even outside BOLD mode, we skip empty species names
-                        if not species:
-                            continue
-
-                    species_lower = normalize_species_name(species)
-
-                    # Check if species or subspecies matches relevant names
-                    match = species_lower in relevant_names
-                    if not match and has_subspecies:
-                        subspecies = (row.get('subspecies', '') or '').strip()
-                        if subspecies and is_valid_species_name(subspecies):
-                            match = normalize_species_name(subspecies) in relevant_names
+                    # Check if any of this record's cluster IDs are relevant
+                    match = False
+                    if has_bin_uri:
+                        for cid in parse_cluster_ids((row.get('bin_uri', '') or '').strip()):
+                            if cid in relevant_cluster_ids:
+                                match = True
+                                break
+                    if not match and has_otu_id:
+                        for cid in parse_cluster_ids((row.get(otu_col, '') or '').strip()):
+                            if cid in relevant_cluster_ids:
+                                match = True
+                                break
 
                     if match:
                         writer.writerow(row)
@@ -1230,9 +1221,9 @@ Examples:
     if filtered_output is None:
         filtered_output = args.output.parent / f"{args.output.stem}_filtered_records.tsv"
     filtered_output.parent.mkdir(parents=True, exist_ok=True)
-    relevant_names = collect_relevant_names(taxa, results)
-    logging.info(f"Relevant species names for filtering: {len(relevant_names):,}")
-    write_filtered_records(args.records, filtered_output, relevant_names, bold_filters=bold_filters)
+    relevant_cluster_ids = collect_relevant_cluster_ids(results)
+    logging.info(f"Relevant cluster IDs for filtering: {len(relevant_cluster_ids):,}")
+    write_filtered_records(args.records, filtered_output, relevant_cluster_ids, bold_filters=bold_filters)
 
     # Print summary
     print_summary(results)
