@@ -827,6 +827,150 @@ def write_results(
         sys.exit(1)
 
 
+def collect_relevant_names(
+    taxa: List[Taxon],
+    results: List[TaxonResult]
+) -> Set[str]:
+    """
+    Collect all normalized species names relevant to the analysis.
+
+    This includes:
+    - All names (valid + synonyms) from the input species list
+    - All "other names" discovered via BIN/OTU sharing during analysis
+
+    Returns:
+        Set of normalized (lowercase) species names
+    """
+    relevant = set()
+
+    # All names from the input species list
+    for taxon in taxa:
+        relevant.update(taxon.all_names)
+
+    # Other names found via BIN/OTU sharing
+    for result in results:
+        for name in result.other_names:
+            relevant.add(normalize_species_name(name))
+
+    return relevant
+
+
+def write_filtered_records(
+    records_file: Path,
+    output_file: Path,
+    relevant_names: Set[str],
+    bold_filters: Optional[BoldFilterSettings] = None
+) -> None:
+    """
+    Write a filtered copy of the records file containing only records
+    whose species (or subspecies) name matches the set of relevant names.
+
+    These are the records the gap analysis is based on: species list matches
+    plus records from other taxa that share BIN/OTUs with listed species.
+
+    All original columns are preserved.
+
+    Args:
+        records_file: Path to the input records TSV
+        output_file: Path for the filtered output TSV
+        relevant_names: Set of normalized species names to keep
+        bold_filters: Optional BOLD filter settings (same as used for indexing)
+    """
+    logging.info(f"Writing filtered records to {output_file}")
+    start_time = time.time()
+
+    bold_mode = bold_filters is not None and bold_filters.enabled
+    kingdom_set = None
+    if bold_mode and bold_filters.filter_kingdom:
+        kingdom_set = frozenset(k.lower() for k in bold_filters.kingdom_list)
+
+    total_records = 0
+    written_records = 0
+
+    for encoding in ['utf-8', 'latin-1']:
+        try:
+            with open(records_file, 'r', encoding=encoding) as fin, \
+                 open(output_file, 'w', encoding='utf-8', newline='') as fout:
+
+                if bold_mode:
+                    reader = csv.DictReader(fin, delimiter='\t', quoting=csv.QUOTE_NONE)
+                else:
+                    reader = csv.DictReader(fin, delimiter='\t')
+
+                fieldnames = reader.fieldnames or []
+
+                species_column = detect_species_column_in_records(fieldnames)
+                if species_column is None:
+                    logging.error("Records file must have 'species' or 'organism' column")
+                    sys.exit(1)
+
+                has_subspecies = 'subspecies' in fieldnames
+                has_marker_col = 'marker_code' in fieldnames
+                has_kingdom_col = 'kingdom' in fieldnames
+
+                writer = csv.DictWriter(fout, fieldnames=fieldnames, delimiter='\t',
+                                        extrasaction='ignore')
+                writer.writeheader()
+
+                for row in reader:
+                    total_records += 1
+
+                    # Apply same BOLD sanitization and filters as index building
+                    if bold_mode:
+                        row = {k: sanitize_field(v) if v else '' for k, v in row.items()}
+
+                    if bold_mode and bold_filters.marker and has_marker_col:
+                        marker_val = (row.get('marker_code', '') or '').strip()
+                        if marker_val != bold_filters.marker:
+                            continue
+
+                    if bold_mode and bold_filters.filter_kingdom and has_kingdom_col:
+                        kingdom_val = (row.get('kingdom', '') or '').strip().lower()
+                        if not kingdom_val or kingdom_val not in kingdom_set:
+                            continue
+
+                    species = (row.get(species_column, '') or '').strip()
+                    if not species or not is_valid_species_name(species):
+                        if bold_mode and bold_filters.filter_species:
+                            continue
+                        # Even outside BOLD mode, we skip empty species names
+                        if not species:
+                            continue
+
+                    species_lower = normalize_species_name(species)
+
+                    # Check if species or subspecies matches relevant names
+                    match = species_lower in relevant_names
+                    if not match and has_subspecies:
+                        subspecies = (row.get('subspecies', '') or '').strip()
+                        if subspecies and is_valid_species_name(subspecies):
+                            match = normalize_species_name(subspecies) in relevant_names
+
+                    if match:
+                        writer.writerow(row)
+                        written_records += 1
+
+                    if total_records % 500000 == 0:
+                        logging.info(f"  Scanned {total_records:,} records...")
+
+            elapsed = time.time() - start_time
+            logging.info(f"Filtered records complete in {elapsed:.1f} seconds")
+            logging.info(f"  Total records scanned: {total_records:,}")
+            logging.info(f"  Records written: {written_records:,}")
+            return
+
+        except UnicodeDecodeError:
+            if encoding == 'utf-8':
+                logging.warning("UTF-8 decoding failed, trying Latin-1")
+                total_records = 0
+                written_records = 0
+                continue
+            raise
+
+    logging.error("Failed to read records file for filtering")
+    sys.exit(1)
+
+
 def print_summary(results: List[TaxonResult]) -> None:
     """Print summary statistics."""
     logging.info("=" * 60)
@@ -933,6 +1077,14 @@ Examples:
         help='Path to output gap analysis TSV file'
     )
     
+    parser.add_argument(
+        '--filtered-records',
+        type=Path,
+        default=None,
+        help='Path to output filtered records TSV file (all records the analysis is based on). '
+             'If not specified, derived from --output as <stem>_filtered_records.tsv'
+    )
+
     parser.add_argument(
         '--workers',
         type=int,
@@ -1072,7 +1224,16 @@ Examples:
     
     # Write results
     write_results(results, args.output, input_columns)
-    
+
+    # Write filtered records (second pass through records file)
+    filtered_output = args.filtered_records
+    if filtered_output is None:
+        filtered_output = args.output.parent / f"{args.output.stem}_filtered_records.tsv"
+    filtered_output.parent.mkdir(parents=True, exist_ok=True)
+    relevant_names = collect_relevant_names(taxa, results)
+    logging.info(f"Relevant species names for filtering: {len(relevant_names):,}")
+    write_filtered_records(args.records, filtered_output, relevant_names, bold_filters=bold_filters)
+
     # Print summary
     print_summary(results)
     
