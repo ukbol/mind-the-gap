@@ -84,7 +84,6 @@ INVALID_NAME_PATTERNS = [
     r'/',                   # Slash (catches species aggregates like "species1/species2")
     r'\bmoths\b',           # "moths"
     r'_',                   # Underscore
-    r'-',                   # Hyphen
     r'\d',                  # Any digit
     r'(?:^|\s)[a-zA-Z](?:\s|$)',  # Single letter surrounded by whitespace (or at start/end)
     r'\btype\b',            # "type" as a word (with word boundary)

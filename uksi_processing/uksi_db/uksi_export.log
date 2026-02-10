@@ -1,81 +1,122 @@
-[2026-02-10 16:14:24] 
+[2026-02-10 20:34:57] 
 Database: C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi.db
-[2026-02-10 16:14:24] Valid output: C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi_species_export.tsv
-[2026-02-10 16:14:24] Invalid output: C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi_invalid_species_export.tsv
-[2026-02-10 16:14:24] 
+[2026-02-10 20:34:57] Valid output: C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi_species_export.tsv
+[2026-02-10 20:34:57] Invalid output: C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi_invalid_species_export.tsv
+[2026-02-10 20:34:57] 
 === Starting Species Export ===
-[2026-02-10 16:14:24] Building lineage lookup table...
-[2026-02-10 16:14:24]   Built lookup with 124,397 taxa
-[2026-02-10 16:14:24] Building JNCC designation maps with hierarchy propagation...
-[2026-02-10 16:14:24]   Loaded 14,364 taxa with direct JNCC designations
-[2026-02-10 16:14:25]   Processing 80,677 species for designation inheritance...
-[2026-02-10 16:14:25]   Inherited 742 designations from higher taxa
-[2026-02-10 16:14:25]   Propagated 369 designations upward from subspecific taxa
-[2026-02-10 16:14:25]   Final: 14,169 taxa with JNCC designations
-[2026-02-10 16:14:25] Loading Latin synonyms (comprehensive)...
-[2026-02-10 16:14:26]   Loaded names for 124,033 taxa from names table
-[2026-02-10 16:14:26]   Built child index for 32,536 parent taxa
-[2026-02-10 16:14:26]   Final: 124,033 taxa with 226,980 unique synonyms
-[2026-02-10 16:14:26] Loading Pantheon data...
-[2026-02-10 16:14:26]   Loaded Pantheon data for 12,738 taxa
-[2026-02-10 16:14:26] Loading freshwater list data...
-[2026-02-10 16:14:26]   FreshBase: 4,216 resolved TVKs
-[2026-02-10 16:14:26]   UKCEH freshwater list: 8,279 resolved TVKs
-[2026-02-10 16:14:26]   FreshBase: 9 resolved TVKs are split-level ranks, propagating to children...
-[2026-02-10 16:14:26]   FreshBase: propagated to 10 child species (total now 4,226)
-[2026-02-10 16:14:26]   UKCEH freshwater: 95 resolved TVKs are split-level ranks, propagating to children...
-[2026-02-10 16:14:26]   UKCEH freshwater: propagated to 14 child species (total now 8,293)
-[2026-02-10 16:14:26] 
+[2026-02-10 20:34:57] Building lineage lookup table...
+[2026-02-10 20:34:57]   Built lookup with 124,397 taxa
+[2026-02-10 20:34:57] Building JNCC designation maps with hierarchy propagation...
+[2026-02-10 20:34:57]   Loaded 14,364 taxa with direct JNCC designations
+[2026-02-10 20:34:57]   Processing 80,677 species for designation inheritance...
+[2026-02-10 20:34:58]   Inherited 742 designations from higher taxa
+[2026-02-10 20:34:58]   Propagated 369 designations upward from subspecific taxa
+[2026-02-10 20:34:58]   Final: 14,169 taxa with JNCC designations
+[2026-02-10 20:34:58] Loading Latin synonyms (comprehensive)...
+[2026-02-10 20:34:58]   Loaded names for 124,033 taxa from names table
+[2026-02-10 20:34:58]   Built child index for 32,536 parent taxa
+[2026-02-10 20:34:59]   Final: 124,033 taxa with 226,980 unique synonyms
+[2026-02-10 20:34:59] Loading Pantheon data...
+[2026-02-10 20:34:59]   Loaded Pantheon data for 12,738 taxa
+[2026-02-10 20:34:59] Loading freshwater list data...
+[2026-02-10 20:34:59]   FreshBase: 4,216 resolved TVKs
+[2026-02-10 20:34:59]   UKCEH freshwater list: 8,279 resolved TVKs
+[2026-02-10 20:34:59]   FreshBase: 9 resolved TVKs are split-level ranks, propagating to children...
+[2026-02-10 20:34:59]   FreshBase: propagated to 10 child species (total now 4,226)
+[2026-02-10 20:34:59]   UKCEH freshwater: 95 resolved TVKs are split-level ranks, propagating to children...
+[2026-02-10 20:34:59]   UKCEH freshwater: propagated to 14 child species (total now 8,293)
+[2026-02-10 20:34:59] 
 Querying valid species...
-[2026-02-10 16:14:27]   Found 76,008 species (before filtering)
-[2026-02-10 16:14:27] 
+[2026-02-10 20:34:59]   Found 80,677 species (before filtering)
+[2026-02-10 20:34:59] 
 Writing valid species to C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi_species_export.tsv...
-[2026-02-10 16:14:27] Writing invalid species to C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi_invalid_species_export.tsv...
-[2026-02-10 16:14:27]   Processed 10,000 species...
-[2026-02-10 16:14:27]   Processed 20,000 species...
-[2026-02-10 16:14:27]   Processed 30,000 species...
-[2026-02-10 16:14:27]   Processed 40,000 species...
-[2026-02-10 16:14:27]   Processed 50,000 species...
-[2026-02-10 16:14:28]   Processed 60,000 species...
-[2026-02-10 16:14:28]   Processed 70,000 species...
-[2026-02-10 16:14:29] 
-  Valid species exported: 74,599
-[2026-02-10 16:14:29]   Invalid species filtered: 337
-[2026-02-10 16:14:29]   Kingdom filtered (not Animalia/Plantae/Chromista/Fungi): 1,072
-[2026-02-10 16:14:29]     - Contains '.': 297
-[2026-02-10 16:14:29]     - Contains '?': 27
-[2026-02-10 16:14:29]     - Contains 'indet': 4
-[2026-02-10 16:14:29]     - Contains '(Other)': 4
-[2026-02-10 16:14:29]     - Contains '/': 3
-[2026-02-10 16:14:29]     - Contains '(unidentified)': 2
-[2026-02-10 16:14:29] 
+[2026-02-10 20:34:59] Writing invalid species to C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi_invalid_species_export.tsv...
+[2026-02-10 20:34:59]   Processed 10,000 species...
+[2026-02-10 20:35:00]   Processed 20,000 species...
+[2026-02-10 20:35:00]   Processed 30,000 species...
+[2026-02-10 20:35:00]   Processed 40,000 species...
+[2026-02-10 20:35:00]   Processed 50,000 species...
+[2026-02-10 20:35:01]   Processed 60,000 species...
+[2026-02-10 20:35:01]   Processed 70,000 species...
+[2026-02-10 20:35:01] 
+  Valid species exported: 79,085
+[2026-02-10 20:35:01]   Invalid species filtered: 505
+[2026-02-10 20:35:01]   Kingdom filtered (not Animalia/Plantae/Chromista/Fungi): 1,087
+[2026-02-10 20:35:01]     - Contains '.': 312
+[2026-02-10 20:35:01]     - Contains '?': 29
+[2026-02-10 20:35:01]     - Contains '"': 21
+[2026-02-10 20:35:01]     - Contains 'species': 20
+[2026-02-10 20:35:01]     - Contains '(Other)': 19
+[2026-02-10 20:35:01]     - Contains '1': 13
+[2026-02-10 20:35:01]     - Contains '2': 13
+[2026-02-10 20:35:01]     - Contains 'a ': 13
+[2026-02-10 20:35:01]     - Contains 'type': 6
+[2026-02-10 20:35:01]     - Contains ' A': 5
+[2026-02-10 20:35:01]     - Contains '3': 5
+[2026-02-10 20:35:01]     - Contains '/': 3
+[2026-02-10 20:35:01]     - Contains 'Length': 3
+[2026-02-10 20:35:01]     - Contains 'indet': 3
+[2026-02-10 20:35:01]     - Contains 'Species': 3
+[2026-02-10 20:35:01]     - Contains '9': 2
+[2026-02-10 20:35:01]     - Contains '5': 2
+[2026-02-10 20:35:01]     - Contains '4': 2
+[2026-02-10 20:35:01]     - Contains '(unidentified)': 2
+[2026-02-10 20:35:01]     - Contains 'Solitary': 2
+[2026-02-10 20:35:01]     - Contains 'Brigittea': 1
+[2026-02-10 20:35:01]     - Contains 'Chazara': 1
+[2026-02-10 20:35:01]     - Contains 'Cheletiella': 1
+[2026-02-10 20:35:01]     - Contains '7': 1
+[2026-02-10 20:35:01]     - Contains 'Crab': 1
+[2026-02-10 20:35:01]     - Contains '_': 1
+[2026-02-10 20:35:01]     - Contains 'Cymbella': 1
+[2026-02-10 20:35:01]     - Contains 'Flabellia': 1
+[2026-02-10 20:35:01]     - Contains 'Fragilaria': 1
+[2026-02-10 20:35:01]     - Contains 'Geissleria': 1
+[2026-02-10 20:35:01]     - Contains 'Hylocomiastrum': 1
+[2026-02-10 20:35:01]     - Contains 'Oleolophozia': 1
+[2026-02-10 20:35:01]     - Contains ' a': 1
+[2026-02-10 20:35:01]     - Contains ' b': 1
+[2026-02-10 20:35:01]     - Contains ' x': 1
+[2026-02-10 20:35:01]     - Contains 'Type': 1
+[2026-02-10 20:35:01]     - Contains 'Prooppia': 1
+[2026-02-10 20:35:01]     - Contains 'Protolophozia': 1
+[2026-02-10 20:35:01]     - Contains 'Snails': 1
+[2026-02-10 20:35:01]     - Contains ' B': 1
+[2026-02-10 20:35:01]     - Contains 'Springtale': 1
+[2026-02-10 20:35:01]     - Contains 'and': 1
+[2026-02-10 20:35:01]     - Contains 'Triaeris': 1
+[2026-02-10 20:35:01]     - Contains 'Unknown': 1
+[2026-02-10 20:35:01]     - Contains 'Woodlouse': 1
+[2026-02-10 20:35:01]     - Contains 'Zoroaster': 1
+[2026-02-10 20:35:01]     - Contains 'moths': 1
+[2026-02-10 20:35:01] 
 === Export Validation ===
-[2026-02-10 16:14:30] Total valid rows in export: 74,599
-[2026-02-10 16:14:31]   - With synonyms: 36,836
-[2026-02-10 16:14:31]   - With Pantheon data: 11,867
-[2026-02-10 16:14:31]   - With JNCC designations: 14,000
-[2026-02-10 16:14:31]   - On FreshBase list: 4,049
-[2026-02-10 16:14:31]   - On UKCEH freshwater list: 5,611
-[2026-02-10 16:14:31]   Higher taxonomy coverage:
-[2026-02-10 16:14:31]     - Kingdom: 74,599
-[2026-02-10 16:14:31]     - Phylum/Division: 72,282
-[2026-02-10 16:14:31]     - Class: 73,654
-[2026-02-10 16:14:31]     - Order: 72,652
-[2026-02-10 16:14:31]     - Family: 72,937
-[2026-02-10 16:14:31]     - Genus: 74,519
-[2026-02-10 16:14:32] 
-  Species with subgenus pattern: 1,358
-[2026-02-10 16:14:32] 
+[2026-02-10 20:35:02] Total valid rows in export: 79,085
+[2026-02-10 20:35:03]   - With synonyms: 38,385
+[2026-02-10 20:35:03]   - With Pantheon data: 11,880
+[2026-02-10 20:35:03]   - With JNCC designations: 14,092
+[2026-02-10 20:35:03]   - On FreshBase list: 4,200
+[2026-02-10 20:35:03]   - On UKCEH freshwater list: 5,766
+[2026-02-10 20:35:03]   Higher taxonomy coverage:
+[2026-02-10 20:35:03]     - Kingdom: 79,085
+[2026-02-10 20:35:03]     - Phylum/Division: 76,742
+[2026-02-10 20:35:03]     - Class: 77,948
+[2026-02-10 20:35:03]     - Order: 76,880
+[2026-02-10 20:35:03]     - Family: 77,030
+[2026-02-10 20:35:03]     - Genus: 79,003
+[2026-02-10 20:35:03] 
+  Species with subgenus pattern: 1,393
+[2026-02-10 20:35:03] 
   Sample subgenus species with synonyms:
-[2026-02-10 16:14:32]     Acartia (Acanthacartia) bifilosa
-[2026-02-10 16:14:32]       Synonyms: Acanthacartia bifilosa;Acartia (Acanthacartia) bifilosa subsp. bifilosa;Acartia bifilosa;Dias bifilo...
-[2026-02-10 16:14:32]     Acartia (Acanthacartia) tonsa
-[2026-02-10 16:14:32]       Synonyms: Acanthacartia tonsa;Acartia tonsa...
-[2026-02-10 16:14:32]     Acartia (Acartia) danae
-[2026-02-10 16:14:32]       Synonyms: Acartia danae...
-[2026-02-10 16:14:32] 
+[2026-02-10 20:35:03]     Acartia (Acanthacartia) bifilosa
+[2026-02-10 20:35:03]       Synonyms: Acanthacartia bifilosa;Acartia (Acanthacartia) bifilosa subsp. bifilosa;Acartia bifilosa;Dias bifilo...
+[2026-02-10 20:35:03]     Acartia (Acanthacartia) tonsa
+[2026-02-10 20:35:03]       Synonyms: Acanthacartia tonsa;Acartia tonsa...
+[2026-02-10 20:35:03]     Acartia (Acartia) danae
+[2026-02-10 20:35:03]       Synonyms: Acartia danae...
+[2026-02-10 20:35:04] 
 ============================================================
-[2026-02-10 16:14:32] Export completed successfully!
-[2026-02-10 16:14:32] Valid species: C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi_species_export.tsv
-[2026-02-10 16:14:32] Invalid species: C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi_invalid_species_export.tsv
-[2026-02-10 16:14:32] ============================================================
+[2026-02-10 20:35:04] Export completed successfully!
+[2026-02-10 20:35:04] Valid species: C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi_species_export.tsv
+[2026-02-10 20:35:04] Invalid species: C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi_invalid_species_export.tsv
+[2026-02-10 20:35:04] ============================================================
