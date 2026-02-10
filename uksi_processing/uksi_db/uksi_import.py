@@ -3,7 +3,7 @@
 UKSI Database Import Script
 ===========================
 Creates a SQLite database linking UKSI names and taxa tables,
-with additional Pantheon and JNCC conservation data.
+with additional Pantheon, JNCC, and freshwater species list data.
 
 Author: Generated for Ben Price, NHM London
 Date: 2025-01-25
@@ -13,6 +13,8 @@ Database Schema:
 - taxa: Backbone taxonomy with hierarchical structure
 - pantheon: Invertebrate ecological traits (linked via RECOMMENDED_TAXON_VERSION_KEY)
 - jncc: Conservation designations (linked via Recommended_taxon_version)
+- freshbase: FreshBase freshwater species list (linked via TAXON_VERSION_KEY)
+- ukceh_freshwater: UKCEH freshwater species list (linked via TAXON_VERSION_KEY)
 """
 
 import sqlite3
@@ -31,6 +33,8 @@ INPUT_FILES = {
     "taxa": BASE_DIR / "uksi_20251203a_input_taxa.tsv",
     "pantheon": BASE_DIR / "pantheon_mapping" / "output" / "pantheon_input_cleaned_matched.tsv",
     "jncc": BASE_DIR / "jncc_mapping" / "20231206_jncc_conservation_designations_taxon.tsv",
+    "freshbase": BASE_DIR / "freshwater" / "2026-02-10_freshbase.tsv",
+    "ukceh_freshwater": BASE_DIR / "freshwater" / "UKCEH_freshwater_list.tsv",
 }
 
 # Logging setup
@@ -164,6 +168,47 @@ def create_database_schema(conn: sqlite3.Connection):
         )
     """)
     
+    # FreshBase table - freshwater species list
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS freshbase (
+            ORGANISM_KEY TEXT,
+            TAXON_VERSION_KEY TEXT,
+            Phylum TEXT,
+            Subphylum TEXT,
+            "Class" TEXT,
+            "Order" TEXT,
+            Family TEXT,
+            Genus TEXT,
+            species TEXT,
+            Taxon TEXT
+        )
+    """)
+
+    # UKCEH freshwater table - UKCEH freshwater species list
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS ukceh_freshwater (
+            TAXON_GROUP_NAME TEXT,
+            TAXON_LIST_KEY TEXT,
+            TAXON_LIST_VERSION_KEY TEXT,
+            TAXON_LIST_ITEM_KEY TEXT,
+            PARENT TEXT,
+            TAXON_VERSION_KEY TEXT,
+            PREFERRED_NAME TEXT,
+            SORT_CODE TEXT,
+            LST_ITM_CODE TEXT,
+            TAXON_RANK_KEY TEXT,
+            LONG_NAME TEXT,
+            ITEM_NAME TEXT,
+            AUTHORITY TEXT,
+            ATTRIBUTE TEXT,
+            LANGUAGE TEXT,
+            NOTE TEXT,
+            CHANGED_BY TEXT,
+            CHANGED_DATE TEXT,
+            DELETED_DATE TEXT
+        )
+    """)
+
     # Create indexes for efficient lookups
     log("Creating indexes...")
     
@@ -186,7 +231,13 @@ def create_database_schema(conn: sqlite3.Connection):
     
     # JNCC table indexes
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_jncc_rec_tvk ON jncc(Recommended_taxon_version)")
-    
+
+    # FreshBase table indexes
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_freshbase_tvk ON freshbase(TAXON_VERSION_KEY)")
+
+    # UKCEH freshwater table indexes
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_ukceh_freshwater_tvk ON ukceh_freshwater(TAXON_VERSION_KEY)")
+
     conn.commit()
     log("Schema created successfully")
 
@@ -334,6 +385,40 @@ def validate_import(conn: sqlite3.Connection):
     log(f"  - Direct match to taxa: {jncc_direct_matched:,}")
     log(f"  - Resolved via names table: {jncc_resolved_matched:,} ({jncc_resolved_matched - jncc_direct_matched:,} additional)")
     
+    # FreshBase table stats
+    cursor.execute("SELECT COUNT(*) FROM freshbase")
+    freshbase_count = cursor.fetchone()[0]
+    cursor.execute("""
+        SELECT COUNT(*) FROM freshbase f
+        WHERE EXISTS (SELECT 1 FROM taxa t WHERE t.TAXON_VERSION_KEY = f.TAXON_VERSION_KEY)
+    """)
+    freshbase_direct_matched = cursor.fetchone()[0]
+    cursor.execute("""
+        SELECT COUNT(*) FROM freshbase_resolved fr
+        WHERE EXISTS (SELECT 1 FROM taxa t WHERE t.TAXON_VERSION_KEY = fr.resolved_tvk)
+    """)
+    freshbase_resolved_matched = cursor.fetchone()[0]
+    log(f"FreshBase table: {freshbase_count:,} total")
+    log(f"  - Direct match to taxa: {freshbase_direct_matched:,}")
+    log(f"  - Resolved via names table: {freshbase_resolved_matched:,} ({freshbase_resolved_matched - freshbase_direct_matched:,} additional)")
+
+    # UKCEH freshwater table stats
+    cursor.execute("SELECT COUNT(*) FROM ukceh_freshwater")
+    ukceh_count = cursor.fetchone()[0]
+    cursor.execute("""
+        SELECT COUNT(*) FROM ukceh_freshwater u
+        WHERE EXISTS (SELECT 1 FROM taxa t WHERE t.TAXON_VERSION_KEY = u.TAXON_VERSION_KEY)
+    """)
+    ukceh_direct_matched = cursor.fetchone()[0]
+    cursor.execute("""
+        SELECT COUNT(*) FROM ukceh_freshwater_resolved ur
+        WHERE EXISTS (SELECT 1 FROM taxa t WHERE t.TAXON_VERSION_KEY = ur.resolved_tvk)
+    """)
+    ukceh_resolved_matched = cursor.fetchone()[0]
+    log(f"UKCEH freshwater table: {ukceh_count:,} total")
+    log(f"  - Direct match to taxa: {ukceh_direct_matched:,}")
+    log(f"  - Resolved via names table: {ukceh_resolved_matched:,} ({ukceh_resolved_matched - ukceh_direct_matched:,} additional)")
+
     # Check linkage between names and taxa via recommended TVK
     cursor.execute("""
         SELECT COUNT(DISTINCT n.RECOMMENDED_TAXON_VERSION_KEY)
@@ -434,7 +519,41 @@ def create_utility_views(conn: sqlite3.Connection):
         LEFT JOIN names n ON n.TAXON_VERSION_KEY = j.Recommended_taxon_version
     """)
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_jncc_resolved_tvk ON jncc_resolved(resolved_tvk)")
-    
+
+    # FreshBase resolved via names table
+    # Resolves TVKs to their current recommended TVK in taxa
+    cursor.execute("DROP TABLE IF EXISTS freshbase_resolved")
+    cursor.execute("""
+        CREATE TABLE freshbase_resolved AS
+        SELECT
+            f.*,
+            COALESCE(
+                CASE WHEN EXISTS (SELECT 1 FROM taxa t WHERE t.TAXON_VERSION_KEY = f.TAXON_VERSION_KEY)
+                     THEN f.TAXON_VERSION_KEY END,
+                n.RECOMMENDED_TAXON_VERSION_KEY
+            ) as resolved_tvk
+        FROM freshbase f
+        LEFT JOIN names n ON n.TAXON_VERSION_KEY = f.TAXON_VERSION_KEY
+    """)
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_freshbase_resolved_tvk ON freshbase_resolved(resolved_tvk)")
+
+    # UKCEH freshwater resolved via names table
+    # Resolves TVKs to their current recommended TVK in taxa
+    cursor.execute("DROP TABLE IF EXISTS ukceh_freshwater_resolved")
+    cursor.execute("""
+        CREATE TABLE ukceh_freshwater_resolved AS
+        SELECT
+            u.*,
+            COALESCE(
+                CASE WHEN EXISTS (SELECT 1 FROM taxa t WHERE t.TAXON_VERSION_KEY = u.TAXON_VERSION_KEY)
+                     THEN u.TAXON_VERSION_KEY END,
+                n.RECOMMENDED_TAXON_VERSION_KEY
+            ) as resolved_tvk
+        FROM ukceh_freshwater u
+        LEFT JOIN names n ON n.TAXON_VERSION_KEY = u.TAXON_VERSION_KEY
+    """)
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_ukceh_freshwater_resolved_tvk ON ukceh_freshwater_resolved(resolved_tvk)")
+
     conn.commit()
     log("Utility views created")
 
@@ -490,6 +609,8 @@ def main():
         import_tsv_to_table(conn, INPUT_FILES["taxa"], "taxa")
         import_tsv_to_table(conn, INPUT_FILES["pantheon"], "pantheon")
         import_tsv_to_table(conn, INPUT_FILES["jncc"], "jncc")
+        import_tsv_to_table(conn, INPUT_FILES["freshbase"], "freshbase")
+        import_tsv_to_table(conn, INPUT_FILES["ukceh_freshwater"], "ukceh_freshwater")
         
         # Create utility views
         create_utility_views(conn)

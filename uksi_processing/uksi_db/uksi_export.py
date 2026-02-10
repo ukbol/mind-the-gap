@@ -7,10 +7,14 @@ Exports valid species with:
 - All Latin synonyms (including subspecific taxa, subgenus variants)
 - Pantheon ecological traits
 - JNCC conservation designations (propagated through hierarchy)
+- FreshBase and UKCEH freshwater list membership flags
 
 Author: Generated for Ben Price, NHM London
 Date: 2025-01-25
-Version: 2.1
+Version: 2.2
+
+Changes in v2.2:
+- Add FreshBase and UKCEH freshwater list presence columns
 
 Changes in v2.1:
 - Filter to only Animalia, Plantae, Chromista, and Fungi kingdoms
@@ -513,6 +517,27 @@ def get_pantheon_data(conn: sqlite3.Connection) -> dict:
     return pantheon
 
 
+def get_freshwater_presence(conn: sqlite3.Connection) -> tuple:
+    """
+    Build sets of TVKs that appear in each freshwater species list.
+    Uses the resolved tables (which map synonym TVKs to recommended TVKs).
+
+    Returns: (freshbase_tvks, ukceh_freshwater_tvks) as sets of TVK strings
+    """
+    log("Loading freshwater list data...")
+    cur = conn.cursor()
+
+    cur.execute("SELECT DISTINCT resolved_tvk FROM freshbase_resolved WHERE resolved_tvk IS NOT NULL")
+    freshbase_tvks = {row[0] for row in cur.fetchall()}
+    log(f"  FreshBase: {len(freshbase_tvks):,} resolved TVKs")
+
+    cur.execute("SELECT DISTINCT resolved_tvk FROM ukceh_freshwater_resolved WHERE resolved_tvk IS NOT NULL")
+    ukceh_tvks = {row[0] for row in cur.fetchall()}
+    log(f"  UKCEH freshwater list: {len(ukceh_tvks):,} resolved TVKs")
+
+    return freshbase_tvks, ukceh_tvks
+
+
 def export_species(conn: sqlite3.Connection):
     """Main export function."""
     log("\n=== Starting Species Export ===")
@@ -522,6 +547,7 @@ def export_species(conn: sqlite3.Connection):
     jncc_designations = build_jncc_designation_maps(conn, lineage_lookup)
     synonyms = get_latin_synonyms(conn, lineage_lookup)
     pantheon = get_pantheon_data(conn)
+    freshbase_tvks, ukceh_tvks = get_freshwater_presence(conn)
     
     # Get all valid species
     log("\nQuerying valid species...")
@@ -571,10 +597,14 @@ def export_species(conn: sqlite3.Connection):
         'marine_flag',
     ]
     
+    # Add freshwater list columns
+    headers.append('freshbase')
+    headers.append('ukceh_freshwater_list')
+
     # Add Pantheon columns
     for _, output_name in PANTHEON_COLUMNS:
         headers.append(output_name)
-    
+
     # Add JNCC columns (lowercase)
     for _, output_name in JNCC_COLUMNS:
         headers.append(output_name.lower())
@@ -654,10 +684,14 @@ def export_species(conn: sqlite3.Connection):
                 marine,
             ]
             
+            # Add freshwater list presence
+            row.append('Y' if tvk in freshbase_tvks else '')
+            row.append('Y' if tvk in ukceh_tvks else '')
+
             # Add Pantheon columns
             for input_col, _ in PANTHEON_COLUMNS:
                 row.append(panth.get(input_col, ''))
-            
+
             # Add JNCC columns
             for input_col, _ in JNCC_COLUMNS:
                 row.append(jncc.get(input_col, ''))
@@ -698,10 +732,14 @@ def validate_export(conn: sqlite3.Connection, valid_count: int, invalid_count: i
     with_synonyms = sum(1 for r in rows if r.get('synonyms', ''))
     with_pantheon = sum(1 for r in rows if r.get('pantheon_sqs', ''))
     with_jncc = sum(1 for r in rows if any(r.get(col[1].lower(), '') for col in JNCC_COLUMNS))
-    
+    with_freshbase = sum(1 for r in rows if r.get('freshbase', ''))
+    with_ukceh = sum(1 for r in rows if r.get('ukceh_freshwater_list', ''))
+
     log(f"  - With synonyms: {with_synonyms:,}")
     log(f"  - With Pantheon data: {with_pantheon:,}")
     log(f"  - With JNCC designations: {with_jncc:,}")
+    log(f"  - On FreshBase list: {with_freshbase:,}")
+    log(f"  - On UKCEH freshwater list: {with_ukceh:,}")
     
     # Check higher taxonomy coverage
     with_kingdom = sum(1 for r in rows if r.get('kingdom', ''))
@@ -745,7 +783,7 @@ def validate_export(conn: sqlite3.Connection, valid_count: int, invalid_count: i
 def main():
     """Main entry point for the export script."""
     log("=" * 60)
-    log("UKSI Database Export Script v2")
+    log("UKSI Database Export Script v2.2")
     log("=" * 60)
     
     # Clear log file
