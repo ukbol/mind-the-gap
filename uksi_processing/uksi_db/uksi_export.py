@@ -553,36 +553,60 @@ def get_freshwater_presence(conn: sqlite3.Connection) -> tuple:
 
 def _propagate_freshwater_to_children(conn: sqlite3.Connection, tvk_set: set, list_name: str) -> set:
     """
-    For any TVK in the set that is not a species-level rank, find all
-    descendant species and add them to the set.
+    For any TVK in the set that is a Species aggregate (or similar split-level
+    rank), find all child species and add them to the set.
 
-    This handles the case where a freshwater list entry resolves to a
-    Species aggregate (or other higher grouping) after a taxonomic split,
-    ensuring the child species inherit the freshwater list membership.
+    This handles taxonomic splits where a freshwater list entry resolves to a
+    Species aggregate rather than the individual species within it (e.g. old
+    'Baetis rhodani' TVK now resolves to 'Baetis rhodani/atlanticus' aggregate).
+
+    Only propagates from split-level ranks (Species aggregate, Species group,
+    Species sensu lato). Does NOT propagate from Genus or higher — those are
+    genuinely higher-level list entries, not artefacts of taxonomic splits.
+
+    Two strategies are used to find child species:
+    1. PARENT_KEY descent: standard parent-child walk (works when children
+       point to the aggregate's ORGANISM_KEY)
+    2. Name-component matching: for aggregates whose component species sit
+       directly under the genus (e.g. 'Baetis rhodani/atlanticus' -> find
+       siblings 'Baetis rhodani' and 'Baetis atlanticus' under genus Baetis)
     """
     cur = conn.cursor()
 
-    # Find which TVKs in the set are non-species (aggregates, etc.)
-    species_ranks_set = set(SPECIES_RANKS)
-    non_species_tvks = []
-    for tvk in tvk_set:
-        cur.execute("SELECT RANK, ORGANISM_KEY, TAXON_NAME FROM taxa WHERE TAXON_VERSION_KEY = ?", (tvk,))
-        row = cur.fetchone()
-        if row and row[0] not in species_ranks_set:
-            non_species_tvks.append((tvk, row[1], row[0], row[2]))
+    # Ranks that represent taxonomic splits — safe to propagate downward
+    PROPAGATION_RANKS = {
+        'Species aggregate', 'Species group', 'Species sensu lato'
+    }
 
-    if not non_species_tvks:
+    species_ranks_set = set(SPECIES_RANKS)
+
+    # Find which TVKs in the set are split-level ranks
+    aggregate_tvks = []
+    for tvk in tvk_set:
+        cur.execute("SELECT RANK, ORGANISM_KEY, TAXON_NAME, PARENT_KEY FROM taxa WHERE TAXON_VERSION_KEY = ?", (tvk,))
+        row = cur.fetchone()
+        if row and row[0] in PROPAGATION_RANKS:
+            aggregate_tvks.append({
+                'tvk': tvk,
+                'org_key': row[1],
+                'rank': row[0],
+                'name': row[2],
+                'parent_key': row[3],
+            })
+
+    if not aggregate_tvks:
         return tvk_set
 
-    log(f"  {list_name}: {len(non_species_tvks)} resolved TVKs are non-species ranks, propagating to children...")
+    log(f"  {list_name}: {len(aggregate_tvks)} resolved TVKs are split-level ranks, propagating to children...")
 
-    # For each non-species TVK, find all descendant species via PARENT_KEY chain
     expanded = set(tvk_set)
     total_propagated = 0
 
-    for parent_tvk, parent_org_key, parent_rank, parent_name in non_species_tvks:
-        # BFS/iterative descent through PARENT_KEY to find all descendant species
-        queue = [parent_org_key]
+    for agg in aggregate_tvks:
+        found_children = set()
+
+        # Strategy 1: BFS descent via PARENT_KEY
+        queue = [agg['org_key']]
         visited = set()
         while queue:
             org_key = queue.pop(0)
@@ -591,20 +615,54 @@ def _propagate_freshwater_to_children(conn: sqlite3.Connection, tvk_set: set, li
             visited.add(org_key)
 
             cur.execute("""
-                SELECT TAXON_VERSION_KEY, ORGANISM_KEY, RANK, TAXON_NAME
+                SELECT TAXON_VERSION_KEY, ORGANISM_KEY, RANK
                 FROM taxa
                 WHERE PARENT_KEY = ?
                 AND (REDUNDANT_FLAG IS NULL OR REDUNDANT_FLAG = '')
             """, (org_key,))
 
-            for child_tvk, child_org, child_rank, child_name in cur.fetchall():
+            for child_tvk, child_org, child_rank in cur.fetchall():
                 if child_rank in species_ranks_set:
-                    if child_tvk not in expanded:
-                        expanded.add(child_tvk)
-                        total_propagated += 1
+                    found_children.add(child_tvk)
                 else:
-                    # Non-species child (e.g. subaggregate) - keep descending
                     queue.append(child_org)
+
+        # Strategy 2: Name-component matching for childless aggregates
+        # Aggregate names use '/' separators, e.g. 'Baetis rhodani/atlanticus'
+        # meaning 'Baetis rhodani' and 'Baetis atlanticus'. Find these as
+        # siblings under the same parent genus.
+        if not found_children and '/' in agg['name'] and agg['parent_key']:
+            parts = agg['name'].split('/')
+            # First part is the full binomial (e.g. 'Baetis rhodani')
+            genus = parts[0].split()[0] if ' ' in parts[0] else ''
+            if genus:
+                # Build candidate species names from the slash-separated epithets
+                candidate_names = [parts[0].strip()]  # First full binomial
+                for part in parts[1:]:
+                    part = part.strip()
+                    if ' ' in part:
+                        candidate_names.append(part)  # Already a binomial
+                    else:
+                        candidate_names.append(f"{genus} {part}")  # genus + epithet
+
+                placeholders = ','.join(['?' for _ in candidate_names])
+                cur.execute(f"""
+                    SELECT TAXON_VERSION_KEY, TAXON_NAME, RANK
+                    FROM taxa
+                    WHERE PARENT_KEY = ?
+                    AND TAXON_NAME IN ({placeholders})
+                    AND RANK IN ({','.join(['?' for _ in SPECIES_RANKS])})
+                    AND (REDUNDANT_FLAG IS NULL OR REDUNDANT_FLAG = '')
+                """, [agg['parent_key']] + candidate_names + SPECIES_RANKS)
+
+                for child_tvk, child_name, child_rank in cur.fetchall():
+                    found_children.add(child_tvk)
+
+        # Add found children to the expanded set
+        for child_tvk in found_children:
+            if child_tvk not in expanded:
+                expanded.add(child_tvk)
+                total_propagated += 1
 
     if total_propagated:
         log(f"  {list_name}: propagated to {total_propagated} child species (total now {len(expanded):,})")
