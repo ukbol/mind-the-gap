@@ -1,72 +1,81 @@
-[2026-01-26 00:06:51] 
+[2026-02-10 16:14:24] 
 Database: C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi.db
-[2026-01-26 00:06:51] Valid output: C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi_species_export.tsv
-[2026-01-26 00:06:51] Invalid output: C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi_invalid_species_export.tsv
-[2026-01-26 00:06:51] 
+[2026-02-10 16:14:24] Valid output: C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi_species_export.tsv
+[2026-02-10 16:14:24] Invalid output: C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi_invalid_species_export.tsv
+[2026-02-10 16:14:24] 
 === Starting Species Export ===
-[2026-01-26 00:06:51] Building lineage lookup table...
-[2026-01-26 00:06:51]   Built lookup with 124,397 taxa
-[2026-01-26 00:06:51] Building JNCC designation maps with hierarchy propagation...
-[2026-01-26 00:06:51]   Loaded 14,364 taxa with direct JNCC designations
-[2026-01-26 00:06:51]   Processing 80,677 species for designation inheritance...
-[2026-01-26 00:06:51]   Inherited 742 designations from higher taxa
-[2026-01-26 00:06:51]   Propagated 369 designations upward from subspecific taxa
-[2026-01-26 00:06:51]   Final: 14,169 taxa with JNCC designations
-[2026-01-26 00:06:51] Loading Latin synonyms (comprehensive)...
-[2026-01-26 00:06:52]   Loaded names for 124,033 taxa from names table
-[2026-01-26 00:06:52]   Built child index for 32,536 parent taxa
-[2026-01-26 00:06:53]   Final: 124,033 taxa with 226,980 unique synonyms
-[2026-01-26 00:06:53] Loading Pantheon data...
-[2026-01-26 00:06:53]   Loaded Pantheon data for 12,738 taxa
-[2026-01-26 00:06:53] 
+[2026-02-10 16:14:24] Building lineage lookup table...
+[2026-02-10 16:14:24]   Built lookup with 124,397 taxa
+[2026-02-10 16:14:24] Building JNCC designation maps with hierarchy propagation...
+[2026-02-10 16:14:24]   Loaded 14,364 taxa with direct JNCC designations
+[2026-02-10 16:14:25]   Processing 80,677 species for designation inheritance...
+[2026-02-10 16:14:25]   Inherited 742 designations from higher taxa
+[2026-02-10 16:14:25]   Propagated 369 designations upward from subspecific taxa
+[2026-02-10 16:14:25]   Final: 14,169 taxa with JNCC designations
+[2026-02-10 16:14:25] Loading Latin synonyms (comprehensive)...
+[2026-02-10 16:14:26]   Loaded names for 124,033 taxa from names table
+[2026-02-10 16:14:26]   Built child index for 32,536 parent taxa
+[2026-02-10 16:14:26]   Final: 124,033 taxa with 226,980 unique synonyms
+[2026-02-10 16:14:26] Loading Pantheon data...
+[2026-02-10 16:14:26]   Loaded Pantheon data for 12,738 taxa
+[2026-02-10 16:14:26] Loading freshwater list data...
+[2026-02-10 16:14:26]   FreshBase: 4,216 resolved TVKs
+[2026-02-10 16:14:26]   UKCEH freshwater list: 8,279 resolved TVKs
+[2026-02-10 16:14:26]   FreshBase: 9 resolved TVKs are split-level ranks, propagating to children...
+[2026-02-10 16:14:26]   FreshBase: propagated to 10 child species (total now 4,226)
+[2026-02-10 16:14:26]   UKCEH freshwater: 95 resolved TVKs are split-level ranks, propagating to children...
+[2026-02-10 16:14:26]   UKCEH freshwater: propagated to 14 child species (total now 8,293)
+[2026-02-10 16:14:26] 
 Querying valid species...
-[2026-01-26 00:06:53]   Found 76,008 species (before filtering)
-[2026-01-26 00:06:53] 
+[2026-02-10 16:14:27]   Found 76,008 species (before filtering)
+[2026-02-10 16:14:27] 
 Writing valid species to C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi_species_export.tsv...
-[2026-01-26 00:06:53] Writing invalid species to C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi_invalid_species_export.tsv...
-[2026-01-26 00:06:53]   Processed 10,000 species...
-[2026-01-26 00:06:54]   Processed 20,000 species...
-[2026-01-26 00:06:54]   Processed 30,000 species...
-[2026-01-26 00:06:54]   Processed 40,000 species...
-[2026-01-26 00:06:54]   Processed 50,000 species...
-[2026-01-26 00:06:55]   Processed 60,000 species...
-[2026-01-26 00:06:55]   Processed 70,000 species...
-[2026-01-26 00:06:55] 
+[2026-02-10 16:14:27] Writing invalid species to C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi_invalid_species_export.tsv...
+[2026-02-10 16:14:27]   Processed 10,000 species...
+[2026-02-10 16:14:27]   Processed 20,000 species...
+[2026-02-10 16:14:27]   Processed 30,000 species...
+[2026-02-10 16:14:27]   Processed 40,000 species...
+[2026-02-10 16:14:27]   Processed 50,000 species...
+[2026-02-10 16:14:28]   Processed 60,000 species...
+[2026-02-10 16:14:28]   Processed 70,000 species...
+[2026-02-10 16:14:29] 
   Valid species exported: 74,599
-[2026-01-26 00:06:55]   Invalid species filtered: 337
-[2026-01-26 00:06:55]   Kingdom filtered (not Animalia/Plantae/Chromista/Fungi): 1,072
-[2026-01-26 00:06:55]     - Contains '.': 297
-[2026-01-26 00:06:55]     - Contains '?': 27
-[2026-01-26 00:06:55]     - Contains 'indet': 4
-[2026-01-26 00:06:55]     - Contains '(Other)': 4
-[2026-01-26 00:06:55]     - Contains '/': 3
-[2026-01-26 00:06:55]     - Contains '(unidentified)': 2
-[2026-01-26 00:06:55] 
+[2026-02-10 16:14:29]   Invalid species filtered: 337
+[2026-02-10 16:14:29]   Kingdom filtered (not Animalia/Plantae/Chromista/Fungi): 1,072
+[2026-02-10 16:14:29]     - Contains '.': 297
+[2026-02-10 16:14:29]     - Contains '?': 27
+[2026-02-10 16:14:29]     - Contains 'indet': 4
+[2026-02-10 16:14:29]     - Contains '(Other)': 4
+[2026-02-10 16:14:29]     - Contains '/': 3
+[2026-02-10 16:14:29]     - Contains '(unidentified)': 2
+[2026-02-10 16:14:29] 
 === Export Validation ===
-[2026-01-26 00:06:56] Total valid rows in export: 74,599
-[2026-01-26 00:06:56]   - With synonyms: 36,836
-[2026-01-26 00:06:56]   - With Pantheon data: 11,867
-[2026-01-26 00:06:56]   - With JNCC designations: 14,000
-[2026-01-26 00:06:57]   Higher taxonomy coverage:
-[2026-01-26 00:06:57]     - Kingdom: 74,599
-[2026-01-26 00:06:57]     - Phylum/Division: 72,282
-[2026-01-26 00:06:57]     - Class: 73,654
-[2026-01-26 00:06:57]     - Order: 72,652
-[2026-01-26 00:06:57]     - Family: 72,937
-[2026-01-26 00:06:57]     - Genus: 74,519
-[2026-01-26 00:06:57] 
+[2026-02-10 16:14:30] Total valid rows in export: 74,599
+[2026-02-10 16:14:31]   - With synonyms: 36,836
+[2026-02-10 16:14:31]   - With Pantheon data: 11,867
+[2026-02-10 16:14:31]   - With JNCC designations: 14,000
+[2026-02-10 16:14:31]   - On FreshBase list: 4,049
+[2026-02-10 16:14:31]   - On UKCEH freshwater list: 5,611
+[2026-02-10 16:14:31]   Higher taxonomy coverage:
+[2026-02-10 16:14:31]     - Kingdom: 74,599
+[2026-02-10 16:14:31]     - Phylum/Division: 72,282
+[2026-02-10 16:14:31]     - Class: 73,654
+[2026-02-10 16:14:31]     - Order: 72,652
+[2026-02-10 16:14:31]     - Family: 72,937
+[2026-02-10 16:14:31]     - Genus: 74,519
+[2026-02-10 16:14:32] 
   Species with subgenus pattern: 1,358
-[2026-01-26 00:06:57] 
+[2026-02-10 16:14:32] 
   Sample subgenus species with synonyms:
-[2026-01-26 00:06:57]     Acartia (Acanthacartia) bifilosa
-[2026-01-26 00:06:57]       Synonyms: Acanthacartia bifilosa;Acartia (Acanthacartia) bifilosa subsp. bifilosa;Acartia bifilosa;Dias bifilo...
-[2026-01-26 00:06:57]     Acartia (Acanthacartia) tonsa
-[2026-01-26 00:06:57]       Synonyms: Acanthacartia tonsa;Acartia tonsa...
-[2026-01-26 00:06:57]     Acartia (Acartia) danae
-[2026-01-26 00:06:57]       Synonyms: Acartia danae...
-[2026-01-26 00:06:57] 
+[2026-02-10 16:14:32]     Acartia (Acanthacartia) bifilosa
+[2026-02-10 16:14:32]       Synonyms: Acanthacartia bifilosa;Acartia (Acanthacartia) bifilosa subsp. bifilosa;Acartia bifilosa;Dias bifilo...
+[2026-02-10 16:14:32]     Acartia (Acanthacartia) tonsa
+[2026-02-10 16:14:32]       Synonyms: Acanthacartia tonsa;Acartia tonsa...
+[2026-02-10 16:14:32]     Acartia (Acartia) danae
+[2026-02-10 16:14:32]       Synonyms: Acartia danae...
+[2026-02-10 16:14:32] 
 ============================================================
-[2026-01-26 00:06:57] Export completed successfully!
-[2026-01-26 00:06:57] Valid species: C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi_species_export.tsv
-[2026-01-26 00:06:57] Invalid species: C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi_invalid_species_export.tsv
-[2026-01-26 00:06:57] ============================================================
+[2026-02-10 16:14:32] Export completed successfully!
+[2026-02-10 16:14:32] Valid species: C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi_species_export.tsv
+[2026-02-10 16:14:32] Invalid species: C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi_invalid_species_export.tsv
+[2026-02-10 16:14:32] ============================================================

@@ -6,3 +6,5 @@ midori_processing/midori_12s.tsv
 midori_processing/midori_12s.tsv.gz
 /uksi_processing/uksi_db/__pycache__
 check_results.py
+uksi_processing/uksi_db/uksi.db-wal
+uksi_processing/uksi_db/uksi.db-shm
