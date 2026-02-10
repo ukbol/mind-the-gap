@@ -618,7 +618,6 @@ def _propagate_freshwater_to_children(conn: sqlite3.Connection, tvk_set: set, li
                 SELECT TAXON_VERSION_KEY, ORGANISM_KEY, RANK
                 FROM taxa
                 WHERE PARENT_KEY = ?
-                AND (REDUNDANT_FLAG IS NULL OR REDUNDANT_FLAG = '')
             """, (org_key,))
 
             for child_tvk, child_org, child_rank in cur.fetchall():
@@ -652,7 +651,6 @@ def _propagate_freshwater_to_children(conn: sqlite3.Connection, tvk_set: set, li
                     WHERE PARENT_KEY = ?
                     AND TAXON_NAME IN ({placeholders})
                     AND RANK IN ({','.join(['?' for _ in SPECIES_RANKS])})
-                    AND (REDUNDANT_FLAG IS NULL OR REDUNDANT_FLAG = '')
                 """, [agg['parent_key']] + candidate_names + SPECIES_RANKS)
 
                 for child_tvk, child_name, child_rank in cur.fetchall():
@@ -697,7 +695,6 @@ def export_species(conn: sqlite3.Connection):
             MARINE_FLAG
         FROM taxa
         WHERE RANK IN ({','.join(['?' for _ in SPECIES_RANKS])})
-        AND (REDUNDANT_FLAG IS NULL OR REDUNDANT_FLAG = '')
         ORDER BY TAXON_NAME
     """, SPECIES_RANKS)
     
