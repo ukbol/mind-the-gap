@@ -76,12 +76,50 @@ class TaxonResult:
 # HELPER FUNCTIONS
 # =============================================================================
 
+# BOLD-specific filter settings
+@dataclass
+class BoldFilterSettings:
+    """Settings for filtering raw BOLD data during index building."""
+    enabled: bool = False           # Master switch: use BOLD parsing mode
+    filter_species: bool = True     # Only include records with valid species names
+    filter_kingdom: bool = True     # Filter by kingdom
+    kingdom_list: List[str] = field(default_factory=lambda: ['Animalia'])
+    marker: Optional[str] = 'COI-5P'  # Filter by marker_code column
+
+
 # Values to treat as empty/missing for cluster IDs
 EMPTY_CLUSTER_VALUES = frozenset(['', 'none', 'null', 'na', 'n/a', '-', '.'])
 
 # Values to treat as empty/missing for species/subspecies names
 # BOLD data commonly uses "None" for unidentified specimens
 EMPTY_SPECIES_VALUES = frozenset(['', 'none', 'null', 'na', 'n/a', '-', '.'])
+
+
+def sanitize_field(field_value: str) -> str:
+    """
+    Sanitize a field value to prevent parsing issues caused by unescaped quotes.
+    
+    BOLD raw TSV data contains unescaped double quotes (e.g. "Syn.) and embedded
+    newlines/carriage returns that break standard CSV parsers.
+    
+    Only needed when reading raw BOLD data (--bold mode).
+    
+    Args:
+        field_value: Raw field value from TSV
+        
+    Returns:
+        Sanitized field value with quotes removed and whitespace cleaned
+    """
+    if not field_value:
+        return ''
+    
+    # Remove embedded newlines and carriage returns that cause row merging
+    field_value = field_value.replace('\r', ' ').replace('\n', ' ')
+    
+    # Remove all double quotes to prevent CSV parsing issues
+    field_value = field_value.replace('"', '')
+    
+    return field_value.strip()
 
 
 def normalize_species_name(name: str) -> str:
@@ -281,10 +319,15 @@ def detect_species_column_in_records(fieldnames: List[str]) -> str:
 
 def build_indices_from_records(
     records_file: Path,
+    bold_filters: Optional[BoldFilterSettings] = None,
     chunk_size: int = 100000
 ) -> Tuple[Dict[str, int], Dict[str, Set[str]], Dict[str, Set[str]], Dict[str, Set[str]], Dict[str, Set[str]], str]:
     """
     Build indices from records file in a single pass.
+    
+    When bold_filters is provided and enabled, applies BOLD-specific parsing
+    (quoting=QUOTE_NONE, field sanitisation) and row-level filters for
+    species validity, kingdom, and marker code.
     
     Returns:
         - name_to_count: species_name (lowercase) -> record count
@@ -313,10 +356,30 @@ def build_indices_from_records(
     has_bin_uri = False
     has_otu_id = False
     
+    # BOLD-specific filter tracking
+    bold_mode = bold_filters is not None and bold_filters.enabled
+    skipped_species = 0
+    skipped_kingdom = 0
+    skipped_marker = 0
+    
+    if bold_mode:
+        logging.info("BOLD mode enabled - applying raw BOLD parsing and filters")
+        if bold_filters.filter_species:
+            logging.info("  Species filter: ON (skipping empty/None species)")
+        if bold_filters.filter_kingdom:
+            kingdom_set = frozenset(k.lower() for k in bold_filters.kingdom_list)
+            logging.info(f"  Kingdom filter: ON (keeping: {', '.join(bold_filters.kingdom_list)})")
+        if bold_filters.marker:
+            logging.info(f"  Marker filter: ON (keeping: {bold_filters.marker})")
+    
     for encoding in ['utf-8', 'latin-1']:
         try:
             with open(records_file, 'r', encoding=encoding) as f:
-                reader = csv.DictReader(f, delimiter='\t')
+                # Use QUOTE_NONE for raw BOLD data to handle unescaped quotes
+                if bold_mode:
+                    reader = csv.DictReader(f, delimiter='\t', quoting=csv.QUOTE_NONE)
+                else:
+                    reader = csv.DictReader(f, delimiter='\t')
                 fieldnames = reader.fieldnames or []
                 
                 # Detect cluster column (file-level decision)
@@ -345,25 +408,55 @@ def build_indices_from_records(
                 if has_subspecies:
                     logging.info("Subspecies column detected - will match against both species and subspecies")
                 
+                # Detect BOLD-specific columns when in BOLD mode
+                has_marker_col = 'marker_code' in fieldnames
+                has_kingdom_col = 'kingdom' in fieldnames
+                if bold_mode:
+                    if bold_filters.marker and not has_marker_col:
+                        logging.warning("Marker filter requested but 'marker_code' column not found in records file")
+                    if bold_filters.filter_kingdom and not has_kingdom_col:
+                        logging.warning("Kingdom filter requested but 'kingdom' column not found in records file")
+                
                 for row in reader:
                     total_records += 1
                     
+                    # --- BOLD mode: sanitize fields to handle broken lines/quotes ---
+                    if bold_mode:
+                        row = {k: sanitize_field(v) if v else '' for k, v in row.items()}
+                    
+                    # --- BOLD filter: marker_code ---
+                    if bold_mode and bold_filters.marker and has_marker_col:
+                        marker_val = (row.get('marker_code', '') or '').strip()
+                        if marker_val != bold_filters.marker:
+                            skipped_marker += 1
+                            continue
+                    
+                    # --- BOLD filter: kingdom ---
+                    if bold_mode and bold_filters.filter_kingdom and has_kingdom_col:
+                        kingdom_val = (row.get('kingdom', '') or '').strip().lower()
+                        if not kingdom_val or kingdom_val not in kingdom_set:
+                            skipped_kingdom += 1
+                            continue
+                    
                     # Get species name - skip if empty or placeholder like "None"
-                    species = row.get(species_column, '').strip()
+                    species = (row.get(species_column, '') or '').strip()
                     if not species or not is_valid_species_name(species):
+                        # In BOLD mode with species filter, track this separately
+                        if bold_mode and bold_filters.filter_species:
+                            skipped_species += 1
                         continue
                     
                     # Get cluster IDs for primary analysis (may be pipe-separated)
-                    cluster_field = row.get(cluster_column, '').strip()
+                    cluster_field = (row.get(cluster_column, '') or '').strip()
                     cluster_ids = parse_cluster_ids(cluster_field)
                     
                     # Get bin_uri and otu_id separately for output columns
                     bin_uri_ids = []
                     otu_id_ids = []
                     if has_bin_uri:
-                        bin_uri_ids = parse_cluster_ids(row.get('bin_uri', '').strip())
+                        bin_uri_ids = parse_cluster_ids((row.get('bin_uri', '') or '').strip())
                     if has_otu_id:
-                        otu_id_ids = parse_cluster_ids(row.get(otu_col, '').strip())
+                        otu_id_ids = parse_cluster_ids((row.get(otu_col, '') or '').strip())
                     
                     # Process species name
                     species_lower = normalize_species_name(species)
@@ -385,7 +478,7 @@ def build_indices_from_records(
                     
                     # Also process subspecies if present
                     if has_subspecies:
-                        subspecies = row.get('subspecies', '').strip()
+                        subspecies = (row.get('subspecies', '') or '').strip()
                         if subspecies and is_valid_species_name(subspecies):
                             subspecies_lower = normalize_species_name(subspecies)
                             name_to_count[subspecies_lower] += 1
@@ -413,6 +506,19 @@ def build_indices_from_records(
             logging.info(f"  Unique species names: {len(unique_names):,}")
             logging.info(f"  Unique BIN/OTU IDs: {len(unique_bins):,}")
             
+            # BOLD filter summary
+            if bold_mode:
+                total_skipped = skipped_marker + skipped_kingdom + skipped_species
+                records_kept = total_records - total_skipped
+                logging.info(f"  BOLD filtering summary:")
+                logging.info(f"    Records kept: {records_kept:,} of {total_records:,}")
+                if bold_filters.marker:
+                    logging.info(f"    Skipped (wrong marker): {skipped_marker:,}")
+                if bold_filters.filter_kingdom:
+                    logging.info(f"    Skipped (wrong kingdom): {skipped_kingdom:,}")
+                if bold_filters.filter_species:
+                    logging.info(f"    Skipped (no valid species): {skipped_species:,}")
+            
             return (dict(name_to_count), dict(name_to_bins), dict(bin_to_names), 
                     dict(name_to_bin_uris), dict(name_to_otu_ids), cluster_column)
             
@@ -429,6 +535,9 @@ def build_indices_from_records(
                 records_with_cluster = 0
                 unique_names = set()
                 unique_bins = set()
+                skipped_species = 0
+                skipped_kingdom = 0
+                skipped_marker = 0
                 continue
             raise
     
@@ -786,6 +895,20 @@ Examples:
       --records results/result_output.tsv \\
       --output results/gap_analysis.tsv \\
       --workers 1
+
+  # Raw BOLD data with default filters (Animalia, COI-5P, valid species only)
+  python gap_analysis.py \\
+      --species-list species.tsv \\
+      --records BOLD_Public.tsv \\
+      --output results/gap_analysis.tsv \\
+      --bold
+
+  # BOLD data with custom filters
+  python gap_analysis.py \\
+      --species-list species.tsv \\
+      --records BOLD_Public.tsv \\
+      --output results/gap_analysis.tsv \\
+      --bold --marker matK --kingdom-list Plantae Fungi --no-filter-species
         """
     )
     
@@ -831,6 +954,62 @@ Examples:
         help='Logging level (default: INFO)'
     )
     
+    # BOLD-specific arguments
+    bold_group = parser.add_argument_group(
+        'BOLD mode',
+        'Options for processing raw BOLD TSV data. Use --bold to enable. '
+        'When --bold is set, default filters are applied (Animalia, COI-5P, valid species). '
+        'Override individual filters as needed.'
+    )
+    
+    bold_group.add_argument(
+        '--bold',
+        action='store_true',
+        default=False,
+        help='Enable BOLD mode: use QUOTE_NONE parsing, field sanitisation, and default filters'
+    )
+    
+    bold_group.add_argument(
+        '--filter-species',
+        dest='filter_species',
+        action='store_true',
+        default=None,
+        help='Only include records with valid species names (default: ON in BOLD mode, OFF otherwise)'
+    )
+    bold_group.add_argument(
+        '--no-filter-species',
+        dest='filter_species',
+        action='store_false',
+        help='Disable species name filtering'
+    )
+    
+    bold_group.add_argument(
+        '--filter-kingdom',
+        dest='filter_kingdom',
+        action='store_true',
+        default=None,
+        help='Filter records by kingdom (default: ON in BOLD mode, OFF otherwise)'
+    )
+    bold_group.add_argument(
+        '--no-filter-kingdom',
+        dest='filter_kingdom',
+        action='store_false',
+        help='Disable kingdom filtering'
+    )
+    
+    bold_group.add_argument(
+        '--kingdom-list',
+        nargs='+',
+        default=None,
+        help='Kingdom(s) to include when --filter-kingdom is active (default: Animalia)'
+    )
+    
+    bold_group.add_argument(
+        '--marker',
+        default=None,
+        help='Marker code to filter by, e.g. "COI-5P" (default: COI-5P in BOLD mode, disabled otherwise)'
+    )
+    
     args = parser.parse_args()
     
     # Setup logging
@@ -852,11 +1031,34 @@ Examples:
     # Create output directory
     args.output.parent.mkdir(parents=True, exist_ok=True)
     
+    # Build BOLD filter settings
+    bold_filters = None
+    if args.bold:
+        bold_filters = BoldFilterSettings(
+            enabled=True,
+            filter_species=args.filter_species if args.filter_species is not None else True,
+            filter_kingdom=args.filter_kingdom if args.filter_kingdom is not None else True,
+            kingdom_list=args.kingdom_list if args.kingdom_list is not None else ['Animalia'],
+            marker=args.marker if args.marker is not None else 'COI-5P'
+        )
+    else:
+        # Non-BOLD mode: only apply explicit overrides
+        if any(v is not None for v in [args.filter_species, args.filter_kingdom, args.kingdom_list, args.marker]):
+            bold_filters = BoldFilterSettings(
+                enabled=True,  # Enable parsing safeguards if any filter is set
+                filter_species=args.filter_species if args.filter_species is not None else False,
+                filter_kingdom=args.filter_kingdom if args.filter_kingdom is not None else False,
+                kingdom_list=args.kingdom_list if args.kingdom_list is not None else ['Animalia'],
+                marker=args.marker  # None = disabled
+            )
+    
     # Load species list
     taxa, input_columns = load_species_list(args.species_list)
     
     # Build indices from records file
-    name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids, cluster_col = build_indices_from_records(args.records)
+    name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids, cluster_col = build_indices_from_records(
+        args.records, bold_filters=bold_filters
+    )
     
     # Analyze taxa
     if args.workers == 1:
