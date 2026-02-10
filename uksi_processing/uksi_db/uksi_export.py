@@ -11,7 +11,11 @@ Exports valid species with:
 
 Author: Generated for Ben Price, NHM London
 Date: 2025-01-25
-Version: 2.2
+Version: 2.3
+
+Changes in v2.3:
+- Propagate FreshBase/UKCEH freshwater list flags from aggregates to child species
+  (fixes species lost after taxonomic splits, e.g. Baetis rhodani)
 
 Changes in v2.2:
 - Add FreshBase and UKCEH freshwater list presence columns
@@ -522,6 +526,11 @@ def get_freshwater_presence(conn: sqlite3.Connection) -> tuple:
     Build sets of TVKs that appear in each freshwater species list.
     Uses the resolved tables (which map synonym TVKs to recommended TVKs).
 
+    When a resolved TVK points to a non-species rank (e.g. Species aggregate),
+    the flag is propagated downward to all child species of that taxon.
+    This handles taxonomic splits where old TVKs now resolve to aggregates
+    (e.g. old 'Baetis rhodani' -> 'Baetis rhodani/atlanticus' aggregate).
+
     Returns: (freshbase_tvks, ukceh_freshwater_tvks) as sets of TVK strings
     """
     log("Loading freshwater list data...")
@@ -535,7 +544,72 @@ def get_freshwater_presence(conn: sqlite3.Connection) -> tuple:
     ukceh_tvks = {row[0] for row in cur.fetchall()}
     log(f"  UKCEH freshwater list: {len(ukceh_tvks):,} resolved TVKs")
 
+    # Propagate from non-species ranks (e.g. aggregates) down to child species
+    freshbase_tvks = _propagate_freshwater_to_children(conn, freshbase_tvks, "FreshBase")
+    ukceh_tvks = _propagate_freshwater_to_children(conn, ukceh_tvks, "UKCEH freshwater")
+
     return freshbase_tvks, ukceh_tvks
+
+
+def _propagate_freshwater_to_children(conn: sqlite3.Connection, tvk_set: set, list_name: str) -> set:
+    """
+    For any TVK in the set that is not a species-level rank, find all
+    descendant species and add them to the set.
+
+    This handles the case where a freshwater list entry resolves to a
+    Species aggregate (or other higher grouping) after a taxonomic split,
+    ensuring the child species inherit the freshwater list membership.
+    """
+    cur = conn.cursor()
+
+    # Find which TVKs in the set are non-species (aggregates, etc.)
+    species_ranks_set = set(SPECIES_RANKS)
+    non_species_tvks = []
+    for tvk in tvk_set:
+        cur.execute("SELECT RANK, ORGANISM_KEY, TAXON_NAME FROM taxa WHERE TAXON_VERSION_KEY = ?", (tvk,))
+        row = cur.fetchone()
+        if row and row[0] not in species_ranks_set:
+            non_species_tvks.append((tvk, row[1], row[0], row[2]))
+
+    if not non_species_tvks:
+        return tvk_set
+
+    log(f"  {list_name}: {len(non_species_tvks)} resolved TVKs are non-species ranks, propagating to children...")
+
+    # For each non-species TVK, find all descendant species via PARENT_KEY chain
+    expanded = set(tvk_set)
+    total_propagated = 0
+
+    for parent_tvk, parent_org_key, parent_rank, parent_name in non_species_tvks:
+        # BFS/iterative descent through PARENT_KEY to find all descendant species
+        queue = [parent_org_key]
+        visited = set()
+        while queue:
+            org_key = queue.pop(0)
+            if org_key in visited:
+                continue
+            visited.add(org_key)
+
+            cur.execute("""
+                SELECT TAXON_VERSION_KEY, ORGANISM_KEY, RANK, TAXON_NAME
+                FROM taxa
+                WHERE PARENT_KEY = ?
+                AND (REDUNDANT_FLAG IS NULL OR REDUNDANT_FLAG = '')
+            """, (org_key,))
+
+            for child_tvk, child_org, child_rank, child_name in cur.fetchall():
+                if child_rank in species_ranks_set:
+                    if child_tvk not in expanded:
+                        expanded.add(child_tvk)
+                        total_propagated += 1
+                else:
+                    # Non-species child (e.g. subaggregate) - keep descending
+                    queue.append(child_org)
+
+    if total_propagated:
+        log(f"  {list_name}: propagated to {total_propagated} child species (total now {len(expanded):,})")
+
+    return expanded
 
 
 def export_species(conn: sqlite3.Connection):
