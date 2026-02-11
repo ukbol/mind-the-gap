@@ -827,6 +827,141 @@ def write_results(
         sys.exit(1)
 
 
+def collect_relevant_cluster_ids(
+    results: List[TaxonResult]
+) -> Set[str]:
+    """
+    Collect all BIN/OTU cluster IDs associated with target taxa.
+
+    Gathers every bin_uri and otu_id found for each taxon (from records
+    matching valid names and synonyms). Any record in the records file
+    that carries one of these cluster IDs is part of the analysis.
+
+    Returns:
+        Set of cluster ID strings (bin_uri and otu_id values)
+    """
+    cluster_ids = set()
+
+    for result in results:
+        cluster_ids.update(result.bin_uris)
+        cluster_ids.update(result.otu_ids)
+
+    return cluster_ids
+
+
+def write_filtered_records(
+    records_file: Path,
+    output_file: Path,
+    relevant_cluster_ids: Set[str],
+    bold_filters: Optional[BoldFilterSettings] = None
+) -> None:
+    """
+    Write a filtered copy of the records file containing only records
+    that belong to BIN/OTU clusters associated with target taxa.
+
+    A record is included if any of its bin_uri or otu_id values appear
+    in the set of relevant cluster IDs. This captures target species
+    records as well as other-name records sharing those same clusters,
+    while excluding unrelated records from those other names.
+
+    All original columns are preserved.
+
+    Args:
+        records_file: Path to the input records TSV
+        output_file: Path for the filtered output TSV
+        relevant_cluster_ids: Set of bin_uri/otu_id values to keep
+        bold_filters: Optional BOLD filter settings (same as used for indexing)
+    """
+    logging.info(f"Writing filtered records to {output_file}")
+    start_time = time.time()
+
+    bold_mode = bold_filters is not None and bold_filters.enabled
+    kingdom_set = None
+    if bold_mode and bold_filters.filter_kingdom:
+        kingdom_set = frozenset(k.lower() for k in bold_filters.kingdom_list)
+
+    total_records = 0
+    written_records = 0
+
+    for encoding in ['utf-8', 'latin-1']:
+        try:
+            with open(records_file, 'r', encoding=encoding) as fin, \
+                 open(output_file, 'w', encoding='utf-8', newline='') as fout:
+
+                if bold_mode:
+                    reader = csv.DictReader(fin, delimiter='\t', quoting=csv.QUOTE_NONE)
+                else:
+                    reader = csv.DictReader(fin, delimiter='\t')
+
+                fieldnames = reader.fieldnames or []
+
+                has_marker_col = 'marker_code' in fieldnames
+                has_kingdom_col = 'kingdom' in fieldnames
+
+                # Detect which cluster columns exist
+                has_bin_uri = 'bin_uri' in fieldnames
+                has_otu_id = 'otu_id' in fieldnames or 'OTU_ID' in fieldnames
+                otu_col = 'otu_id' if 'otu_id' in fieldnames else 'OTU_ID' if 'OTU_ID' in fieldnames else None
+
+                writer = csv.DictWriter(fout, fieldnames=fieldnames, delimiter='\t',
+                                        extrasaction='ignore')
+                writer.writeheader()
+
+                for row in reader:
+                    total_records += 1
+
+                    # Apply same BOLD sanitization and filters as index building
+                    if bold_mode:
+                        row = {k: sanitize_field(v) if v else '' for k, v in row.items()}
+
+                    if bold_mode and bold_filters.marker and has_marker_col:
+                        marker_val = (row.get('marker_code', '') or '').strip()
+                        if marker_val != bold_filters.marker:
+                            continue
+
+                    if bold_mode and bold_filters.filter_kingdom and has_kingdom_col:
+                        kingdom_val = (row.get('kingdom', '') or '').strip().lower()
+                        if not kingdom_val or kingdom_val not in kingdom_set:
+                            continue
+
+                    # Check if any of this record's cluster IDs are relevant
+                    match = False
+                    if has_bin_uri:
+                        for cid in parse_cluster_ids((row.get('bin_uri', '') or '').strip()):
+                            if cid in relevant_cluster_ids:
+                                match = True
+                                break
+                    if not match and has_otu_id:
+                        for cid in parse_cluster_ids((row.get(otu_col, '') or '').strip()):
+                            if cid in relevant_cluster_ids:
+                                match = True
+                                break
+
+                    if match:
+                        writer.writerow(row)
+                        written_records += 1
+
+                    if total_records % 500000 == 0:
+                        logging.info(f"  Scanned {total_records:,} records...")
+
+            elapsed = time.time() - start_time
+            logging.info(f"Filtered records complete in {elapsed:.1f} seconds")
+            logging.info(f"  Total records scanned: {total_records:,}")
+            logging.info(f"  Records written: {written_records:,}")
+            return
+
+        except UnicodeDecodeError:
+            if encoding == 'utf-8':
+                logging.warning("UTF-8 decoding failed, trying Latin-1")
+                total_records = 0
+                written_records = 0
+                continue
+            raise
+
+    logging.error("Failed to read records file for filtering")
+    sys.exit(1)
+
+
 def print_summary(results: List[TaxonResult]) -> None:
     """Print summary statistics."""
     logging.info("=" * 60)
@@ -933,6 +1068,14 @@ Examples:
         help='Path to output gap analysis TSV file'
     )
     
+    parser.add_argument(
+        '--filtered-records',
+        type=Path,
+        default=None,
+        help='Path to output filtered records TSV file (all records the analysis is based on). '
+             'If not specified, derived from --output as <stem>_filtered_records.tsv'
+    )
+
     parser.add_argument(
         '--workers',
         type=int,
@@ -1072,7 +1215,16 @@ Examples:
     
     # Write results
     write_results(results, args.output, input_columns)
-    
+
+    # Write filtered records (second pass through records file)
+    filtered_output = args.filtered_records
+    if filtered_output is None:
+        filtered_output = args.output.parent / f"{args.output.stem}_filtered_records.tsv"
+    filtered_output.parent.mkdir(parents=True, exist_ok=True)
+    relevant_cluster_ids = collect_relevant_cluster_ids(results)
+    logging.info(f"Relevant cluster IDs for filtering: {len(relevant_cluster_ids):,}")
+    write_filtered_records(args.records, filtered_output, relevant_cluster_ids, bold_filters=bold_filters)
+
     # Print summary
     print_summary(results)
     
