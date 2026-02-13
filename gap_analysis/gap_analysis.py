@@ -678,10 +678,11 @@ def analyze_taxa_batch(
     name_to_bins: Dict[str, Set[str]],
     bin_to_names: Dict[str, Set[str]],
     name_to_bin_uris: Dict[str, Set[str]],
-    name_to_otu_ids: Dict[str, Set[str]]
+    name_to_otu_ids: Dict[str, Set[str]],
+    name_to_gb_count: Dict[str, int] = None
 ) -> List[TaxonResult]:
     """Analyze a batch of taxa (for parallel processing)."""
-    return [analyze_taxon(t, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids) for t in taxa_batch]
+    return [analyze_taxon(t, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids, name_to_gb_count) for t in taxa_batch]
 
 
 def analyze_all_taxa_parallel(
@@ -691,12 +692,13 @@ def analyze_all_taxa_parallel(
     bin_to_names: Dict[str, Set[str]],
     name_to_bin_uris: Dict[str, Set[str]],
     name_to_otu_ids: Dict[str, Set[str]],
+    name_to_gb_count: Dict[str, int] = None,
     num_workers: int = None,
     batch_size: int = 1000
 ) -> List[TaxonResult]:
     """
     Analyze all taxa using parallel processing.
-    
+
     Args:
         taxa: List of taxa to analyze
         name_to_count: Mapping of species name -> record count
@@ -704,9 +706,10 @@ def analyze_all_taxa_parallel(
         bin_to_names: Mapping of BIN/OTU ID -> set of species names
         name_to_bin_uris: Mapping of species name -> set of bin_uri values
         name_to_otu_ids: Mapping of species name -> set of otu_id values
+        name_to_gb_count: Mapping of species name -> UK record count (optional)
         num_workers: Number of parallel workers (default: CPU count)
         batch_size: Taxa per batch
-    
+
     Returns:
         List of TaxonResult in same order as input taxa
     """
@@ -719,7 +722,7 @@ def analyze_all_taxa_parallel(
     # For small datasets or single worker, don't use multiprocessing
     if len(taxa) < batch_size or num_workers == 1:
         logging.info("Using single-threaded analysis")
-        results = [analyze_taxon(t, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids) for t in taxa]
+        results = [analyze_taxon(t, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids, name_to_gb_count) for t in taxa]
         elapsed = time.time() - start_time
         logging.info(f"Analysis complete in {elapsed:.1f} seconds")
         return results
@@ -739,7 +742,7 @@ def analyze_all_taxa_parallel(
     
     with ProcessPoolExecutor(max_workers=num_workers) as executor:
         futures = {
-            executor.submit(analyze_taxa_batch, batch, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids): i
+            executor.submit(analyze_taxa_batch, batch, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids, name_to_gb_count): i
             for i, batch in enumerate(batches)
         }
         
@@ -768,20 +771,21 @@ def analyze_all_taxa_serial(
     name_to_bins: Dict[str, Set[str]],
     bin_to_names: Dict[str, Set[str]],
     name_to_bin_uris: Dict[str, Set[str]],
-    name_to_otu_ids: Dict[str, Set[str]]
+    name_to_otu_ids: Dict[str, Set[str]],
+    name_to_gb_count: Dict[str, int] = None
 ) -> List[TaxonResult]:
     """
     Analyze all taxa using single-threaded processing.
-    
+
     More memory efficient for smaller datasets or when multiprocessing
     overhead isn't worth it.
     """
     logging.info(f"Analyzing {len(taxa):,} taxa (single-threaded)")
     start_time = time.time()
-    
+
     results = []
     for i, taxon in enumerate(taxa):
-        results.append(analyze_taxon(taxon, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids))
+        results.append(analyze_taxon(taxon, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids, name_to_gb_count))
         
         if (i + 1) % 10000 == 0:
             logging.info(f"  Processed {i + 1:,}/{len(taxa):,} taxa")
