@@ -1227,16 +1227,17 @@ Examples:
     taxa, input_columns = load_species_list(args.species_list)
     
     # Build indices from records file
-    name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids, cluster_col = build_indices_from_records(
+    name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids, name_to_gb_count, cluster_col = build_indices_from_records(
         args.records, bold_filters=bold_filters
     )
-    
+
     # Analyze taxa
     if args.workers == 1:
-        results = analyze_all_taxa_serial(taxa, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids)
+        results = analyze_all_taxa_serial(taxa, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids, name_to_gb_count)
     else:
         results = analyze_all_taxa_parallel(
             taxa, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids,
+            name_to_gb_count,
             num_workers=args.workers,
             batch_size=args.batch_size
         )
