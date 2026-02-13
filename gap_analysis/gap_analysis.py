@@ -573,11 +573,12 @@ def analyze_taxon(
     name_to_bins: Dict[str, Set[str]],
     bin_to_names: Dict[str, Set[str]],
     name_to_bin_uris: Dict[str, Set[str]],
-    name_to_otu_ids: Dict[str, Set[str]]
+    name_to_otu_ids: Dict[str, Set[str]],
+    name_to_gb_count: Dict[str, int] = None
 ) -> TaxonResult:
     """
     Analyze a single taxon and determine its BAGS grade and status.
-    
+
     Args:
         taxon: The taxon to analyze
         name_to_count: Mapping of species name -> record count
@@ -585,7 +586,8 @@ def analyze_taxon(
         bin_to_names: Mapping of BIN/OTU ID -> set of species names
         name_to_bin_uris: Mapping of species name -> set of bin_uri values
         name_to_otu_ids: Mapping of species name -> set of otu_id values
-    
+        name_to_gb_count: Mapping of species name -> UK record count (optional)
+
     Returns:
         TaxonResult with grade, status, and other metrics
     """
@@ -594,12 +596,15 @@ def analyze_taxon(
     valid_name_lower = normalize_species_name(taxon.valid_name)
     
     # Step 1: Count records and find which names are recorded
+    if name_to_gb_count is None:
+        name_to_gb_count = {}
     for name in taxon_names:
         count = name_to_count.get(name, 0)
         if count > 0:
             result.number_records += count
             result.names_recorded.add(name)
-        
+        result.gb_records += name_to_gb_count.get(name, 0)
+
         # Collect bin_uris and otu_ids for this taxon
         result.bin_uris.update(name_to_bin_uris.get(name, set()))
         result.otu_ids.update(name_to_otu_ids.get(name, set()))
