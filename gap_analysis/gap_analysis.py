@@ -322,20 +322,21 @@ def build_indices_from_records(
     records_file: Path,
     bold_filters: Optional[BoldFilterSettings] = None,
     chunk_size: int = 100000
-) -> Tuple[Dict[str, int], Dict[str, Set[str]], Dict[str, Set[str]], Dict[str, Set[str]], Dict[str, Set[str]], str]:
+) -> Tuple[Dict[str, int], Dict[str, Set[str]], Dict[str, Set[str]], Dict[str, Set[str]], Dict[str, Set[str]], Dict[str, int], str]:
     """
     Build indices from records file in a single pass.
-    
+
     When bold_filters is provided and enabled, applies BOLD-specific parsing
     (quoting=QUOTE_NONE, field sanitisation) and row-level filters for
     species validity, kingdom, and marker code.
-    
+
     Returns:
         - name_to_count: species_name (lowercase) -> record count
         - name_to_bins: species_name (lowercase) -> set of BIN/OTU IDs (for analysis)
         - bin_to_names: BIN/OTU ID -> set of species_names (lowercase)
         - name_to_bin_uris: species_name (lowercase) -> set of bin_uri values
         - name_to_otu_ids: species_name (lowercase) -> set of otu_id values
+        - name_to_gb_count: species_name (lowercase) -> UK record count (country_iso = GB)
         - cluster_column: name of column used for primary clustering
     """
     logging.info(f"Building indices from {records_file}")
@@ -346,7 +347,8 @@ def build_indices_from_records(
     bin_to_names: Dict[str, Set[str]] = defaultdict(set)
     name_to_bin_uris: Dict[str, Set[str]] = defaultdict(set)
     name_to_otu_ids: Dict[str, Set[str]] = defaultdict(set)
-    
+    name_to_gb_count: Dict[str, int] = defaultdict(int)
+
     total_records = 0
     records_with_cluster = 0
     unique_names = set()
@@ -412,6 +414,9 @@ def build_indices_from_records(
                 # Detect BOLD-specific columns when in BOLD mode
                 has_marker_col = 'marker_code' in fieldnames
                 has_kingdom_col = 'kingdom' in fieldnames
+                has_country_iso = 'country_iso' in fieldnames
+                if has_country_iso:
+                    logging.info("country_iso column detected - will track UK (GB) specimen counts")
                 if bold_mode:
                     if bold_filters.marker and not has_marker_col:
                         logging.warning("Marker filter requested but 'marker_code' column not found in records file")
@@ -459,9 +464,17 @@ def build_indices_from_records(
                     if has_otu_id:
                         otu_id_ids = parse_cluster_ids((row.get(otu_col, '') or '').strip())
                     
+                    # Check if record is from UK (country_iso = GB)
+                    is_gb = False
+                    if has_country_iso:
+                        country_iso = (row.get('country_iso', '') or '').strip()
+                        is_gb = country_iso == 'GB'
+
                     # Process species name
                     species_lower = normalize_species_name(species)
                     name_to_count[species_lower] += 1
+                    if is_gb:
+                        name_to_gb_count[species_lower] += 1
                     unique_names.add(species_lower)
                     
                     # Track bin_uri and otu_id separately
@@ -483,6 +496,8 @@ def build_indices_from_records(
                         if subspecies and is_valid_species_name(subspecies):
                             subspecies_lower = normalize_species_name(subspecies)
                             name_to_count[subspecies_lower] += 1
+                            if is_gb:
+                                name_to_gb_count[subspecies_lower] += 1
                             unique_names.add(subspecies_lower)
                             
                             # Track bin_uri and otu_id for subspecies too
@@ -520,8 +535,9 @@ def build_indices_from_records(
                 if bold_filters.filter_species:
                     logging.info(f"    Skipped (no valid species): {skipped_species:,}")
             
-            return (dict(name_to_count), dict(name_to_bins), dict(bin_to_names), 
-                    dict(name_to_bin_uris), dict(name_to_otu_ids), cluster_column)
+            return (dict(name_to_count), dict(name_to_bins), dict(bin_to_names),
+                    dict(name_to_bin_uris), dict(name_to_otu_ids), dict(name_to_gb_count),
+                    cluster_column)
             
         except UnicodeDecodeError:
             if encoding == 'utf-8':
@@ -532,6 +548,7 @@ def build_indices_from_records(
                 bin_to_names = defaultdict(set)
                 name_to_bin_uris = defaultdict(set)
                 name_to_otu_ids = defaultdict(set)
+                name_to_gb_count = defaultdict(int)
                 total_records = 0
                 records_with_cluster = 0
                 unique_names = set()
