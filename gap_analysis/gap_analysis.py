@@ -823,7 +823,7 @@ def write_results(
     logging.info(f"Writing results to {output_file}")
     
     # Define output columns: input columns first, then analysis columns
-    analysis_columns = ['number_records', 'bags_grade', 'species_status', 'bin_uris', 'otu_ids', 'other_names']
+    analysis_columns = ['number_records', 'gb_records', 'bags_grade', 'species_status', 'bin_uris', 'otu_ids', 'other_names']
     
     # Build fieldnames - input columns (excluding duplicates with analysis) + analysis
     output_columns = list(input_columns)
@@ -839,6 +839,7 @@ def write_results(
             for result in results:
                 row = dict(result.taxon.input_data)
                 row['number_records'] = result.number_records
+                row['gb_records'] = result.gb_records
                 row['bags_grade'] = result.bags_grade
                 row['species_status'] = result.species_status
                 row['bin_uris'] = ';'.join(sorted(result.bin_uris))
