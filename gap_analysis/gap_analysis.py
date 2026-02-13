@@ -68,6 +68,7 @@ class TaxonResult:
     other_names: List[str] = field(default_factory=list)
     bins_found: Set[str] = field(default_factory=set)
     names_recorded: Set[str] = field(default_factory=set)  # Which of taxon's names have records
+    gb_records: int = 0  # Records from the UK (country_iso = GB)
     bin_uris: Set[str] = field(default_factory=set)  # Distinct bin_uri values
     otu_ids: Set[str] = field(default_factory=set)  # Distinct otu_id values
 
