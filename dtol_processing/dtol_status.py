@@ -275,7 +275,7 @@ def build_dtol_index(records: List[DtolRecord]) -> Dict[str, List[DtolRecord]]:
 def analyze_taxa(
     taxa: List[Taxon],
     dtol_index: Dict[str, List[DtolRecord]],
-) -> List[TaxonResult]:
+) -> Tuple[List[TaxonResult], List[DtolRecord]]:
     """
     For each UKSI taxon, find the best-matching DToL record(s).
 
@@ -284,9 +284,19 @@ def analyze_taxa(
     2. Check each synonym against DToL organism names
     3. If multiple DToL records match (via different names), keep the one
        at the furthest pipeline stage.
+
+    Returns:
+        Tuple of (list of TaxonResult, list of unmatched DtolRecords)
     """
     results: List[TaxonResult] = []
     matched_count = 0
+
+    # Build set of all UKSI names (valid + synonyms) for unmatched detection
+    all_uksi_names: Set[str] = set()
+    for taxon in taxa:
+        all_uksi_names.add(normalize_name(taxon.valid_name))
+        for syn in taxon.synonyms:
+            all_uksi_names.add(normalize_name(syn))
 
     for taxon in taxa:
         result = TaxonResult(taxon=taxon)
@@ -333,19 +343,16 @@ def analyze_taxa(
 
     logging.info(f"Matched {matched_count:,} / {len(taxa):,} UKSI taxa to DToL records")
 
-    # Report unmatched DToL organisms
-    matched_dtol_names = set()
-    for taxon in taxa:
-        for name in [taxon.valid_name] + taxon.synonyms:
-            matched_dtol_names.add(normalize_name(name))
-    unmatched_dtol = [
-        name for name in dtol_index if name not in matched_dtol_names
-    ]
-    if unmatched_dtol:
-        logging.info(f"{len(unmatched_dtol):,} DToL organisms did not match any UKSI taxon")
-        logging.debug(f"Unmatched DToL organisms (first 20): {unmatched_dtol[:20]}")
+    # Collect unmatched DToL records
+    unmatched: List[DtolRecord] = []
+    for norm_name, recs in dtol_index.items():
+        if norm_name not in all_uksi_names:
+            unmatched.extend(recs)
 
-    return results
+    if unmatched:
+        logging.info(f"{len(unmatched):,} DToL organisms did not match any UKSI taxon")
+
+    return results, unmatched
 
 
 # =============================================================================
@@ -397,6 +404,40 @@ def write_results(
 
     except Exception as e:
         logging.error(f"Failed to write output: {e}")
+        sys.exit(1)
+
+
+def write_unmatched(
+    unmatched: List[DtolRecord],
+    output_file: Path,
+) -> None:
+    """Write unmatched DToL organisms to a TSV for manual follow-up."""
+    if not unmatched:
+        logging.info("No unmatched DToL organisms to write")
+        return
+
+    logging.info(f"Writing {len(unmatched):,} unmatched DToL organisms to {output_file}")
+
+    columns = ['organism', 'common_name', 'current_status', 'insdc_id', 'tol_ids']
+
+    try:
+        with open(output_file, 'w', encoding='utf-8', newline='') as f:
+            writer = csv.DictWriter(f, fieldnames=columns, delimiter='\t')
+            writer.writeheader()
+
+            for rec in sorted(unmatched, key=lambda r: r.organism):
+                writer.writerow({
+                    'organism': rec.organism,
+                    'common_name': rec.common_name,
+                    'current_status': rec.current_status,
+                    'insdc_id': rec.insdc_id,
+                    'tol_ids': ';'.join(rec.tol_ids),
+                })
+
+        logging.info(f"Successfully wrote {len(unmatched):,} unmatched records")
+
+    except Exception as e:
+        logging.error(f"Failed to write unmatched file: {e}")
         sys.exit(1)
 
 
@@ -492,10 +533,15 @@ Status colour mapping:
 
     # Build index and analyze
     dtol_index = build_dtol_index(dtol_records)
-    results = analyze_taxa(taxa, dtol_index)
+    results, unmatched = analyze_taxa(taxa, dtol_index)
 
     # Output
     write_results(results, args.output, input_columns)
+
+    # Write unmatched DToL organisms alongside the main output
+    unmatched_file = args.output.parent / (args.output.stem + '_unmatched.tsv')
+    write_unmatched(unmatched, unmatched_file)
+
     print_summary(results)
 
     logging.info("Done.")
