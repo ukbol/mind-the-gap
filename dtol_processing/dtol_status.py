@@ -51,8 +51,8 @@ DTOL_STAGE_ORDER = [
 # giving visual consistency with the barcode gap analysis panels.
 DTOL_STATUS_COLOURS = {
     'Annotation Complete':    'GREEN',
-    'Assemblies - Submitted': 'AMBER',
-    'Raw Data - Submitted':   'BLUE',
+    'Assemblies - Submitted': 'BLUE',
+    'Raw Data - Submitted':   'AMBER',
     'Submitted to BioSamples':'RED',
 }
 
