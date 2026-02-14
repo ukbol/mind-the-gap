@@ -91,7 +91,7 @@ class TaxonResult:
     """DToL analysis results for a single UKSI taxon."""
     taxon: Taxon
     dtol_status: str = 'Not in DToL'
-    dtol_status_colour: str = 'BLACK'
+    species_status: str = 'BLACK'
     dtol_organism_name: str = ''
     dtol_common_name: str = ''
     dtol_insdc_ids: List[str] = field(default_factory=list)
@@ -320,7 +320,7 @@ def analyze_taxa(
             best_name, best_rec = matches[0]
 
             result.dtol_status = best_rec.current_status
-            result.dtol_status_colour = DTOL_STATUS_COLOURS.get(
+            result.species_status = DTOL_STATUS_COLOURS.get(
                 best_rec.current_status, 'BLACK'
             )
             result.dtol_organism_name = best_rec.organism
@@ -369,12 +369,8 @@ def write_results(
 
     dtol_columns = [
         'dtol_status',
-        'dtol_status_colour',
-        'dtol_organism_name',
-        'dtol_common_name',
+        'species_status',
         'dtol_insdc_ids',
-        'dtol_tol_ids',
-        'dtol_matched_name',
     ]
 
     output_columns = list(input_columns) + dtol_columns
@@ -392,12 +388,8 @@ def write_results(
             for result in results:
                 row = dict(result.taxon.input_data)
                 row['dtol_status'] = result.dtol_status
-                row['dtol_status_colour'] = result.dtol_status_colour
-                row['dtol_organism_name'] = result.dtol_organism_name
-                row['dtol_common_name'] = result.dtol_common_name
+                row['species_status'] = result.species_status
                 row['dtol_insdc_ids'] = ';'.join(result.dtol_insdc_ids)
-                row['dtol_tol_ids'] = ';'.join(result.dtol_tol_ids)
-                row['dtol_matched_name'] = result.dtol_matched_name
                 writer.writerow(row)
 
         logging.info(f"Successfully wrote {len(results):,} results")
@@ -450,7 +442,7 @@ def print_summary(results: List[TaxonResult]) -> None:
     from collections import Counter
 
     total = len(results)
-    colour_counts = Counter(r.dtol_status_colour for r in results)
+    colour_counts = Counter(r.species_status for r in results)
     status_counts = Counter(r.dtol_status for r in results)
 
     logging.info("=" * 60)
