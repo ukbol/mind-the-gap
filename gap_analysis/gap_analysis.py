@@ -68,6 +68,7 @@ class TaxonResult:
     other_names: List[str] = field(default_factory=list)
     bins_found: Set[str] = field(default_factory=set)
     names_recorded: Set[str] = field(default_factory=set)  # Which of taxon's names have records
+    gb_records: int = 0  # Records from the UK (country_iso = GB)
     bin_uris: Set[str] = field(default_factory=set)  # Distinct bin_uri values
     otu_ids: Set[str] = field(default_factory=set)  # Distinct otu_id values
 
@@ -321,20 +322,21 @@ def build_indices_from_records(
     records_file: Path,
     bold_filters: Optional[BoldFilterSettings] = None,
     chunk_size: int = 100000
-) -> Tuple[Dict[str, int], Dict[str, Set[str]], Dict[str, Set[str]], Dict[str, Set[str]], Dict[str, Set[str]], str]:
+) -> Tuple[Dict[str, int], Dict[str, Set[str]], Dict[str, Set[str]], Dict[str, Set[str]], Dict[str, Set[str]], Dict[str, int], str]:
     """
     Build indices from records file in a single pass.
-    
+
     When bold_filters is provided and enabled, applies BOLD-specific parsing
     (quoting=QUOTE_NONE, field sanitisation) and row-level filters for
     species validity, kingdom, and marker code.
-    
+
     Returns:
         - name_to_count: species_name (lowercase) -> record count
         - name_to_bins: species_name (lowercase) -> set of BIN/OTU IDs (for analysis)
         - bin_to_names: BIN/OTU ID -> set of species_names (lowercase)
         - name_to_bin_uris: species_name (lowercase) -> set of bin_uri values
         - name_to_otu_ids: species_name (lowercase) -> set of otu_id values
+        - name_to_gb_count: species_name (lowercase) -> UK record count (country_iso = GB)
         - cluster_column: name of column used for primary clustering
     """
     logging.info(f"Building indices from {records_file}")
@@ -345,7 +347,8 @@ def build_indices_from_records(
     bin_to_names: Dict[str, Set[str]] = defaultdict(set)
     name_to_bin_uris: Dict[str, Set[str]] = defaultdict(set)
     name_to_otu_ids: Dict[str, Set[str]] = defaultdict(set)
-    
+    name_to_gb_count: Dict[str, int] = defaultdict(int)
+
     total_records = 0
     records_with_cluster = 0
     unique_names = set()
@@ -411,6 +414,9 @@ def build_indices_from_records(
                 # Detect BOLD-specific columns when in BOLD mode
                 has_marker_col = 'marker_code' in fieldnames
                 has_kingdom_col = 'kingdom' in fieldnames
+                has_country_iso = 'country_iso' in fieldnames
+                if has_country_iso:
+                    logging.info("country_iso column detected - will track UK (GB) specimen counts")
                 if bold_mode:
                     if bold_filters.marker and not has_marker_col:
                         logging.warning("Marker filter requested but 'marker_code' column not found in records file")
@@ -458,9 +464,17 @@ def build_indices_from_records(
                     if has_otu_id:
                         otu_id_ids = parse_cluster_ids((row.get(otu_col, '') or '').strip())
                     
+                    # Check if record is from UK (country_iso = GB)
+                    is_gb = False
+                    if has_country_iso:
+                        country_iso = (row.get('country_iso', '') or '').strip()
+                        is_gb = country_iso == 'GB'
+
                     # Process species name
                     species_lower = normalize_species_name(species)
                     name_to_count[species_lower] += 1
+                    if is_gb:
+                        name_to_gb_count[species_lower] += 1
                     unique_names.add(species_lower)
                     
                     # Track bin_uri and otu_id separately
@@ -482,6 +496,8 @@ def build_indices_from_records(
                         if subspecies and is_valid_species_name(subspecies):
                             subspecies_lower = normalize_species_name(subspecies)
                             name_to_count[subspecies_lower] += 1
+                            if is_gb:
+                                name_to_gb_count[subspecies_lower] += 1
                             unique_names.add(subspecies_lower)
                             
                             # Track bin_uri and otu_id for subspecies too
@@ -519,8 +535,9 @@ def build_indices_from_records(
                 if bold_filters.filter_species:
                     logging.info(f"    Skipped (no valid species): {skipped_species:,}")
             
-            return (dict(name_to_count), dict(name_to_bins), dict(bin_to_names), 
-                    dict(name_to_bin_uris), dict(name_to_otu_ids), cluster_column)
+            return (dict(name_to_count), dict(name_to_bins), dict(bin_to_names),
+                    dict(name_to_bin_uris), dict(name_to_otu_ids), dict(name_to_gb_count),
+                    cluster_column)
             
         except UnicodeDecodeError:
             if encoding == 'utf-8':
@@ -531,6 +548,7 @@ def build_indices_from_records(
                 bin_to_names = defaultdict(set)
                 name_to_bin_uris = defaultdict(set)
                 name_to_otu_ids = defaultdict(set)
+                name_to_gb_count = defaultdict(int)
                 total_records = 0
                 records_with_cluster = 0
                 unique_names = set()
@@ -555,11 +573,12 @@ def analyze_taxon(
     name_to_bins: Dict[str, Set[str]],
     bin_to_names: Dict[str, Set[str]],
     name_to_bin_uris: Dict[str, Set[str]],
-    name_to_otu_ids: Dict[str, Set[str]]
+    name_to_otu_ids: Dict[str, Set[str]],
+    name_to_gb_count: Dict[str, int] = None
 ) -> TaxonResult:
     """
     Analyze a single taxon and determine its BAGS grade and status.
-    
+
     Args:
         taxon: The taxon to analyze
         name_to_count: Mapping of species name -> record count
@@ -567,7 +586,8 @@ def analyze_taxon(
         bin_to_names: Mapping of BIN/OTU ID -> set of species names
         name_to_bin_uris: Mapping of species name -> set of bin_uri values
         name_to_otu_ids: Mapping of species name -> set of otu_id values
-    
+        name_to_gb_count: Mapping of species name -> UK record count (optional)
+
     Returns:
         TaxonResult with grade, status, and other metrics
     """
@@ -576,12 +596,15 @@ def analyze_taxon(
     valid_name_lower = normalize_species_name(taxon.valid_name)
     
     # Step 1: Count records and find which names are recorded
+    if name_to_gb_count is None:
+        name_to_gb_count = {}
     for name in taxon_names:
         count = name_to_count.get(name, 0)
         if count > 0:
             result.number_records += count
             result.names_recorded.add(name)
-        
+        result.gb_records += name_to_gb_count.get(name, 0)
+
         # Collect bin_uris and otu_ids for this taxon
         result.bin_uris.update(name_to_bin_uris.get(name, set()))
         result.otu_ids.update(name_to_otu_ids.get(name, set()))
@@ -655,10 +678,11 @@ def analyze_taxa_batch(
     name_to_bins: Dict[str, Set[str]],
     bin_to_names: Dict[str, Set[str]],
     name_to_bin_uris: Dict[str, Set[str]],
-    name_to_otu_ids: Dict[str, Set[str]]
+    name_to_otu_ids: Dict[str, Set[str]],
+    name_to_gb_count: Dict[str, int] = None
 ) -> List[TaxonResult]:
     """Analyze a batch of taxa (for parallel processing)."""
-    return [analyze_taxon(t, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids) for t in taxa_batch]
+    return [analyze_taxon(t, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids, name_to_gb_count) for t in taxa_batch]
 
 
 def analyze_all_taxa_parallel(
@@ -668,12 +692,13 @@ def analyze_all_taxa_parallel(
     bin_to_names: Dict[str, Set[str]],
     name_to_bin_uris: Dict[str, Set[str]],
     name_to_otu_ids: Dict[str, Set[str]],
+    name_to_gb_count: Dict[str, int] = None,
     num_workers: int = None,
     batch_size: int = 1000
 ) -> List[TaxonResult]:
     """
     Analyze all taxa using parallel processing.
-    
+
     Args:
         taxa: List of taxa to analyze
         name_to_count: Mapping of species name -> record count
@@ -681,9 +706,10 @@ def analyze_all_taxa_parallel(
         bin_to_names: Mapping of BIN/OTU ID -> set of species names
         name_to_bin_uris: Mapping of species name -> set of bin_uri values
         name_to_otu_ids: Mapping of species name -> set of otu_id values
+        name_to_gb_count: Mapping of species name -> UK record count (optional)
         num_workers: Number of parallel workers (default: CPU count)
         batch_size: Taxa per batch
-    
+
     Returns:
         List of TaxonResult in same order as input taxa
     """
@@ -696,7 +722,7 @@ def analyze_all_taxa_parallel(
     # For small datasets or single worker, don't use multiprocessing
     if len(taxa) < batch_size or num_workers == 1:
         logging.info("Using single-threaded analysis")
-        results = [analyze_taxon(t, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids) for t in taxa]
+        results = [analyze_taxon(t, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids, name_to_gb_count) for t in taxa]
         elapsed = time.time() - start_time
         logging.info(f"Analysis complete in {elapsed:.1f} seconds")
         return results
@@ -716,7 +742,7 @@ def analyze_all_taxa_parallel(
     
     with ProcessPoolExecutor(max_workers=num_workers) as executor:
         futures = {
-            executor.submit(analyze_taxa_batch, batch, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids): i
+            executor.submit(analyze_taxa_batch, batch, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids, name_to_gb_count): i
             for i, batch in enumerate(batches)
         }
         
@@ -745,20 +771,21 @@ def analyze_all_taxa_serial(
     name_to_bins: Dict[str, Set[str]],
     bin_to_names: Dict[str, Set[str]],
     name_to_bin_uris: Dict[str, Set[str]],
-    name_to_otu_ids: Dict[str, Set[str]]
+    name_to_otu_ids: Dict[str, Set[str]],
+    name_to_gb_count: Dict[str, int] = None
 ) -> List[TaxonResult]:
     """
     Analyze all taxa using single-threaded processing.
-    
+
     More memory efficient for smaller datasets or when multiprocessing
     overhead isn't worth it.
     """
     logging.info(f"Analyzing {len(taxa):,} taxa (single-threaded)")
     start_time = time.time()
-    
+
     results = []
     for i, taxon in enumerate(taxa):
-        results.append(analyze_taxon(taxon, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids))
+        results.append(analyze_taxon(taxon, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids, name_to_gb_count))
         
         if (i + 1) % 10000 == 0:
             logging.info(f"  Processed {i + 1:,}/{len(taxa):,} taxa")
@@ -796,7 +823,7 @@ def write_results(
     logging.info(f"Writing results to {output_file}")
     
     # Define output columns: input columns first, then analysis columns
-    analysis_columns = ['number_records', 'bags_grade', 'species_status', 'bin_uris', 'otu_ids', 'other_names']
+    analysis_columns = ['number_records', 'gb_records', 'bags_grade', 'species_status', 'bin_uris', 'otu_ids', 'other_names']
     
     # Build fieldnames - input columns (excluding duplicates with analysis) + analysis
     output_columns = list(input_columns)
@@ -812,6 +839,7 @@ def write_results(
             for result in results:
                 row = dict(result.taxon.input_data)
                 row['number_records'] = result.number_records
+                row['gb_records'] = result.gb_records
                 row['bags_grade'] = result.bags_grade
                 row['species_status'] = result.species_status
                 row['bin_uris'] = ';'.join(sorted(result.bin_uris))
@@ -1199,16 +1227,17 @@ Examples:
     taxa, input_columns = load_species_list(args.species_list)
     
     # Build indices from records file
-    name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids, cluster_col = build_indices_from_records(
+    name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids, name_to_gb_count, cluster_col = build_indices_from_records(
         args.records, bold_filters=bold_filters
     )
-    
+
     # Analyze taxa
     if args.workers == 1:
-        results = analyze_all_taxa_serial(taxa, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids)
+        results = analyze_all_taxa_serial(taxa, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids, name_to_gb_count)
     else:
         results = analyze_all_taxa_parallel(
             taxa, name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids,
+            name_to_gb_count,
             num_workers=args.workers,
             batch_size=args.batch_size
         )
