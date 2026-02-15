@@ -249,6 +249,40 @@ For 5M records with 500K unique names and 100K BINs:
 - The script automatically tries UTF-8 then Latin-1
 - If issues persist, convert files to UTF-8
 
+## SLURM Job Script (sh-run_gap_analysis.sh)
+
+A ready-made SLURM batch submission script is provided for running the gap analysis on HPC clusters.
+
+### SLURM Configuration
+
+```bash
+#SBATCH --partition=day
+#SBATCH --mem=50G
+#SBATCH --cpus-per-task=32
+#SBATCH --mail-user=email@email.com
+#SBATCH --mail-type=ALL
+```
+
+### Usage
+
+Edit the path variables in the script to match your environment, then submit:
+
+```bash
+sbatch sh-run_gap_analysis.sh
+```
+
+### Variables to Configure
+
+| Variable | Description |
+|----------|-------------|
+| `SCRIPT_DIR` | Directory containing `gap_analysis.py` |
+| `SPECIES_LIST` | Path to your species list TSV |
+| `RECORDS_FILE` | Path to your records TSV |
+| `OUTPUT_FILE` | Desired output path |
+| `WORKERS` | Number of parallel workers (should match `--cpus-per-task`) |
+
+Adjust `--mem` and `--cpus-per-task` based on dataset size. See the Performance section above for guidance.
+
 ## Integration with Pipeline
 
 This script is designed to work with BOLD data processing pipelines:
