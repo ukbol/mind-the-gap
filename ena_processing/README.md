@@ -20,7 +20,7 @@ This script:
 
 ### Step 1: Fetch mitogenomes from ENA
 
-Download complete mitochondrial genome records from ENA using their search API. Note the limit of 200,000 records:
+Download complete mitochondrial genome records from ENA using their search API. Note the example has a limit of 200,000 records:
 
 ```bash
 curl "https://www.ebi.ac.uk/ena/portal/api/search?result=sequence&query=organelle%3D%22mitochondrion%22%20AND%20description%3D%22complete%20genome%22&fields=scientific_name,tax_id,accession&limit=200000&format=tsv" > mito_species_ena.tsv
