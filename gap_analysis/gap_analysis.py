@@ -68,7 +68,7 @@ class TaxonResult:
     other_names: List[str] = field(default_factory=list)
     bins_found: Set[str] = field(default_factory=set)
     names_recorded: Set[str] = field(default_factory=set)  # Which of taxon's names have records
-    gb_records: int = 0  # Records from the UK (country_iso = GB)
+    gb_records: int = 0  # Records from the UK (country_iso=GB, or Country column fallback)
     bin_uris: Set[str] = field(default_factory=set)  # Distinct bin_uri values
     otu_ids: Set[str] = field(default_factory=set)  # Distinct otu_id values
 
@@ -336,7 +336,7 @@ def build_indices_from_records(
         - bin_to_names: BIN/OTU ID -> set of species_names (lowercase)
         - name_to_bin_uris: species_name (lowercase) -> set of bin_uri values
         - name_to_otu_ids: species_name (lowercase) -> set of otu_id values
-        - name_to_gb_count: species_name (lowercase) -> UK record count (country_iso = GB)
+        - name_to_gb_count: species_name (lowercase) -> UK record count (country_iso=GB, or Country column fallback)
         - cluster_column: name of column used for primary clustering
     """
     logging.info(f"Building indices from {records_file}")
@@ -415,8 +415,20 @@ def build_indices_from_records(
                 has_marker_col = 'marker_code' in fieldnames
                 has_kingdom_col = 'kingdom' in fieldnames
                 has_country_iso = 'country_iso' in fieldnames
-                if has_country_iso:
+                # Detect Country column as fallback for UK detection
+                country_col_name = None
+                for col in fieldnames:
+                    if col.lower() == 'country':
+                        country_col_name = col
+                        break
+                has_country_col = country_col_name is not None
+                UK_COUNTRY_NAMES = {'united kingdom', 'united-kingdom', 'uk'}
+                if has_country_iso and has_country_col:
+                    logging.info("country_iso column detected - will track UK (GB) specimen counts (Country column available as fallback)")
+                elif has_country_iso:
                     logging.info("country_iso column detected - will track UK (GB) specimen counts")
+                elif has_country_col:
+                    logging.info("Country column detected (no country_iso) - will track UK specimen counts using country name matching")
                 if bold_mode:
                     if bold_filters.marker and not has_marker_col:
                         logging.warning("Marker filter requested but 'marker_code' column not found in records file")
@@ -464,11 +476,19 @@ def build_indices_from_records(
                     if has_otu_id:
                         otu_id_ids = parse_cluster_ids((row.get(otu_col, '') or '').strip())
                     
-                    # Check if record is from UK (country_iso = GB)
+                    # Check if record is from UK: use country_iso if available,
+                    # fall back to Country column for rows where country_iso is missing/empty
                     is_gb = False
                     if has_country_iso:
                         country_iso = (row.get('country_iso', '') or '').strip()
-                        is_gb = country_iso == 'GB'
+                        if country_iso:
+                            is_gb = country_iso == 'GB'
+                        elif has_country_col:
+                            country_val = (row.get(country_col_name, '') or '').strip().lower()
+                            is_gb = country_val in UK_COUNTRY_NAMES
+                    elif has_country_col:
+                        country_val = (row.get(country_col_name, '') or '').strip().lower()
+                        is_gb = country_val in UK_COUNTRY_NAMES
 
                     # Process species name
                     species_lower = normalize_species_name(species)
