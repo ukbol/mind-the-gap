@@ -6,7 +6,7 @@ This script performs taxon-centric gap analysis by:
 1. Loading a species list (taxa with valid names and synonyms)
 2. Scanning a records file to find all records matching each taxon's names
 3. Analyzing BIN/OTU sharing to detect taxonomic conflicts
-4. Assigning BAGS grades (A-F) and traffic light status (GREEN/AMBER/RED/BLUE/BLACK)
+4. Assigning BAGS grades (A-F) and traffic light status (GREEN/AMBER/BLUE/ORANGE/RED/BLACK)
 
 Optimized for HPC environments with parallel processing support.
 
@@ -17,6 +17,7 @@ Date: 2025-01-25
 import argparse
 import csv
 import logging
+import re
 import sys
 from pathlib import Path
 from typing import Dict, List, Set, Tuple, Optional
@@ -156,6 +157,40 @@ def is_valid_species_name(species_name: str) -> bool:
     as they don't represent real taxonomic identifications.
     """
     return species_name.lower() not in EMPTY_SPECIES_VALUES
+
+
+# Placeholder markers that indicate a name is not a formal Linnaean binomial
+_PLACEHOLDER_MARKERS = frozenset({
+    'cf.', 'cf', 'aff.', 'aff', 'nr.', 'nr',
+    'sp.', 'sp', 'spp.', 'spp',
+})
+
+_HAS_DIGIT = re.compile(r'\d')
+
+
+def is_linnaean_name(species_name: str) -> bool:
+    """
+    Check if a species name is a proper Linnaean binomial (Genus species).
+
+    Returns False for placeholder/provisional names containing:
+    - cf., aff., nr. (confer, affinis, near - uncertain identifications)
+    - sp., sp, spp., spp (not identified to species)
+    - Strings with numbers (e.g. "Genus sp. BOLD:ABC1234", "Genus BIN123")
+    - Names with fewer than 2 parts (genus-only)
+    """
+    name = species_name.strip().lower()
+    parts = name.split()
+
+    if len(parts) < 2:
+        return False
+
+    if any(part in _PLACEHOLDER_MARKERS for part in parts[1:]):
+        return False
+
+    if _HAS_DIGIT.search(name):
+        return False
+
+    return True
 
 
 def parse_cluster_ids(field_value: str) -> List[str]:
@@ -652,9 +687,16 @@ def analyze_taxon(
     
     # Step 4: Determine Status
     if other_names:
-        # Taxonomic conflict - external names share BIN/OTU
-        result.species_status = 'RED'
-        result.bags_grade = 'E'
+        # Check if any sharing names are proper Linnaean binomials
+        linnaean_sharers = [n for n in other_names if is_linnaean_name(n)]
+        if linnaean_sharers:
+            # Sharing with formally described species - true conflict
+            result.species_status = 'RED'
+            result.bags_grade = 'E'
+        else:
+            # Only sharing with placeholder/provisional names
+            result.species_status = 'ORANGE'
+            result.bags_grade = 'E'
         return result
     
     # No external names - check nomenclatural status
@@ -1033,10 +1075,10 @@ def print_summary(results: List[TaxonResult]) -> None:
         status_counts[r.species_status] += 1
     
     logging.info("Status Distribution:")
-    for status in ['GREEN', 'AMBER', 'BLUE', 'RED', 'BLACK']:
+    for status in ['GREEN', 'AMBER', 'BLUE', 'ORANGE', 'RED', 'BLACK']:
         count = status_counts.get(status, 0)
         pct = 100 * count / len(results) if results else 0
-        emoji = {'GREEN': '🟢', 'AMBER': '🟡', 'BLUE': '🔵', 'RED': '🔴', 'BLACK': '⚫'}.get(status, '')
+        emoji = {'GREEN': '🟢', 'AMBER': '🟡', 'BLUE': '🔵', 'ORANGE': '🟠', 'RED': '🔴', 'BLACK': '⚫'}.get(status, '')
         logging.info(f"  {status} {emoji}: {count:,} ({pct:.1f}%)")
     
     # Record coverage
