@@ -14,7 +14,7 @@ Requirements:
     pip install pandas matplotlib numpy
 
 Expects a CSV with at minimum these columns:
-    - species_status:  GREEN | AMBER | BLUE | RED | BLACK
+    - species_status:  GREEN | AMBER | BLUE | ORANGE | RED | BLACK
     - bags_grade:      A | B | C | D | E | F
     - phylum_division: Taxonomic phylum
     - class:           Taxonomic class
@@ -39,20 +39,22 @@ import matplotlib.ticker as mticker
 # CONFIGURATION — edit these if your column names or categories differ
 # ═══════════════════════════════════════════════════════════════════════════════
 
-STATUS_ORDER = ["GREEN", "AMBER", "BLUE", "RED", "BLACK"]
+STATUS_ORDER = ["GREEN", "AMBER", "BLUE", "ORANGE", "RED", "BLACK"]
 STATUS_COLORS = {
-    "GREEN": "#2E7D32",
-    "AMBER": "#F57F17",
-    "BLUE":  "#1565C0",
-    "RED":   "#C62828",
-    "BLACK": "#333333",
+    "GREEN":  "#2E7D32",
+    "AMBER":  "#F57F17",
+    "BLUE":   "#1565C0",
+    "ORANGE": "#E65100",
+    "RED":    "#C62828",
+    "BLACK":  "#333333",
 }
 STATUS_LABELS = {
-    "GREEN": "Green – Only valid name has records",
-    "AMBER": "Amber – Valid name & synonym(s) have records",
-    "BLUE":  "Blue – Only synonym(s), valid name absent",
-    "RED":   "Red – Taxonomic conflict (external names share BIN)",
-    "BLACK": "Black – No records found",
+    "GREEN":  "Green – Only valid name has records",
+    "AMBER":  "Amber – Valid name & synonym(s) have records",
+    "BLUE":   "Blue – Only synonym(s), valid name absent",
+    "ORANGE": "Orange – BIN shared only with non-Linnaean names (interim ID conflict)",
+    "RED":    "Red – Taxonomic conflict (Linnaean name shares BIN)",
+    "BLACK":  "Black – No records found",
 }
 
 BAGS_ORDER = ["A", "B", "C", "D", "E", "F"]
@@ -197,7 +199,7 @@ def fig_summary(df):
             ax.annotate(
                 f"{count}\n({pct:.1f}%)",
                 xy=(0.75 * x, 0.75 * y), fontsize=7, ha="center", va="center",
-                fontweight="bold", color="white" if s != "AMBER" else "#333",
+                fontweight="bold", color="#333" if s in ("AMBER", "ORANGE") else "white",
             )
 
     centre = plt.Circle((0, 0), 0.45, fc="white", ec="none", zorder=5)
@@ -240,8 +242,8 @@ def fig_summary(df):
     handles = [plt.Rectangle((0, 0), 1, 1, facecolor=STATUS_COLORS[s], edgecolor="none")
                for s in STATUS_ORDER]
     fig.legend(handles, [STATUS_LABELS[s] for s in STATUS_ORDER],
-               loc="lower center", ncol=3, fontsize=7, frameon=False,
-               bbox_to_anchor=(0.35, -0.06),
+               loc="lower center", ncol=2, fontsize=7, frameon=False,
+               bbox_to_anchor=(0.35, -0.12),
                handlelength=1.2, handletextpad=0.5, columnspacing=1.5)
 
     return fig
