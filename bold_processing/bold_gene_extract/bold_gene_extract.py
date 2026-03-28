@@ -3,7 +3,7 @@
 BOLD Gene Extractor
 
 Filters BOLD TSV data files to extract rows matching specified marker genes.
-Supports case-insensitive matching and multiple gene names.
+Supports case-insensitive matching, multiple gene names, and substring matching.
 
 Author: Ben Price / Claude
 Date: 2025-01-22
@@ -79,7 +79,8 @@ def process_file(
     output_file: TextIO,
     target_genes: Set[str],
     delimiter: str = '\t',
-    verbose: bool = False
+    verbose: bool = False,
+    substring: bool = False
 ) -> tuple:
     """
     Process a BOLD TSV file and extract rows matching target genes.
@@ -90,6 +91,7 @@ def process_file(
         target_genes: Set of normalized target gene names
         delimiter: Field delimiter
         verbose: Print progress information
+        substring: If True, match genes as substrings rather than exact matches
         
     Returns:
         Tuple of (processed_count, matched_count, skipped_count)
@@ -130,7 +132,12 @@ def process_file(
         # Get marker code and check for match
         marker_code = normalize_gene_name(fields[marker_col])
         
-        if marker_code in target_genes:
+        if substring:
+            match = any(gene in marker_code for gene in target_genes)
+        else:
+            match = marker_code in target_genes
+
+        if match:
             output_file.write(line)
             matched += 1
         else:
@@ -155,6 +162,12 @@ Examples:
   
   # Extract multiple related genes (comma-separated)
   python bold_gene_extract.py -g rbcL,rbcLa input.tsv output.tsv
+  
+  # Extract all genes with "rbcL" in the name (rbcL, rbcLa, rbcL-like, etc.)
+  python bold_gene_extract.py -g rbcL --substring input.tsv output.tsv
+  
+  # Substring match across multiple patterns
+  python bold_gene_extract.py -g rbcL -g ITS --substring input.tsv output.tsv
   
   # Extract multiple genes (multiple -g flags)
   python bold_gene_extract.py -g rbcL -g matK -g ITS2 input.tsv output.tsv
@@ -191,6 +204,9 @@ Notes:
                         help='Target gene name(s) to extract. Can be specified multiple times '
                              'or as comma-separated values (e.g., -g rbcL,rbcLa or -g rbcL -g rbcLa). '
                              'Case-insensitive matching.')
+    parser.add_argument('-s', '--substring', action='store_true',
+                        help='Match gene names as substrings rather than exact matches. '
+                             'E.g., -g rbcL will also match rbcLa, rbcL-like, etc.')
     parser.add_argument('-v', '--verbose', action='store_true',
                         help='Print progress and statistics to stderr')
     parser.add_argument('-d', '--delimiter', type=str, default='\t',
@@ -237,7 +253,8 @@ Notes:
         
         processed, matched, skipped = process_file(
             input_file, output_file, target_genes,
-            delimiter=args.delimiter, verbose=args.verbose
+            delimiter=args.delimiter, verbose=args.verbose,
+            substring=args.substring
         )
         
         if args.verbose:
