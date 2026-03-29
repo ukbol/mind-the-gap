@@ -315,12 +315,28 @@ def load_species_list(species_file: Path) -> Tuple[List[Taxon], List[str]]:
     sys.exit(1)
 
 
-def detect_cluster_column(fieldnames: List[str]) -> str:
+def detect_cluster_column(fieldnames: List[str], override: Optional[str] = None) -> str:
     """
     Detect which column to use for cluster identity (bin_uri or otu_id).
-    
+
+    If override is provided, that column is used directly (validated against fieldnames).
+    Otherwise auto-detects in priority order: bin_uri -> otu_id -> OTU_ID -> BIN.
+
     Returns column name to use.
     """
+    if override:
+        # Case-insensitive match so e.g. "otu_id" matches "OTU_ID" in the file
+        matched = next((col for col in fieldnames if col.lower() == override.lower()), None)
+        if matched:
+            if matched != override:
+                logging.info(f"--cluster-column '{override}' matched column '{matched}' (case-insensitive)")
+            else:
+                logging.info(f"Using user-specified cluster column: {matched}")
+            return matched
+        else:
+            logging.error(f"Specified --cluster-column '{override}' not found in records file. "
+                          f"Available columns: {', '.join(fieldnames[:20])}")
+            sys.exit(1)
     if 'bin_uri' in fieldnames:
         return 'bin_uri'
     elif 'otu_id' in fieldnames:
@@ -356,7 +372,8 @@ def detect_species_column_in_records(fieldnames: List[str]) -> str:
 def build_indices_from_records(
     records_file: Path,
     bold_filters: Optional[BoldFilterSettings] = None,
-    chunk_size: int = 100000
+    chunk_size: int = 100000,
+    cluster_column_override: Optional[str] = None
 ) -> Tuple[Dict[str, int], Dict[str, Set[str]], Dict[str, Set[str]], Dict[str, Set[str]], Dict[str, Set[str]], Dict[str, int], str]:
     """
     Build indices from records file in a single pass.
@@ -421,7 +438,7 @@ def build_indices_from_records(
                 fieldnames = reader.fieldnames or []
                 
                 # Detect cluster column (file-level decision)
-                cluster_column = detect_cluster_column(fieldnames)
+                cluster_column = detect_cluster_column(fieldnames, override=cluster_column_override)
                 logging.info(f"Using cluster column for analysis: {cluster_column}")
                 
                 # Check which cluster columns exist
@@ -943,7 +960,8 @@ def write_filtered_records(
     records_file: Path,
     output_file: Path,
     relevant_cluster_ids: Set[str],
-    bold_filters: Optional[BoldFilterSettings] = None
+    bold_filters: Optional[BoldFilterSettings] = None,
+    cluster_column_override: Optional[str] = None
 ) -> None:
     """
     Write a filtered copy of the records file containing only records
@@ -988,10 +1006,15 @@ def write_filtered_records(
                 has_marker_col = 'marker_code' in fieldnames
                 has_kingdom_col = 'kingdom' in fieldnames
 
-                # Detect which cluster columns exist
-                has_bin_uri = 'bin_uri' in fieldnames
-                has_otu_id = 'otu_id' in fieldnames or 'OTU_ID' in fieldnames
-                otu_col = 'otu_id' if 'otu_id' in fieldnames else 'OTU_ID' if 'OTU_ID' in fieldnames else None
+                # Determine which column(s) to use for cluster ID matching
+                primary_cluster_col = detect_cluster_column(fieldnames, override=cluster_column_override)
+                # When no override, also check the other cluster column as fallback
+                secondary_cluster_col = None
+                if cluster_column_override is None:
+                    if primary_cluster_col == 'bin_uri' and ('otu_id' in fieldnames or 'OTU_ID' in fieldnames):
+                        secondary_cluster_col = 'otu_id' if 'otu_id' in fieldnames else 'OTU_ID'
+                    elif primary_cluster_col in ('otu_id', 'OTU_ID') and 'bin_uri' in fieldnames:
+                        secondary_cluster_col = 'bin_uri'
 
                 writer = csv.DictWriter(fout, fieldnames=fieldnames, delimiter='\t',
                                         extrasaction='ignore')
@@ -1016,13 +1039,12 @@ def write_filtered_records(
 
                     # Check if any of this record's cluster IDs are relevant
                     match = False
-                    if has_bin_uri:
-                        for cid in parse_cluster_ids((row.get('bin_uri', '') or '').strip()):
-                            if cid in relevant_cluster_ids:
-                                match = True
-                                break
-                    if not match and has_otu_id:
-                        for cid in parse_cluster_ids((row.get(otu_col, '') or '').strip()):
+                    for cid in parse_cluster_ids((row.get(primary_cluster_col, '') or '').strip()):
+                        if cid in relevant_cluster_ids:
+                            match = True
+                            break
+                    if not match and secondary_cluster_col:
+                        for cid in parse_cluster_ids((row.get(secondary_cluster_col, '') or '').strip()):
                             if cid in relevant_cluster_ids:
                                 match = True
                                 break
@@ -1159,6 +1181,14 @@ Examples:
     )
     
     parser.add_argument(
+        '--cluster-column',
+        default=None,
+        help='Column to use as the primary cluster ID for BAGS grading and BIN-sharing analysis '
+             '(e.g. "otu_id" for plant data where bin_uri is blank). '
+             'Overrides auto-detection (default: bin_uri > otu_id > OTU_ID > BIN).'
+    )
+
+    parser.add_argument(
         '--filtered-records',
         type=Path,
         default=None,
@@ -1290,7 +1320,7 @@ Examples:
     
     # Build indices from records file
     name_to_count, name_to_bins, bin_to_names, name_to_bin_uris, name_to_otu_ids, name_to_gb_count, cluster_col = build_indices_from_records(
-        args.records, bold_filters=bold_filters
+        args.records, bold_filters=bold_filters, cluster_column_override=args.cluster_column
     )
 
     # Analyze taxa
@@ -1314,7 +1344,7 @@ Examples:
     filtered_output.parent.mkdir(parents=True, exist_ok=True)
     relevant_cluster_ids = collect_relevant_cluster_ids(results)
     logging.info(f"Relevant cluster IDs for filtering: {len(relevant_cluster_ids):,}")
-    write_filtered_records(args.records, filtered_output, relevant_cluster_ids, bold_filters=bold_filters)
+    write_filtered_records(args.records, filtered_output, relevant_cluster_ids, bold_filters=bold_filters, cluster_column_override=args.cluster_column)
 
     # Print summary
     print_summary(results)

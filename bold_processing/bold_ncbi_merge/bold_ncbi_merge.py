@@ -27,9 +27,10 @@ import sys
 from pathlib import Path
 
 # Mapping from GenBank column names to BOLD column names.
-# Only fields with a clear equivalent are mapped; the rest are left empty.
+# Values can be a single string or a list of strings where one source
+# maps to multiple BOLD columns.
 GENBANK_TO_BOLD = {
-    'locus_name':             'insdc_acs',
+    'locus_name':             ['insdc_acs', 'processid'],
     'organism':               'identification',
     'source_collected_by':    'collectors',
     'source_collection_date': 'collection_date_start',
@@ -96,8 +97,11 @@ def map_genbank_row(gb_row: dict, bold_fieldnames: list[str]) -> dict:
     bold_row = {col: '' for col in bold_fieldnames}
 
     for gb_col, bold_col in GENBANK_TO_BOLD.items():
-        if bold_col in bold_row:
-            bold_row[bold_col] = gb_row.get(gb_col, '').strip()
+        value = gb_row.get(gb_col, '').strip()
+        targets = bold_col if isinstance(bold_col, list) else [bold_col]
+        for target in targets:
+            if target in bold_row:
+                bold_row[target] = value
 
     # Traceability tag
     existing_notes = bold_row.get('notes', '')
@@ -156,7 +160,19 @@ def write_output(
     fieldnames: list[str],
     verbose: bool
 ) -> None:
-    """Write all BOLD records followed by unique GenBank records to output TSV."""
+    """Write all BOLD records followed by unique GenBank records to output TSV.
+    Records with an empty 'nuc' field are excluded from output.
+    """
+    bold_written   = [r for r in bold_records  if r.get('nuc', '').strip()]
+    genbank_written = [r for r in genbank_unique if r.get('nuc', '').strip()]
+
+    bold_dropped    = len(bold_records)   - len(bold_written)
+    genbank_dropped = len(genbank_unique) - len(genbank_written)
+
+    if verbose and (bold_dropped or genbank_dropped):
+        print(f"Dropped {bold_dropped:,} BOLD and {genbank_dropped:,} GenBank "
+              f"records with empty nuc", file=sys.stderr)
+
     with open(output_path, 'w', encoding='utf-8', newline='') as fh:
         writer = csv.DictWriter(
             fh,
@@ -167,17 +183,17 @@ def write_output(
         )
         writer.writeheader()
 
-        for row in bold_records:
+        for row in bold_written:
             writer.writerow(row)
 
-        for row in genbank_unique:
+        for row in genbank_written:
             writer.writerow(row)
 
-    total = len(bold_records) + len(genbank_unique)
+    total = len(bold_written) + len(genbank_written)
     if verbose:
         print(f"Output: {total:,} records written to {output_path}", file=sys.stderr)
-        print(f"  BOLD records : {len(bold_records):,}", file=sys.stderr)
-        print(f"  GenBank-only : {len(genbank_unique):,}", file=sys.stderr)
+        print(f"  BOLD records : {len(bold_written):,}", file=sys.stderr)
+        print(f"  GenBank-only : {len(genbank_written):,}", file=sys.stderr)
 
 
 def main():
