@@ -37,18 +37,21 @@ CRITICAL: JNCC designations are propagated:
 
 import sqlite3
 import csv
+import os
 import sys
 import re
 from datetime import datetime
 from pathlib import Path
 from collections import defaultdict
 
-# Configuration
-BASE_DIR = Path(r"C:\GitHub\mind-the-gap\uksi_processing")
-DB_PATH = BASE_DIR / "uksi_db" / "uksi.db"
-OUTPUT_PATH = BASE_DIR / "uksi_db" / "uksi_species_export.tsv"
-INVALID_OUTPUT_PATH = BASE_DIR / "uksi_db" / "uksi_invalid_species_export.tsv"
-LOG_PATH = BASE_DIR / "uksi_db" / "uksi_export.log"
+# Configuration. Defaults match the historical hardcoded layout for
+# interactive runs; each path can be overridden via an env var so that
+# the automated pipeline can drive this script with fetched inputs.
+BASE_DIR = Path(os.environ.get("UKSI_BASE_DIR", r"C:\GitHub\mind-the-gap\uksi_processing"))
+DB_PATH = Path(os.environ.get("UKSI_DB", BASE_DIR / "uksi_db" / "uksi.db"))
+OUTPUT_PATH = Path(os.environ.get("UKSI_VALID_OUT", BASE_DIR / "uksi_db" / "uksi_species_export.tsv"))
+INVALID_OUTPUT_PATH = Path(os.environ.get("UKSI_INVALID_OUT", BASE_DIR / "uksi_db" / "uksi_invalid_species_export.tsv"))
+LOG_PATH = Path(os.environ.get("UKSI_EXPORT_LOG", BASE_DIR / "uksi_db" / "uksi_export.log"))
 
 # Taxonomic ranks for higher taxonomy extraction (in order)
 HIGHER_RANKS = ['Kingdom', 'Phylum', 'Division', 'Class', 'Order', 'Family', 'Genus']

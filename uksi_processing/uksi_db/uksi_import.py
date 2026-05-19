@@ -24,21 +24,23 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-# Configuration
-BASE_DIR = Path(r"C:\GitHub\mind-the-gap\uksi_processing")
-DB_PATH = BASE_DIR / "uksi_db" / "uksi.db"
+# Configuration. Defaults match the historical hardcoded layout for
+# interactive runs; each path can be overridden via an env var so that
+# the automated pipeline can drive this script with fetched inputs.
+BASE_DIR = Path(os.environ.get("UKSI_BASE_DIR", r"C:\GitHub\mind-the-gap\uksi_processing"))
+DB_PATH = Path(os.environ.get("UKSI_DB", BASE_DIR / "uksi_db" / "uksi.db"))
 
 INPUT_FILES = {
-    "names": BASE_DIR / "uksi_20251203a_input_names.tsv",
-    "taxa": BASE_DIR / "uksi_20251203a_input_taxa.tsv",
-    "pantheon": BASE_DIR / "pantheon_mapping" / "output" / "pantheon_input_cleaned_matched.tsv",
-    "jncc": BASE_DIR / "jncc_mapping" / "20231206_jncc_conservation_designations_taxon.tsv",
-    "freshbase": BASE_DIR / "freshwater" / "2026-02-10_freshbase.tsv",
-    "ukceh_freshwater": BASE_DIR / "freshwater" / "UKCEH_freshwater_list.tsv",
+    "names": Path(os.environ.get("UKSI_NAMES_TSV", BASE_DIR / "uksi_20251203a_input_names.tsv")),
+    "taxa": Path(os.environ.get("UKSI_TAXA_TSV", BASE_DIR / "uksi_20251203a_input_taxa.tsv")),
+    "pantheon": Path(os.environ.get("UKSI_PANTHEON_TSV", BASE_DIR / "pantheon_mapping" / "output" / "pantheon_input_cleaned_matched.tsv")),
+    "jncc": Path(os.environ.get("UKSI_JNCC_TSV", BASE_DIR / "jncc_mapping" / "20231206_jncc_conservation_designations_taxon.tsv")),
+    "freshbase": Path(os.environ.get("UKSI_FRESHBASE_TSV", BASE_DIR / "freshwater" / "2026-02-10_freshbase.tsv")),
+    "ukceh_freshwater": Path(os.environ.get("UKSI_UKCEH_FRESHWATER_TSV", BASE_DIR / "freshwater" / "UKCEH_freshwater_list.tsv")),
 }
 
 # Logging setup
-LOG_PATH = BASE_DIR / "uksi_db" / "uksi_import.log"
+LOG_PATH = Path(os.environ.get("UKSI_IMPORT_LOG", BASE_DIR / "uksi_db" / "uksi_import.log"))
 
 def log(message: str):
     """Log message to both console and file."""

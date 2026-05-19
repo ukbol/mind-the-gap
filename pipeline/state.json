@@ -1,5 +1,4 @@
 {
-  "schema_version": 1,
-  "last_run": null,
-  "input_versions": {}
+  "schema_version": 2,
+  "pipelines": {}
 }

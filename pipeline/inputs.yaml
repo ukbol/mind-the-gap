@@ -1,37 +1,219 @@
-# Zenodo inputs for the automated gap-analysis pipeline.
+# Zenodo inputs + pipeline definitions for the automated gap-analysis suite.
 #
-# Each entry is keyed by a logical input name (used by pipeline/run.sh).
-# concept_doi   - the concept (all-versions) DOI; this stays constant across
-#                 input revisions and is what the scheduled poll watches.
-# pinned_version - optional. If set to a specific version DOI, the workflow
-#                 will fetch that version instead of the latest. Use this to
-#                 reproduce a historical run.
-# filename      - which file inside the Zenodo record to download. Wildcards
-#                 are not supported; one file per input row.
+# Schema v2: a map of named `pipelines:`. Each pipeline declares its raw
+# inputs (Zenodo concept DOIs), optional upstream `depends_on:` producer
+# pipelines, the ordered list of stages to run, and its own results
+# Zenodo record.
 #
-# Replace the placeholder DOIs below with real Zenodo records before enabling
-# the workflow. The placeholders cause pipeline/fetch_zenodo.py --check-only
-# to exit with code 2 ("not configured") so the scheduled job no-ops safely.
+# Per-input fields:
+#   concept_doi    - the concept (all-versions) DOI. Stays constant across
+#                    input revisions; the scheduled poll watches this.
+#   pinned_version - optional. If set to a specific version DOI, fetch
+#                    that version instead of latest. Use to reproduce a
+#                    historical run.
+#   filename       - which file inside the Zenodo record to download.
+#   gzipped        - optional (default: auto-detect by .gz/.tar.gz suffix).
+#                    When true, the fetcher decompresses after download.
+#
+# Per-pipeline fields:
+#   inputs         - map of logical name -> input spec (see above).
+#   depends_on     - map of logical name -> producer pipeline name. The
+#                    fetcher downloads the producer's latest published
+#                    `results.primary_file` and exposes it under this name.
+#   stages         - ordered list of stages to run. Each stage has a
+#                    `name` matching pipeline/stages.py STAGES and an
+#                    optional `args:` map.
+#   results        - Zenodo concept DOI to publish results to, plus
+#                    `primary_file`: the name of the deliverable that
+#                    downstream pipelines may consume via depends_on.
+#                    Set concept_doi to a PLACEHOLDER_* token to skip
+#                    publishing for now.
 
-inputs:
-  bold:
-    concept_doi: 10.5281/zenodo.PLACEHOLDER_BOLD
-    pinned_version: null
-    filename: BOLD_Public.tsv
+pipelines:
 
-  species_list:
-    concept_doi: 10.5281/zenodo.PLACEHOLDER_SPECIES
-    pinned_version: null
-    filename: species_list.tsv
+  # ---------------------------------------------------------------------------
+  # Layer 1: producer pipeline.
+  # The species list every gap-analysis pipeline depends on.
+  # ---------------------------------------------------------------------------
+  uksi_species_list:
+    inputs:
+      uksi_names:
+        concept_doi: 10.5281/zenodo.PLACEHOLDER_UKSI_NAMES
+        filename: uksi_names.tsv
+      uksi_taxa:
+        concept_doi: 10.5281/zenodo.PLACEHOLDER_UKSI_TAXA
+        filename: uksi_taxa.tsv
+      pantheon:
+        concept_doi: 10.5281/zenodo.PLACEHOLDER_PANTHEON
+        filename: pantheon.tsv
+      jncc:
+        concept_doi: 10.5281/zenodo.PLACEHOLDER_JNCC
+        filename: jncc_designations.tsv
+      freshbase:
+        concept_doi: 10.5281/zenodo.PLACEHOLDER_FRESHBASE
+        filename: freshbase.tsv
+      ukceh_freshwater:
+        concept_doi: 10.5281/zenodo.PLACEHOLDER_UKCEH_FRESHWATER
+        filename: ukceh_freshwater.tsv
+    stages:
+      - name: uksi_import
+      - name: uksi_export
+    results:
+      concept_doi: 10.5281/zenodo.PLACEHOLDER_RESULTS_SPECIES_LIST
+      primary_file: uksi_species_export.tsv
 
-# Pipeline parameters. Override per-run via workflow_dispatch inputs.
-parameters:
-  marker: COI-5P          # gene marker passed to bold_gene_extract
-  otu_threshold: 0.99     # vsearch identity threshold for otu_clustering
-  workers: 32             # parallel workers for gap_analysis (match runner vCPUs)
-  batch_size: 2000        # taxa per batch for gap_analysis
+  # ---------------------------------------------------------------------------
+  # Layer 2: gap-analysis pipelines.
+  # Each depends on the species list produced above.
+  # ---------------------------------------------------------------------------
 
-# Results Zenodo deposit (a separate, persistent concept DOI you control).
-# Each run creates a new version of this record. Leave null to skip publishing.
-results:
-  concept_doi: null       # e.g. 10.5281/zenodo.RESULTS_RECORD
+  bold_coi:
+    inputs:
+      raw:
+        concept_doi: 10.5281/zenodo.PLACEHOLDER_BOLD_RAW
+        filename: BOLD_Public.tsv.gz
+        gzipped: true
+    depends_on:
+      species_list: uksi_species_list
+    stages:
+      - name: bold_gene_extract
+        args: { gene: COI-5P }
+      - name: gap_analysis
+        args:
+          bold: true
+          workers: 32
+          batch_size: 2000
+    results:
+      concept_doi: 10.5281/zenodo.PLACEHOLDER_RESULTS_BOLD_COI
+      primary_file: 02_gap_analysis.tsv
+
+  bold_rbcl:
+    inputs:
+      raw:
+        concept_doi: 10.5281/zenodo.PLACEHOLDER_BOLD_RAW
+        filename: BOLD_Public.tsv.gz
+        gzipped: true
+    depends_on:
+      species_list: uksi_species_list
+    stages:
+      - name: bold_gene_extract
+        args: { gene: rbcL }
+      - name: otu_clustering
+        args: { threshold: 0.97, threads: 32 }
+      - name: gap_analysis
+        args:
+          workers: 32
+          batch_size: 2000
+          cluster_column: otu_id
+    results:
+      concept_doi: 10.5281/zenodo.PLACEHOLDER_RESULTS_BOLD_RBCL
+      primary_file: 03_gap_analysis.tsv
+
+  midori_12s:
+    inputs:
+      raw:
+        concept_doi: 10.5281/zenodo.PLACEHOLDER_MIDORI_12S
+        filename: midori_12s.fasta.gz
+        gzipped: true
+    depends_on:
+      species_list: uksi_species_list
+    stages:
+      - name: process_midori
+      - name: otu_clustering
+        args: { threshold: 0.99, threads: 32 }
+      - name: gap_analysis
+        args:
+          workers: 32
+          batch_size: 2000
+          cluster_column: otu_id
+    results:
+      concept_doi: 10.5281/zenodo.PLACEHOLDER_RESULTS_MIDORI_12S
+      primary_file: 03_gap_analysis.tsv
+
+  midori_16s:
+    inputs:
+      raw:
+        concept_doi: 10.5281/zenodo.PLACEHOLDER_MIDORI_16S
+        filename: midori_16s.fasta.gz
+        gzipped: true
+    depends_on:
+      species_list: uksi_species_list
+    stages:
+      - name: process_midori
+      - name: otu_clustering
+        args: { threshold: 0.99, threads: 32 }
+      - name: gap_analysis
+        args:
+          workers: 32
+          batch_size: 2000
+          cluster_column: otu_id
+    results:
+      concept_doi: 10.5281/zenodo.PLACEHOLDER_RESULTS_MIDORI_16S
+      primary_file: 03_gap_analysis.tsv
+
+  unite_its:
+    inputs:
+      raw:
+        concept_doi: 10.5281/zenodo.PLACEHOLDER_UNITE_ITS
+        filename: unite.fasta.gz
+        gzipped: true
+    depends_on:
+      species_list: uksi_species_list
+    stages:
+      - name: process_unite
+      - name: gap_analysis
+        args:
+          workers: 32
+          batch_size: 2000
+          cluster_column: OTU_ID
+    results:
+      concept_doi: 10.5281/zenodo.PLACEHOLDER_RESULTS_UNITE_ITS
+      primary_file: 02_gap_analysis.tsv
+
+  ncbi_rbcl:
+    inputs:
+      raw:
+        concept_doi: 10.5281/zenodo.PLACEHOLDER_NCBI_RBCL
+        filename: ncbi_rbcl.gb.tar.gz
+        gzipped: true
+    depends_on:
+      species_list: uksi_species_list
+    stages:
+      - name: ncbi_gb_extract
+        args: { gene: rbcL }
+      - name: otu_clustering
+        args: { threshold: 0.97, threads: 32 }
+      - name: gap_analysis
+        args:
+          workers: 32
+          batch_size: 2000
+          cluster_column: otu_id
+    results:
+      concept_doi: 10.5281/zenodo.PLACEHOLDER_RESULTS_NCBI_RBCL
+      primary_file: 03_gap_analysis.tsv
+
+  dtol_genomes:
+    inputs:
+      dtol_metadata:
+        concept_doi: 10.5281/zenodo.PLACEHOLDER_DTOL
+        filename: dtol.csv
+    depends_on:
+      species_list: uksi_species_list
+    stages:
+      - name: dtol_status
+    results:
+      concept_doi: 10.5281/zenodo.PLACEHOLDER_RESULTS_DTOL
+      primary_file: 01_dtol_status.tsv
+
+  ena_mitogenomes:
+    inputs:
+      mito_metadata:
+        concept_doi: 10.5281/zenodo.PLACEHOLDER_ENA_MITO
+        filename: mito_species_ena.tsv
+    depends_on:
+      species_list: uksi_species_list
+    stages:
+      - name: mito_status
+    results:
+      concept_doi: 10.5281/zenodo.PLACEHOLDER_RESULTS_ENA_MITO
+      primary_file: 01_mito_status.tsv

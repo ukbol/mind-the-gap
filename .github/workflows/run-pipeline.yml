@@ -1,137 +1,120 @@
-name: Run gap-analysis pipeline
+name: Run gap-analysis pipelines
 
 on:
-  # Manual trigger, with optional overrides for pinning a Zenodo version.
   workflow_dispatch:
     inputs:
-      bold_doi:
-        description: "Override Zenodo version DOI for BOLD input (leave empty for latest)"
+      pipelines:
+        description: 'Comma-separated pipeline names, or "all"'
         required: false
-        default: ""
-      species_doi:
-        description: "Override Zenodo version DOI for species_list input (leave empty for latest)"
-        required: false
-        default: ""
+        default: 'all'
       force:
-        description: "Run even if no new Zenodo versions are detected"
+        description: 'Run even if no new Zenodo versions are detected'
         type: boolean
         default: false
 
-  # Weekly poll for new Zenodo versions.
   schedule:
-    - cron: "0 6 * * 1"
+    # Daily; the check job no-ops cheaply when nothing changed.
+    - cron: '0 6 * * *'
 
-  # External webhook can fire this via POST /repos/<owner>/<repo>/dispatches
-  # with event_type "zenodo-new-version".
   repository_dispatch:
     types: [zenodo-new-version]
 
-# Only one pipeline run at a time; queue subsequent triggers.
+# Only one matrix-fan-out is in flight at a time across the repo so the
+# bot's state.json pushes serialise cleanly. New triggers queue.
 concurrency:
-  group: run-pipeline
+  group: run-pipelines
   cancel-in-progress: false
 
 permissions:
-  contents: write   # required for the bot commit of state.json
+  contents: write   # bot commit of pipeline/state.json
 
 jobs:
   check:
     name: Check for new Zenodo versions
     runs-on: ubuntu-latest
     outputs:
-      should_run: ${{ steps.diff.outputs.should_run }}
+      pipelines: ${{ steps.diff.outputs.pipelines_to_run }}
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: '3.11'
 
       - name: Install minimal deps for the checker
         run: pip install pyyaml requests
 
-      - name: Apply per-run version overrides
-        if: github.event_name == 'workflow_dispatch'
-        env:
-          BOLD_DOI: ${{ github.event.inputs.bold_doi }}
-          SPECIES_DOI: ${{ github.event.inputs.species_doi }}
-        run: |
-          python - <<'PY'
-          import os, yaml, pathlib
-          p = pathlib.Path("pipeline/inputs.yaml")
-          data = yaml.safe_load(p.read_text())
-          for key, env in (("bold", "BOLD_DOI"), ("species_list", "SPECIES_DOI")):
-              v = os.environ.get(env, "").strip()
-              if v:
-                  data["inputs"][key]["pinned_version"] = v
-                  print(f"[override] {key} pinned_version = {v}")
-          p.write_text(yaml.safe_dump(data, sort_keys=False))
-          PY
-
-      - name: Resolve latest versions
+      - name: Resolve pipelines needing a run
         id: diff
-        run: python pipeline/fetch_zenodo.py --check-only
+        env:
+          INPUT_PIPELINES: ${{ github.event.inputs.pipelines }}
+          INPUT_FORCE: ${{ github.event.inputs.force }}
+        run: |
+          ARGS=()
+          if [ -n "${INPUT_PIPELINES:-}" ] && [ "${INPUT_PIPELINES}" != "all" ]; then
+            ARGS+=(--only "${INPUT_PIPELINES}")
+          fi
+          if [ "${INPUT_FORCE:-false}" = "true" ]; then
+            ARGS+=(--force)
+          fi
+          python pipeline/fetch_zenodo.py --list-pipelines-needing-run "${ARGS[@]}"
 
   run:
-    name: Run pipeline
+    name: Run ${{ matrix.pipeline }}
     needs: check
-    if: >-
-      needs.check.outputs.should_run == 'true'
-      || (github.event_name == 'workflow_dispatch' && github.event.inputs.force == 'true')
-      || github.event_name == 'repository_dispatch'
+    if: needs.check.outputs.pipelines != '' && needs.check.outputs.pipelines != '[]'
     # NB: change the label to whichever Larger Runner is enabled in your org.
     # See https://docs.github.com/en/actions/using-github-hosted-runners/about-larger-runners
     runs-on: ubuntu-latest-32-cores
     container:
       image: ghcr.io/ukbol/mind-the-gap:latest
     timeout-minutes: 360
+    strategy:
+      # Strictly serial: only one Larger Runner billable at a time, and
+      # producer pipelines must finish before their consumers start.
+      max-parallel: 1
+      fail-fast: false
+      matrix:
+        pipeline: ${{ fromJson(needs.check.outputs.pipelines) }}
     env:
       DATA_DIR: ${{ github.workspace }}/data
-      OUT_DIR: ${{ github.workspace }}/final_result/run
+      OUT_DIR: ${{ github.workspace }}/final_result
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Pick up state.json updates from earlier matrix legs.
+          ref: ${{ github.ref }}
 
-      - name: Apply per-run version overrides
-        if: github.event_name == 'workflow_dispatch'
-        env:
-          BOLD_DOI: ${{ github.event.inputs.bold_doi }}
-          SPECIES_DOI: ${{ github.event.inputs.species_doi }}
+      - name: Pull latest state from this branch
         run: |
-          python - <<'PY'
-          import os, yaml, pathlib
-          p = pathlib.Path("pipeline/inputs.yaml")
-          data = yaml.safe_load(p.read_text())
-          for key, env in (("bold", "BOLD_DOI"), ("species_list", "SPECIES_DOI")):
-              v = os.environ.get(env, "").strip()
-              if v:
-                  data["inputs"][key]["pinned_version"] = v
-          p.write_text(yaml.safe_dump(data, sort_keys=False))
-          PY
+          git fetch origin "${GITHUB_REF_NAME}" --depth=1 || true
+          git reset --hard "origin/${GITHUB_REF_NAME}" || true
 
       - name: Fetch inputs from Zenodo
-        run: python pipeline/fetch_zenodo.py --data-dir "$DATA_DIR"
+        run: python pipeline/fetch_zenodo.py --pipeline "${{ matrix.pipeline }}" --data-dir "$DATA_DIR"
 
       - name: Run pipeline
-        run: pipeline/run.sh
+        run: python pipeline/run.py --pipeline "${{ matrix.pipeline }}" --data-dir "$DATA_DIR" --out-dir "$OUT_DIR"
 
       - name: Upload results as workflow artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: gap-analysis-results
-          path: ${{ env.OUT_DIR }}
+          name: results-${{ matrix.pipeline }}
+          path: ${{ env.OUT_DIR }}/${{ matrix.pipeline }}
           if-no-files-found: warn
           retention-days: 30
 
       - name: Publish results to Zenodo
-        id: publish
         if: success()
         env:
           ZENODO_TOKEN: ${{ secrets.ZENODO_TOKEN }}
-        run: python pipeline/publish_zenodo.py --out-dir "$OUT_DIR"
+        run: python pipeline/publish_zenodo.py --pipeline "${{ matrix.pipeline }}" --out-dir "$OUT_DIR"
 
       - name: Commit refreshed state.json
         if: success()
+        env:
+          PIPELINE: ${{ matrix.pipeline }}
         run: |
           if git diff --quiet pipeline/state.json; then
             echo "state.json unchanged; nothing to commit."
@@ -140,9 +123,10 @@ jobs:
           git config user.name "mind-the-gap-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add pipeline/state.json
-          git commit -m "ci: bump pipeline/state.json after successful run"
+          git commit -m "ci: bump state.json for pipeline ${PIPELINE}"
           for attempt in 1 2 3 4; do
-            if git push -u origin HEAD; then
+            # Pull --rebase to integrate any earlier matrix-leg pushes.
+            if git pull --rebase origin "${GITHUB_REF_NAME}" && git push -u origin "HEAD:${GITHUB_REF_NAME}"; then
               exit 0
             fi
             sleep $((2 ** attempt))
