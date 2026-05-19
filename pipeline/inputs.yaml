@@ -1,0 +1,37 @@
+# Zenodo inputs for the automated gap-analysis pipeline.
+#
+# Each entry is keyed by a logical input name (used by pipeline/run.sh).
+# concept_doi   - the concept (all-versions) DOI; this stays constant across
+#                 input revisions and is what the scheduled poll watches.
+# pinned_version - optional. If set to a specific version DOI, the workflow
+#                 will fetch that version instead of the latest. Use this to
+#                 reproduce a historical run.
+# filename      - which file inside the Zenodo record to download. Wildcards
+#                 are not supported; one file per input row.
+#
+# Replace the placeholder DOIs below with real Zenodo records before enabling
+# the workflow. The placeholders cause pipeline/fetch_zenodo.py --check-only
+# to exit with code 2 ("not configured") so the scheduled job no-ops safely.
+
+inputs:
+  bold:
+    concept_doi: 10.5281/zenodo.PLACEHOLDER_BOLD
+    pinned_version: null
+    filename: BOLD_Public.tsv
+
+  species_list:
+    concept_doi: 10.5281/zenodo.PLACEHOLDER_SPECIES
+    pinned_version: null
+    filename: species_list.tsv
+
+# Pipeline parameters. Override per-run via workflow_dispatch inputs.
+parameters:
+  marker: COI-5P          # gene marker passed to bold_gene_extract
+  otu_threshold: 0.99     # vsearch identity threshold for otu_clustering
+  workers: 32             # parallel workers for gap_analysis (match runner vCPUs)
+  batch_size: 2000        # taxa per batch for gap_analysis
+
+# Results Zenodo deposit (a separate, persistent concept DOI you control).
+# Each run creates a new version of this record. Leave null to skip publishing.
+results:
+  concept_doi: null       # e.g. 10.5281/zenodo.RESULTS_RECORD

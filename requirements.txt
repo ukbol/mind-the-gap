@@ -1,0 +1,6 @@
+biopython>=1.83
+pandas>=2.2
+numpy>=1.26
+matplotlib>=3.8
+pyyaml>=6.0
+requests>=2.31

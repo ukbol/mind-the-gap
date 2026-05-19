@@ -112,6 +112,18 @@ cat sequences.tsv | python bold_gene_extract.py -g COI-5P | python otu_clusterin
 
 See individual README files in each directory for detailed documentation.
 
+## Automated runs (GitHub Actions + Zenodo)
+
+The full pipeline can be run end-to-end on GitHub Actions, with large
+inputs hosted on Zenodo and results published back to a Zenodo record.
+
+- Edit `pipeline/inputs.yaml` to point at your Zenodo concept DOIs.
+- The workflow polls Zenodo weekly, or can be fired manually via the
+  *Run gap-analysis pipeline* workflow on the Actions tab.
+- See [`docs/automation.md`](docs/automation.md) for the one-time
+  setup (Larger Runner label, `ZENODO_TOKEN` secret, container build)
+  and operator runbook.
+
 ## BAGS Grading System
 
 The BAGS assessment assigns quality grades based on OTU clustering results:
