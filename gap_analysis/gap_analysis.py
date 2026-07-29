@@ -429,7 +429,8 @@ def build_indices_from_records(
     
     for encoding in ['utf-8', 'latin-1']:
         try:
-            with open(records_file, 'r', encoding=encoding) as f:
+            with open(records_file, 'r', encoding=encoding, errors='replace') as f:
+                f = (line.replace('\x00', '') for line in f)
                 # Use QUOTE_NONE for raw BOLD data to handle unescaped quotes
                 if bold_mode:
                     reader = csv.DictReader(f, delimiter='\t', quoting=csv.QUOTE_NONE)
@@ -993,9 +994,9 @@ def write_filtered_records(
 
     for encoding in ['utf-8', 'latin-1']:
         try:
-            with open(records_file, 'r', encoding=encoding) as fin, \
+            with open(records_file, 'r', encoding=encoding, errors='replace') as raw_fin, \
                  open(output_file, 'w', encoding='utf-8', newline='') as fout:
-
+                fin = (line.replace('\x00', '') for line in raw_fin)
                 if bold_mode:
                     reader = csv.DictReader(fin, delimiter='\t', quoting=csv.QUOTE_NONE)
                 else:
