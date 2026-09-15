@@ -29,8 +29,8 @@ BASE_DIR = Path(r"C:\GitHub\mind-the-gap\uksi_processing")
 DB_PATH = BASE_DIR / "uksi_db" / "uksi.db"
 
 INPUT_FILES = {
-    "names": BASE_DIR / "uksi_20251203a_input_names.tsv",
-    "taxa": BASE_DIR / "uksi_20251203a_input_taxa.tsv",
+    "names": BASE_DIR / "uksi_20260904a_input_names.tsv",
+    "taxa": BASE_DIR / "uksi_20260904a_input_taxa.tsv",
     "pantheon": BASE_DIR / "pantheon_mapping" / "output" / "pantheon_input_cleaned_matched.tsv",
     "jncc": BASE_DIR / "jncc_mapping" / "20231206_jncc_conservation_designations_taxon.tsv",
     "freshbase": BASE_DIR / "freshwater" / "2026-02-10_freshbase.tsv",

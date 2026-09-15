@@ -1,0 +1,84 @@
+[2026-09-15 19:48:29] 
+Checking input files...
+[2026-09-15 19:48:29]   names: OK (C:\GitHub\mind-the-gap\uksi_processing\uksi_20260904a_input_names.tsv)
+[2026-09-15 19:48:29]   taxa: OK (C:\GitHub\mind-the-gap\uksi_processing\uksi_20260904a_input_taxa.tsv)
+[2026-09-15 19:48:29]   pantheon: OK (C:\GitHub\mind-the-gap\uksi_processing\pantheon_mapping\output\pantheon_input_cleaned_matched.tsv)
+[2026-09-15 19:48:29]   jncc: OK (C:\GitHub\mind-the-gap\uksi_processing\jncc_mapping\20231206_jncc_conservation_designations_taxon.tsv)
+[2026-09-15 19:48:29]   freshbase: OK (C:\GitHub\mind-the-gap\uksi_processing\freshwater\2026-02-10_freshbase.tsv)
+[2026-09-15 19:48:29]   ukceh_freshwater: OK (C:\GitHub\mind-the-gap\uksi_processing\freshwater\UKCEH_freshwater_list.tsv)
+[2026-09-15 19:48:29] 
+Creating database: C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi.db
+[2026-09-15 19:48:29] Creating database schema...
+[2026-09-15 19:48:29] Creating indexes...
+[2026-09-15 19:48:29] Schema created successfully
+[2026-09-15 19:48:29] 
+=== Importing Data ===
+[2026-09-15 19:48:29] Importing uksi_20260904a_input_names.tsv into names...
+[2026-09-15 19:48:29]   Processed 50,000 rows...
+[2026-09-15 19:48:29]   Processed 100,000 rows...
+[2026-09-15 19:48:30]   Processed 150,000 rows...
+[2026-09-15 19:48:30]   Processed 200,000 rows...
+[2026-09-15 19:48:31]   Processed 250,000 rows...
+[2026-09-15 19:48:32]   Processed 300,000 rows...
+[2026-09-15 19:48:32]   Imported 338,180 rows (0 errors)
+[2026-09-15 19:48:32] Importing uksi_20260904a_input_taxa.tsv into taxa...
+[2026-09-15 19:48:33]   Processed 50,000 rows...
+[2026-09-15 19:48:33]   Processed 100,000 rows...
+[2026-09-15 19:48:33]   Imported 124,536 rows (0 errors)
+[2026-09-15 19:48:33] Importing pantheon_input_cleaned_matched.tsv into pantheon...
+[2026-09-15 19:48:34]   Imported 12,745 rows (0 errors)
+[2026-09-15 19:48:34] Importing 20231206_jncc_conservation_designations_taxon.tsv into jncc...
+[2026-09-15 19:48:34]   Imported 14,395 rows (0 errors)
+[2026-09-15 19:48:34] Importing 2026-02-10_freshbase.tsv into freshbase...
+[2026-09-15 19:48:34]   Imported 4,245 rows (0 errors)
+[2026-09-15 19:48:34] Importing UKCEH_freshwater_list.tsv into ukceh_freshwater...
+[2026-09-15 19:48:34]   Imported 8,367 rows (0 errors)
+[2026-09-15 19:48:34] 
+Creating utility views...
+[2026-09-15 19:48:34] Utility views created
+[2026-09-15 19:48:34] 
+=== Import Validation ===
+[2026-09-15 19:48:34] Names table: 338,180 total, 124,535 unique recommended TVKs
+[2026-09-15 19:48:34]   - Recommended names (R): 190,307
+[2026-09-15 19:48:34]   - Latin names: 295,390
+[2026-09-15 19:48:34] Taxa table: 124,535 total, 79,651 species, 62 unique ranks
+[2026-09-15 19:48:34]   Top ranks in taxa:
+[2026-09-15 19:48:34]     Species: 79,651
+[2026-09-15 19:48:34]     Genus: 22,988
+[2026-09-15 19:48:34]     Family: 5,183
+[2026-09-15 19:48:34]     Variety: 2,317
+[2026-09-15 19:48:34]     Subspecies: 2,116
+[2026-09-15 19:48:34]     Subgenus: 1,889
+[2026-09-15 19:48:34]     Subfamily: 1,652
+[2026-09-15 19:48:34]     Species hybrid: 1,383
+[2026-09-15 19:48:34]     Order: 1,198
+[2026-09-15 19:48:34]     Microspecies: 1,155
+[2026-09-15 19:48:34]     Tribe: 978
+[2026-09-15 19:48:34]     Superfamily: 761
+[2026-09-15 19:48:34]     Species aggregate: 557
+[2026-09-15 19:48:34]     Form: 427
+[2026-09-15 19:48:34]     Class: 301
+[2026-09-15 19:48:34]     Suborder: 282
+[2026-09-15 19:48:34]     Breed: 233
+[2026-09-15 19:48:34]     Subclass: 170
+[2026-09-15 19:48:34]     Species sensu lato: 166
+[2026-09-15 19:48:34]     Phylum: 112
+[2026-09-15 19:48:34] Pantheon table: 12,745 total, 12,711 matched to taxa
+[2026-09-15 19:48:34] JNCC table: 14,395 total
+[2026-09-15 19:48:34]   - Direct match to taxa: 13,710
+[2026-09-15 19:48:34]   - Resolved via names table: 14,395 (685 additional)
+[2026-09-15 19:48:34] FreshBase table: 4,245 total
+[2026-09-15 19:48:34]   - Direct match to taxa: 3,854
+[2026-09-15 19:48:34]   - Resolved via names table: 4,245 (391 additional)
+[2026-09-15 19:48:34] UKCEH freshwater table: 8,367 total
+[2026-09-15 19:48:34]   - Direct match to taxa: 7,568
+[2026-09-15 19:48:34]   - Resolved via names table: 8,367 (799 additional)
+[2026-09-15 19:48:34] 
+Names->Taxa linkage: 124,535 recommended TVKs link to taxa table
+[2026-09-15 19:48:34] 
+Optimizing database...
+[2026-09-15 19:48:35] 
+============================================================
+[2026-09-15 19:48:35] Import completed successfully!
+[2026-09-15 19:48:35] Database saved to: C:\GitHub\mind-the-gap\uksi_processing\uksi_db\uksi.db
+[2026-09-15 19:48:35] ============================================================
