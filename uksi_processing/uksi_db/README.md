@@ -7,6 +7,7 @@ A SQLite-based pipeline for processing UK Species Inventory (UKSI) data, linking
 This pipeline creates a SQLite database from UKSI export files and generates a comprehensive species checklist with:
 - Higher taxonomy (Kingdom → Genus)
 - All Latin synonyms (including subspecific taxa and subgenus variants)
+- Optional machine-generated name variants (gender endings and Art. 58 orthographic variants)
 - Pantheon invertebrate ecological traits
 - JNCC conservation designations (with hierarchical propagation)
 
@@ -19,6 +20,8 @@ uksi_db/
 ├── uksi.db                     # SQLite database (~144 MB)
 ├── uksi_species_export.tsv     # Valid species output (~22 MB)
 ├── uksi_invalid_species_export.tsv  # Filtered invalid species
+├── uksi_species_export_generated_all.tsv  # Optional, with generated variants
+├── uksi_invalid_species_export_generated_all.tsv
 ├── uksi_import.log             # Import log
 ├── uksi_export.log             # Export log
 └── README.md                   # This file
@@ -26,24 +29,43 @@ uksi_db/
 
 ## Input Files
 
-The pipeline requires four input files located in the parent directory:
+The pipeline requires six input files located in the parent directory:
 
 | File | Description | Source |
 |------|-------------|--------|
-| `uksi_20251203a_input_names.tsv` | UKSI Nameserver table (~337k names) | NHM UKSI export |
-| `uksi_20251203a_input_taxa.tsv` | UKSI Taxa backbone (~124k taxa) | NHM UKSI export |
+| `uksi_20260904a_input_names.tsv` | UKSI Nameserver table (~337k names) | NHM UKSI export |
+| `uksi_20260904a_input_taxa.tsv` | UKSI Taxa backbone (~124k taxa) | NHM UKSI export |
 | `pantheon_mapping/output/pantheon_input_cleaned_matched.tsv` | Pantheon data matched to UKSI (~13k records) | Pre-processed |
 | `jncc_mapping/20231206_jncc_conservation_designations_taxon.tsv` | JNCC designations (~14k records) | JNCC export |
+| `freshwater/2026-02-10_freshbase.tsv` | FreshBase freshwater species list | Pre-processed |
+| `freshwater/UKCEH_freshwater_list.tsv` | UKCEH freshwater species list | UKCEH |
 
 ## Quick Start
 
 ```bash
-# 1. Create the database
+# 1. Create the database (also builds the generated name variants)
 python uksi_import.py
 
-# 2. Export species checklist
+# 2. Export species checklist (UKSI synonyms only)
 python uksi_export.py
+
+# 3. Or export with machine-generated name variants merged in
+python uksi_export.py --generated all
 ```
+
+### Export options
+
+| Flag | Values | Effect |
+|------|--------|--------|
+| `--generated` | `none` (default), `gender`, `orthographic`, `all` | Which classes of generated variant to merge into the `synonyms` column |
+| `--output` | path | Override the valid species output path |
+| `--invalid-output` | path | Override the filtered species output path |
+| `--db` | path | Override the database location |
+
+`--generated none` reproduces the pre-v2.4 output byte for byte. When
+`--generated` is anything else, the output filenames are automatically
+suffixed (e.g. `uksi_species_export_generated_all.tsv`) so a generated run
+cannot silently overwrite a standard one.
 
 ## Scripts
 
@@ -57,9 +79,14 @@ Creates a SQLite database with four main tables and supporting indexes/views.
 - `pantheon` - Invertebrate ecological traits
 - `jncc` - Conservation designations (original)
 - `jncc_resolved` - Conservation designations with TVK resolution
+- `freshbase` / `ukceh_freshwater` - Freshwater species lists
+- `generated_names` - Machine-generated gender and orthographic name variants
+- `generated_name_collisions` - Generated variants discarded because UKSI already
+  uses that spelling for a different taxon (audit trail)
 
 **Key features:**
 - Resolves JNCC synonym TVKs through the names table (633 additional matches)
+- Generates gender-ending and orthographic name variants (see below)
 - Creates indexes for efficient lookups
 - Creates utility views for common queries
 
@@ -89,7 +116,9 @@ Exports valid species with comprehensive data to a TSV file.
 - For names like `Genus (Subgenus) species`, automatically adds:
   - `Genus species` (without subgenus)
   - `Subgenus species` (subgenus treated as genus)
-- Deduplicates by name (each unique synonym appears once)
+- Optionally includes machine-generated gender and orthographic variants
+- Deduplicates by name (each unique synonym appears once); authoritative UKSI
+  names always win, so a generated form that duplicates a real name is dropped
 - Semicolon-separated
 
 **JNCC designation propagation (CRITICAL):**
@@ -130,7 +159,7 @@ All column headers are lowercase.
 ### Synonyms
 | Column | Description |
 |--------|-------------|
-| synonyms | Semicolon-separated list of Latin synonyms |
+| synonyms | Semicolon-separated list of Latin synonyms. With `--generated`, machine-generated variants are merged into this same column and are not separately labelled. |
 
 ### Taxon information
 | Column | Description |
@@ -210,6 +239,8 @@ taxa.PARENT_KEY → taxa.ORGANISM_KEY (hierarchy)
 - `idx_taxa_lineage` - Lineage-based queries
 - `idx_pantheon_rec_tvk` - Pantheon joins
 - `idx_jncc_resolved_tvk` - JNCC joins
+- `idx_generated_rec_tvk` - Generated variant lookups by taxon
+- `idx_generated_class` - Filter generated variants by class
 
 
 ## Example Queries
@@ -238,6 +269,21 @@ SELECT t.TAXON_NAME, p.*
 FROM taxa t
 JOIN pantheon p ON p.RECOMMENDED_TAXON_VERSION_KEY = t.TAXON_VERSION_KEY
 WHERE t.TAXON_NAME LIKE 'Bombus%';
+```
+
+### Inspect generated variants for a species
+```sql
+SELECT GENERATED_NAME, VARIANT_CLASS, TRANSFORM, SOURCE_NAME
+FROM generated_names
+WHERE RECOMMENDED_TAXON_VERSION_KEY = 'NBNSYS0000007302'
+ORDER BY VARIANT_CLASS, GENERATED_NAME;
+```
+
+### Review collisions (where the generator proposed a name UKSI already uses)
+```sql
+SELECT SOURCE_NAME, GENERATED_NAME, VARIANT_CLASS, TRANSFORM
+FROM generated_name_collisions
+ORDER BY SOURCE_NAME;
 ```
 
 ### Traverse taxonomy hierarchy
@@ -276,6 +322,96 @@ For names with subgenus notation like `Acartia (Acartiura) clausi`:
 - The export automatically generates `Acartia clausi` and `Acartiura clausi` as synonyms
 - This ensures records can be matched regardless of whether the subgenus was recorded
 
+### Generated Name Variants
+
+Two classes of variant are generated into the `generated_names` table by
+`uksi_import.py`, and can be merged into the exported `synonyms` column with
+`uksi_export.py --generated`. **These are not nomenclatural acts and are not
+UKSI data.** They exist solely to widen the net when matching UKSI against
+external databases (BOLD, GBIF) where the recorded spelling may differ.
+
+**Seeds.** Every Latin name at species-group rank, *including existing
+synonyms*, not just the accepted name. So `Phaeostigma notata` and its synonym
+`Raphidia notata` are both inflected.
+
+**Gender endings.** Adjectival epithets must agree in gender with the genus
+(ICZN Art. 31.2, 34.2). The generator emits every plausible ending rather than
+resolving the gender of the genus, because the aim is to match, not to produce
+the correct name:
+
+| Class | Masculine | Feminine | Neuter |
+|-------|-----------|----------|--------|
+| 1st/2nd declension | -us | -a | -um |
+| -er stems | -er | -(e)ra | -(e)rum |
+| -fer / -ger compounds | -fer, -ger | -fera, -gera | -ferum, -gerum |
+| 3rd declension | -is | -is | -e |
+| Comparatives | -ior | -ior | -ius |
+
+`Phaeostigma notata` → `Phaeostigma notatum`, `Phaeostigma notatus`.
+
+Where a stem is ambiguous (`-ra` could be `us/a/um` or `er/ra/rum`) **both**
+interpretations are emitted. A wrong form costs one row that never matches; a
+missing form costs a real match.
+
+Nothing is emitted for genitive nouns (`-i`, `-ii`, `-ae`, `-orum`, `-arum`),
+which do not agree with the genus, or for invariable adjectives (`-ans`,
+`-ens`, `-or`, `-x`, `-ceps`, `-oides`), whose three genders are already
+identical.
+
+**Orthographic variants.** ICZN Art. 58 lists fifteen spelling differences
+that are *deemed not to distinguish* two species-group names. That list is
+exactly the set of spellings an external database might record differently.
+Currently implemented:
+
+| Art. 58 | Variation | Status |
+|---------|-----------|--------|
+| 58.1 | ae / oe / e | implemented |
+| 58.2 | ei / i / y | partial (ei→i, y↔i) |
+| 58.5 | c / k | implemented |
+| 58.6 | aspiration (rh / r) | partial |
+| 58.7 | single / double consonant | partial (double→single only) |
+| 58.9 | f / ph | implemented |
+| 58.11 | th / t | partial (th→t only) |
+| 58.14 | -i / -ii genitives | partial (-i/-ii only) |
+
+**Not yet implemented:** 58.3 (i/j), 58.4 (u/v), 58.8 (c before t), 58.10
+(ch/c), 58.12 (connecting vowels, e.g. `nigricinctus`/`nigrocinctus`), 58.13
+(semivowel i as y/ei/ej/ij), 58.15 (-i before a suffix, e.g.
+`timorensis`/`timoriensis`). The rules live in `ORTHOGRAPHIC_RULES` near the
+top of `uksi_import.py` and are straightforward to extend or trim.
+
+One rule is applied per output form, to one epithet at a time. The genus is
+never altered, so no generated form can bridge two genera.
+
+**Collision handling.** A generated form that already exists in UKSI under the
+*same* taxon is discarded as redundant. One that exists under a *different*
+taxon is discarded and logged to `generated_name_collisions`, because emitting
+it would create a false link between two taxa. Art. 58 guarantees such
+collisions are rare among valid names — two names in one genus differing only
+by a listed variant are homonyms and cannot both be valid — but junior
+homonyms still exist as strings in the source data.
+
+**Known limits.**
+- Art. 58 requires the two names to have *the same derivation and meaning*.
+  The Code's own counter-example is `Chrysops calidus` (warm) vs
+  `Chrysops callidus` (clever), which are **not** homonyms despite differing
+  by a doubled consonant. A string-based generator cannot apply that semantic
+  test, so it is slightly more permissive than the Code.
+- Nouns in apposition (`Danaus plexippus`) cannot be distinguished from
+  adjectives by their ending, so they are inflected spuriously. Harmless,
+  but it inflates the table.
+- Merging into the single `synonyms` column discards the `VARIANT_CLASS`
+  provenance at the export boundary. Once a match is made downstream, nothing
+  records that it came from a generated form. The provenance remains queryable
+  in `generated_names`.
+- The collision check compares against UKSI only. It cannot see collisions in
+  BOLD or GBIF, which is where they matter most. **Review the collision log
+  after each run rather than only counting it** — those rows are the only
+  visible sample of where the approximation breaks.
+
+**Expected volume.** Roughly 3–5 variants per seed name. The export holds all
+of them in memory while building the synonym lists.
+
 ### Invalid Species Filtering
 Species are filtered to the invalid output file if they contain:
 - `.` - Catches sp., spp., cf., aff., n. sp., etc.
@@ -285,6 +421,10 @@ Species are filtered to the invalid output file if they contain:
 
 ## Version History
 
+- **2026-09-16 v2.4** - Added gender-ending and Art. 58 orthographic variant
+  generation (`generated_names`, `generated_name_collisions` tables) and the
+  `--generated` export flag; added argparse CLI with path overrides; fixed an
+  operator-precedence bug in the `v_valid_species` view definition
 - **2025-01-25 v2.1** - Reordered columns, added taxon_rank, all lowercase headers, exclude species aggregates with "/" pattern, removed redundant species column
 - **2025-01-25 v2.0** - Added invalid species filtering, semicolon synonym separator, subgenus synonym generation, synonym deduplication
 - **2025-01-25 v1.0** - Initial database pipeline with JNCC resolution and hierarchical propagation

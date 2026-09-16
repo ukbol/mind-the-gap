@@ -11,7 +11,13 @@ Exports valid species with:
 
 Author: Generated for Ben Price, NHM London
 Date: 2025-01-25
-Version: 2.3
+Version: 2.4
+
+Changes in v2.4:
+- Optional inclusion of machine-generated name variants (gender endings and
+  orthographic variants) from the generated_names table, merged into the
+  existing single 'synonyms' column. Controlled by --generated; default is
+  'none', which reproduces v2.3 output exactly.
 
 Changes in v2.3:
 - Propagate FreshBase/UKCEH freshwater list flags from aggregates to child species
@@ -35,6 +41,7 @@ CRITICAL: JNCC designations are propagated:
 - Upward: If a subspecific taxon has a designation, the parent species inherits it
 """
 
+import argparse
 import sqlite3
 import csv
 import sys
@@ -44,11 +51,20 @@ from pathlib import Path
 from collections import defaultdict
 
 # Configuration
-BASE_DIR = Path(r"C:\GitHub\mind-the-gap\uksi_processing")
+BASE_DIR = Path(r"C:\Users\benjp\Downloads\uksi_genders\uksi_processing")
 DB_PATH = BASE_DIR / "uksi_db" / "uksi.db"
 OUTPUT_PATH = BASE_DIR / "uksi_db" / "uksi_species_export.tsv"
 INVALID_OUTPUT_PATH = BASE_DIR / "uksi_db" / "uksi_invalid_species_export.tsv"
 LOG_PATH = BASE_DIR / "uksi_db" / "uksi_export.log"
+
+# Which classes of machine-generated name variant may be merged into the
+# synonyms column. 'none' reproduces the pre-2.4 output byte for byte.
+GENERATED_CHOICES = {
+    'none': (),
+    'gender': ('gender',),
+    'orthographic': ('orthographic',),
+    'all': ('gender', 'orthographic'),
+}
 
 # Taxonomic ranks for higher taxonomy extraction (in order)
 HIGHER_RANKS = ['Kingdom', 'Phylum', 'Division', 'Class', 'Order', 'Family', 'Genus']
@@ -363,7 +379,48 @@ def build_jncc_designation_maps(conn: sqlite3.Connection, lineage_lookup: dict) 
     return final_designations
 
 
-def get_latin_synonyms(conn: sqlite3.Connection, lineage_lookup: dict) -> dict:
+def load_generated_names(conn: sqlite3.Connection, generated_classes: tuple) -> dict:
+    """
+    Load machine-generated name variants from the generated_names table.
+
+    Returns dict[recommended_tvk] -> list of generated name strings. Returns
+    an empty dict when no classes are requested, or when the table does not
+    exist (i.e. the database predates uksi_import.py v2 and has not been
+    rebuilt).
+    """
+    if not generated_classes:
+        return {}
+
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT name FROM sqlite_master
+        WHERE type = 'table' AND name = 'generated_names'
+    """)
+    if not cur.fetchone():
+        log("  WARNING: generated_names table not found in database.")
+        log("           Re-run uksi_import.py to build it. Continuing without "
+            "generated synonyms.")
+        return {}
+
+    placeholders = ','.join(['?' for _ in generated_classes])
+    cur.execute(f"""
+        SELECT RECOMMENDED_TAXON_VERSION_KEY, GENERATED_NAME
+        FROM generated_names
+        WHERE VARIANT_CLASS IN ({placeholders})
+    """, generated_classes)
+
+    generated = defaultdict(list)
+    for rec_tvk, name in cur.fetchall():
+        generated[rec_tvk].append(name)
+
+    total = sum(len(v) for v in generated.values())
+    log(f"  Loaded {total:,} generated variants ({', '.join(generated_classes)}) "
+        f"for {len(generated):,} taxa")
+    return generated
+
+
+def get_latin_synonyms(conn: sqlite3.Connection, lineage_lookup: dict,
+                       generated_classes: tuple = ()) -> dict:
     """
     Get all Latin synonyms for each species TVK.
     
@@ -371,8 +428,11 @@ def get_latin_synonyms(conn: sqlite3.Connection, lineage_lookup: dict) -> dict:
     - All Latin names from names table pointing to the recommended TVK
     - Child taxa from taxa table (subspecies, varieties, etc.)
     - Subgenus-derived synonyms (Genus species, Subgenus species)
+    - Optionally, machine-generated gender / orthographic variants
     
-    Deduplicates by name (keeping unique names only).
+    Deduplicates by name (keeping unique names only). Authoritative names are
+    always added before generated ones, so a generated form that duplicates a
+    real UKSI name is silently dropped and the real one is kept.
     
     Returns: dict[recommended_tvk] -> list of unique synonym name strings
     """
@@ -452,10 +512,16 @@ def get_latin_synonyms(conn: sqlite3.Connection, lineage_lookup: dict) -> dict:
     
     log(f"  Built child index for {len(children_by_parent):,} parent taxa")
     
+    # Machine-generated variants (empty unless requested)
+    generated_by_tvk = load_generated_names(conn, generated_classes)
+    generated_used = 0
+    
     # Now build final synonym lists with deduplication
     final_synonyms = {}
     
-    for rec_tvk, entries in synonyms_raw.items():
+    all_rec_tvks = set(synonyms_raw) | set(generated_by_tvk)
+    for rec_tvk in all_rec_tvks:
+        entries = synonyms_raw.get(rec_tvk, [])
         # Get the valid name info
         valid_info = tvk_to_info.get(rec_tvk, {})
         valid_name = valid_info.get('name', '')
@@ -493,6 +559,14 @@ def get_latin_synonyms(conn: sqlite3.Connection, lineage_lookup: dict) -> dict:
                 seen_names.add(syn)
                 synonym_names.append(syn)
         
+        # Add machine-generated variants LAST, so any authoritative name
+        # always wins the deduplication.
+        for syn in generated_by_tvk.get(rec_tvk, []):
+            if syn != valid_name and syn not in seen_names:
+                seen_names.add(syn)
+                synonym_names.append(syn)
+                generated_used += 1
+        
         # Sort alphabetically
         synonym_names.sort()
         
@@ -500,6 +574,9 @@ def get_latin_synonyms(conn: sqlite3.Connection, lineage_lookup: dict) -> dict:
     
     total_syns = sum(len(v) for v in final_synonyms.values())
     log(f"  Final: {len(final_synonyms):,} taxa with {total_syns:,} unique synonyms")
+    if generated_classes:
+        log(f"  Of these, {generated_used:,} came from generated variants "
+            f"({generated_used / total_syns:.1%} of all synonyms)")
     
     return final_synonyms
 
@@ -680,14 +757,14 @@ def _propagate_freshwater_to_children(conn: sqlite3.Connection, tvk_set: set, li
     return expanded
 
 
-def export_species(conn: sqlite3.Connection):
+def export_species(conn: sqlite3.Connection, generated_classes: tuple = ()):
     """Main export function."""
     log("\n=== Starting Species Export ===")
     
     # Build lookup tables
     lineage_lookup = build_lineage_lookup(conn)
     jncc_designations = build_jncc_designation_maps(conn, lineage_lookup)
-    synonyms = get_latin_synonyms(conn, lineage_lookup)
+    synonyms = get_latin_synonyms(conn, lineage_lookup, generated_classes)
     pantheon = get_pantheon_data(conn)
     freshbase_tvks, ukceh_tvks = get_freshwater_presence(conn)
     
@@ -921,10 +998,74 @@ def validate_export(conn: sqlite3.Connection, valid_count: int, invalid_count: i
                 break
 
 
+def parse_args():
+    """Command line arguments."""
+    parser = argparse.ArgumentParser(
+        description="Export UKSI species with synonyms, traits and designations.",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=(
+            "Generated synonyms are machine-derived spelling and gender-ending\n"
+            "variants, not UKSI data. They widen the net when matching against\n"
+            "external databases. Use --generated none (the default) to reproduce\n"
+            "the previous output exactly."
+        ),
+    )
+    parser.add_argument(
+        "--generated",
+        choices=sorted(GENERATED_CHOICES),
+        default="none",
+        help="Which classes of generated name variant to merge into the "
+             "synonyms column (default: none).",
+    )
+    parser.add_argument(
+        "--output", type=Path, default=None,
+        help="Path for the valid species TSV. Defaults to the standard path, "
+             "suffixed when --generated is not 'none'.",
+    )
+    parser.add_argument(
+        "--invalid-output", type=Path, default=None,
+        help="Path for the filtered/invalid species TSV.",
+    )
+    parser.add_argument(
+        "--db", type=Path, default=None,
+        help="Path to uksi.db (defaults to the configured location).",
+    )
+    return parser.parse_args()
+
+
+def resolve_paths(args):
+    """
+    Resolve output paths, suffixing them when generated synonyms are included
+    so a generated run cannot silently overwrite a standard one.
+    """
+    global DB_PATH, OUTPUT_PATH, INVALID_OUTPUT_PATH
+
+    if args.db:
+        DB_PATH = args.db
+
+    suffix = "" if args.generated == "none" else f"_generated_{args.generated}"
+
+    if args.output:
+        OUTPUT_PATH = args.output
+    elif suffix:
+        OUTPUT_PATH = OUTPUT_PATH.with_name(
+            f"{OUTPUT_PATH.stem}{suffix}{OUTPUT_PATH.suffix}")
+
+    if args.invalid_output:
+        INVALID_OUTPUT_PATH = args.invalid_output
+    elif suffix:
+        INVALID_OUTPUT_PATH = INVALID_OUTPUT_PATH.with_name(
+            f"{INVALID_OUTPUT_PATH.stem}{suffix}{INVALID_OUTPUT_PATH.suffix}")
+
+
 def main():
     """Main entry point for the export script."""
+    args = parse_args()
+    resolve_paths(args)
+    generated_classes = GENERATED_CHOICES[args.generated]
+
     log("=" * 60)
-    log("UKSI Database Export Script v2.2")
+    log("UKSI Database Export Script v2.4")
     log("=" * 60)
     
     # Clear log file
@@ -938,6 +1079,7 @@ def main():
         sys.exit(1)
     
     log(f"\nDatabase: {DB_PATH}")
+    log(f"Generated synonyms: {args.generated}")
     log(f"Valid output: {OUTPUT_PATH}")
     log(f"Invalid output: {INVALID_OUTPUT_PATH}")
     
@@ -946,7 +1088,7 @@ def main():
     
     try:
         # Export species
-        valid_count, invalid_count = export_species(conn)
+        valid_count, invalid_count = export_species(conn, generated_classes)
         
         # Validate
         validate_export(conn, valid_count, invalid_count)

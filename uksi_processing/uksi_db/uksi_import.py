@@ -15,17 +15,20 @@ Database Schema:
 - jncc: Conservation designations (linked via Recommended_taxon_version)
 - freshbase: FreshBase freshwater species list (linked via TAXON_VERSION_KEY)
 - ukceh_freshwater: UKCEH freshwater species list (linked via TAXON_VERSION_KEY)
+- generated_names: machine-generated gender / orthographic name variants
+- generated_name_collisions: generated forms discarded because they clash
 """
 
 import sqlite3
 import csv
 import os
+import re
 import sys
 from datetime import datetime
 from pathlib import Path
 
 # Configuration
-BASE_DIR = Path(r"C:\GitHub\mind-the-gap\uksi_processing")
+BASE_DIR = Path(r"C:\Users\benjp\Downloads\uksi_genders\uksi_processing")
 DB_PATH = BASE_DIR / "uksi_db" / "uksi.db"
 
 INPUT_FILES = {
@@ -47,6 +50,251 @@ def log(message: str):
     print(log_line)
     with open(LOG_PATH, "a", encoding="utf-8") as f:
         f.write(log_line + "\n")
+
+
+# ---------------------------------------------------------------------------
+# Generated name variants (gender endings + orthographic variants)
+# ---------------------------------------------------------------------------
+# These forms are NOT nomenclatural acts and are NOT UKSI data. They exist
+# purely to widen the net when matching UKSI against external databases
+# (BOLD, GBIF, etc.) where the recorded spelling may differ from UKSI's.
+#
+# Design notes:
+#  - Gender: we do NOT resolve the gender of the genus. The aim is to emit
+#    every plausible ending and let the match decide, so the expensive and
+#    error-prone genus-gender lookup is unnecessary. Where a form is
+#    ambiguous (e.g. "-ra" could be us/a/um or er/ra/rum) we emit BOTH
+#    interpretations; a wrong form simply never matches anything.
+#  - Orthographic: one rule applied per output form, epithets only. The
+#    genus is left untouched so we never bridge two genera.
+#  - Anything generated that already exists in UKSI is discarded; if it
+#    exists under a DIFFERENT recommended TVK it is discarded and logged as
+#    a collision (see generated_name_collisions).
+
+# Ranks whose names are worth inflating. Mirrors SYNONYM_RANKS in the
+# export script - these are the ranks that actually reach the synonym column.
+VARIANT_SOURCE_RANKS = {
+    'Species', 'Species aggregate', 'Species group', 'Species hybrid',
+    'Species pro parte', 'Species sensu lato', 'Species sensu stricto',
+    'Subspecies', 'Subspecies aggregate', 'Subspecies hybrid',
+    'Variety', 'Varietal hybrid', 'Subvariety',
+    'Form', 'Subform', 'Nothosubspecies', 'Nothovariety',
+    'Microspecies', 'Praespecies', 'Convariety',
+    'Morphotype', 'Race', 'Forma specialis',
+}
+
+# Endings that mark a noun in the genitive or a family-group name. Nouns do
+# not agree with the genus (ICZN Art. 31.2), so these must never be inflected.
+NEVER_INFLECT_ENDINGS = (
+    'ii', 'i', 'ae', 'orum', 'arum', 'idae', 'inae', 'aceae',
+)
+
+# Adjectives with the same form in all three genders. Emitting nothing is
+# correct: the masculine, feminine and neuter forms are already identical.
+INVARIANT_ENDINGS = (
+    'ans', 'ens', 'or', 'x', 'ceps', 'oides', 'odes', 'ops', 'fex',
+)
+
+# (masculine, feminine, neuter) declension classes.
+GENDER_CLASSES_FERGER = (
+    ('fer', 'fera', 'ferum'),
+    ('ger', 'gera', 'gerum'),
+)
+GENDER_CLASSES_MAIN = (
+    ('ior', 'ior', 'ius'),
+    ('us', 'a', 'um'),
+    ('is', 'is', 'e'),
+    ('er', 'ra', 'rum'),
+)
+
+# Orthographic variant rules (Art. 58 and common transliteration drift).
+# (compiled pattern, replacement, transform id)
+ORTHOGRAPHIC_RULES = [
+    (re.compile(r'ii$'), 'i', 'ii>i'),
+    (re.compile(r'(?<![aeiou])i$'), 'ii', 'i>ii'),
+    (re.compile(r'ae'), 'e', 'ae>e'),
+    (re.compile(r'oe'), 'e', 'oe>e'),
+    (re.compile(r'ae'), 'oe', 'ae>oe'),
+    (re.compile(r'oe'), 'ae', 'oe>ae'),
+    (re.compile(r'c'), 'k', 'c>k'),
+    (re.compile(r'k'), 'c', 'k>c'),
+    (re.compile(r'y'), 'i', 'y>i'),
+    (re.compile(r'i'), 'y', 'i>y'),
+    (re.compile(r'ph'), 'f', 'ph>f'),
+    (re.compile(r'f'), 'ph', 'f>ph'),
+    (re.compile(r'th'), 't', 'th>t'),
+    (re.compile(r'rh'), 'r', 'rh>r'),
+    (re.compile(r'ei'), 'i', 'ei>i'),
+    (re.compile(r'([bcdfglmnprstz])\1'), r'\1', 'double>single'),
+]
+
+# A name we are willing to parse: letters, spaces, hyphens, and at most one
+# parenthesised subgenus. Anything else (digits, periods, quotes, hybrid
+# signs) is left alone.
+PARSEABLE_NAME_RE = re.compile(r'^[A-Za-z][A-Za-z\-]*(?: \([A-Za-z\-]+\))?(?: [a-z][a-z\-]+){1,3}$')
+
+# Cap on how many variants any single source name may produce, so a
+# four-token name with several ambiguous epithets cannot blow up the table.
+MAX_VARIANTS_PER_NAME = 12
+
+
+def gender_variants(epithet: str) -> set:
+    """
+    Return alternative gender endings for a single epithet.
+
+    Returns an empty set for genitive nouns, invariant adjectives, and
+    anything too short to inflect safely. Ambiguous stems yield the union of
+    every plausible interpretation.
+    """
+    e = epithet.lower()
+
+    if len(e) < 4 or '-' in e:
+        return set()
+    if e.endswith(NEVER_INFLECT_ENDINGS):
+        return set()
+    if e.endswith(INVARIANT_ENDINGS):
+        return set()
+
+    out = set()
+
+    # -fer / -ger compounds. Note these are NOT tried in preference to the
+    # plain -er class: "niger" matches -ger spuriously (stem "ni"), so if we
+    # let a -ger match suppress the -er class we lose the correct "nigrum".
+    # Both interpretations are emitted and the wrong one simply never matches.
+    for cls in GENDER_CLASSES_FERGER:
+        for suffix in cls:
+            if e.endswith(suffix):
+                stem = e[:-len(suffix)]
+                if len(stem) >= 2:
+                    out.update(stem + s for s in cls)
+                break
+
+    for cls in GENDER_CLASSES_MAIN:
+        # Longest matching suffix within this class wins.
+        best = None
+        for suffix in cls:
+            if e.endswith(suffix) and (best is None or len(suffix) > len(best)):
+                best = suffix
+        if best:
+            stem = e[:-len(best)]
+            if len(stem) >= 2:
+                out.update(stem + s for s in cls)
+
+    out.discard(e)
+    return out
+
+
+def orthographic_variants(epithet: str) -> list:
+    """
+    Return [(variant, transform_id)] for a single epithet, one rule applied
+    per variant. All occurrences of a rule are replaced together.
+    """
+    e = epithet.lower()
+    if len(e) < 4:
+        return []
+
+    out = []
+    seen = {e}
+    for pattern, replacement, transform_id in ORTHOGRAPHIC_RULES:
+        candidate = pattern.sub(replacement, e)
+        if candidate != e and candidate not in seen and len(candidate) >= 3:
+            seen.add(candidate)
+            out.append((candidate, transform_id))
+    return out
+
+
+def split_name(name: str):
+    """
+    Split a scientific name into (fixed_prefix_tokens, epithet_tokens).
+
+    The genus, and a parenthesised subgenus if present, are fixed; everything
+    after them is an epithet position that may be varied. Returns None if the
+    name is not of a shape we are willing to touch.
+    """
+    if not PARSEABLE_NAME_RE.match(name):
+        return None
+
+    tokens = name.split()
+    fixed = [tokens[0]]
+    rest = tokens[1:]
+    if rest and rest[0].startswith('('):
+        fixed.append(rest[0])
+        rest = rest[1:]
+
+    if not rest or len(rest) > 3:
+        return None
+    return fixed, rest
+
+
+def _assemble(fixed, epithet_lists, original):
+    """
+    Cross-product of per-position epithet options into full name strings,
+    excluding the original and capped at MAX_VARIANTS_PER_NAME.
+    """
+    results = []
+    combos = [[]]
+    for options in epithet_lists:
+        combos = [c + [opt] for c in combos for opt in options]
+        if len(combos) > MAX_VARIANTS_PER_NAME * 4:
+            break
+
+    for combo in combos:
+        candidate = ' '.join(fixed + [c[0] for c in combo])
+        if candidate == original:
+            continue
+        transforms = sorted({c[1] for c in combo if c[1]})
+        results.append((candidate, '+'.join(transforms)))
+        if len(results) >= MAX_VARIANTS_PER_NAME:
+            break
+    return results
+
+
+def generate_variants(name: str) -> list:
+    """
+    Return [(generated_name, variant_class, transform)] for a full scientific
+    name. Gender and orthographic classes are generated independently; they
+    are deliberately not composed with one another.
+    """
+    parsed = split_name(name)
+    if parsed is None:
+        return []
+    fixed, epithets = parsed
+
+    out = []
+
+    # Gender: vary every epithet position, keeping the original as an option
+    # at each position so single-position changes are included.
+    gender_options = []
+    any_gender = False
+    for ep in epithets:
+        options = [(ep, '')]
+        for variant in sorted(gender_variants(ep)):
+            options.append((variant, 'gender'))
+            any_gender = True
+        gender_options.append(options)
+    if any_gender:
+        for candidate, _ in _assemble(fixed, gender_options, name):
+            out.append((candidate, 'gender', 'gender'))
+
+    # Orthographic: one rule at a time, applied to one epithet position at a
+    # time, so each output differs from the source by a single transform.
+    for idx, ep in enumerate(epithets):
+        for variant, transform_id in orthographic_variants(ep):
+            parts = list(epithets)
+            parts[idx] = variant
+            candidate = ' '.join(fixed + parts)
+            if candidate != name:
+                out.append((candidate, 'orthographic', transform_id))
+
+    # Deduplicate, keeping the first class that produced each form.
+    seen = set()
+    deduped = []
+    for candidate, variant_class, transform in out:
+        if candidate in seen:
+            continue
+        seen.add(candidate)
+        deduped.append((candidate, variant_class, transform))
+    return deduped
 
 
 def create_database_schema(conn: sqlite3.Connection):
@@ -209,6 +457,34 @@ def create_database_schema(conn: sqlite3.Connection):
         )
     """)
 
+    # Generated names table - machine-generated variants, NOT UKSI data
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS generated_names (
+            GENERATED_NAME TEXT NOT NULL,
+            SOURCE_NAME TEXT,
+            SOURCE_TAXON_VERSION_KEY TEXT,
+            RECOMMENDED_TAXON_VERSION_KEY TEXT NOT NULL,
+            VARIANT_CLASS TEXT,
+            TRANSFORM TEXT,
+            SOURCE_RANK TEXT,
+            PRIMARY KEY (RECOMMENDED_TAXON_VERSION_KEY, GENERATED_NAME)
+        )
+    """)
+
+    # Audit trail: generated forms discarded because they already exist in
+    # UKSI under a different recommended TVK. These are the cases where the
+    # "no two species in a genus differ only by ending" assumption fails.
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS generated_name_collisions (
+            GENERATED_NAME TEXT,
+            SOURCE_NAME TEXT,
+            SOURCE_RECOMMENDED_TVK TEXT,
+            CLASHES_WITH_TVK TEXT,
+            VARIANT_CLASS TEXT,
+            TRANSFORM TEXT
+        )
+    """)
+
     # Create indexes for efficient lookups
     log("Creating indexes...")
     
@@ -237,6 +513,10 @@ def create_database_schema(conn: sqlite3.Connection):
 
     # UKCEH freshwater table indexes
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_ukceh_freshwater_tvk ON ukceh_freshwater(TAXON_VERSION_KEY)")
+
+    # Generated names indexes
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_generated_rec_tvk ON generated_names(RECOMMENDED_TAXON_VERSION_KEY)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_generated_class ON generated_names(VARIANT_CLASS)")
 
     conn.commit()
     log("Schema created successfully")
@@ -317,6 +597,139 @@ def import_tsv_to_table(conn: sqlite3.Connection, file_path: Path, table_name: s
     
     log(f"  Imported {row_count:,} rows ({error_count} errors)")
     return row_count
+
+
+def build_generated_names(conn: sqlite3.Connection):
+    """
+    Populate generated_names from every Latin name in the names table.
+
+    Seeds are ALL Latin names at species-group rank, recommended and synonym
+    alike, so the existing synonyms are inflated too. Anything that already
+    exists in UKSI is discarded; where it exists under a different
+    recommended TVK the discard is recorded in generated_name_collisions.
+    """
+    log("\n=== Generating name variants ===")
+    cursor = conn.cursor()
+
+    # Every name UKSI already knows about, and which taxa it belongs to.
+    # A name can legitimately map to more than one recommended TVK.
+    log("  Indexing existing UKSI names...")
+    existing = {}
+    cursor.execute("SELECT TAXON_NAME, RECOMMENDED_TAXON_VERSION_KEY FROM names WHERE TAXON_NAME IS NOT NULL")
+    for name, rec_tvk in cursor.fetchall():
+        existing.setdefault(name, set()).add(rec_tvk)
+    cursor.execute("SELECT TAXON_NAME, TAXON_VERSION_KEY FROM taxa WHERE TAXON_NAME IS NOT NULL")
+    for name, tvk in cursor.fetchall():
+        existing.setdefault(name, set()).add(tvk)
+    log(f"  Indexed {len(existing):,} distinct existing names")
+
+    # Seed rows.
+    placeholders = ','.join(['?' for _ in VARIANT_SOURCE_RANKS])
+    cursor.execute(f"""
+        SELECT TAXON_NAME, TAXON_VERSION_KEY, RECOMMENDED_TAXON_VERSION_KEY, RANK
+        FROM names
+        WHERE LANGUAGE = 'la'
+          AND TAXON_NAME IS NOT NULL AND TAXON_NAME != ''
+          AND RECOMMENDED_TAXON_VERSION_KEY IS NOT NULL
+          AND RECOMMENDED_TAXON_VERSION_KEY != ''
+          AND (TAXON_QUALIFIER IS NULL OR TAXON_QUALIFIER = '')
+          AND RANK IN ({placeholders})
+    """, sorted(VARIANT_SOURCE_RANKS))
+    seeds = cursor.fetchall()
+    log(f"  {len(seeds):,} seed names at species-group rank")
+
+    insert_sql = """
+        INSERT OR IGNORE INTO generated_names
+            (GENERATED_NAME, SOURCE_NAME, SOURCE_TAXON_VERSION_KEY,
+             RECOMMENDED_TAXON_VERSION_KEY, VARIANT_CLASS, TRANSFORM, SOURCE_RANK)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    """
+    collision_sql = """
+        INSERT INTO generated_name_collisions
+            (GENERATED_NAME, SOURCE_NAME, SOURCE_RECOMMENDED_TVK,
+             CLASHES_WITH_TVK, VARIANT_CLASS, TRANSFORM)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """
+
+    batch = []
+    collision_batch = []
+    batch_size = 20000
+
+    generated = 0
+    redundant = 0
+    collisions = 0
+    unparsed = 0
+    processed = 0
+
+    for source_name, source_tvk, rec_tvk, rank in seeds:
+        processed += 1
+        variants = generate_variants(source_name)
+        if not variants:
+            unparsed += 1
+
+        for candidate, variant_class, transform in variants:
+            holders = existing.get(candidate)
+            if holders is not None:
+                if rec_tvk in holders:
+                    # UKSI already has this form for this taxon.
+                    redundant += 1
+                else:
+                    # This form belongs to a different taxon. Emitting it
+                    # would create a false bridge between the two.
+                    collisions += 1
+                    collision_batch.append((
+                        candidate, source_name, rec_tvk,
+                        sorted(holders)[0], variant_class, transform,
+                    ))
+                continue
+
+            batch.append((
+                candidate, source_name, source_tvk, rec_tvk,
+                variant_class, transform, rank,
+            ))
+            generated += 1
+
+        if len(batch) >= batch_size:
+            cursor.executemany(insert_sql, batch)
+            conn.commit()
+            batch = []
+        if len(collision_batch) >= batch_size:
+            cursor.executemany(collision_sql, collision_batch)
+            conn.commit()
+            collision_batch = []
+
+        if processed % 100000 == 0:
+            log(f"    Processed {processed:,} seed names, {generated:,} variants so far...")
+
+    if batch:
+        cursor.executemany(insert_sql, batch)
+    if collision_batch:
+        cursor.executemany(collision_sql, collision_batch)
+    conn.commit()
+
+    cursor.execute("SELECT COUNT(*) FROM generated_names")
+    stored = cursor.fetchone()[0]
+
+    log(f"  Variants generated:            {generated:,}")
+    log(f"  Stored after deduplication:    {stored:,}")
+    log(f"  Discarded, already in UKSI:    {redundant:,}")
+    log(f"  Discarded, clash with another taxon: {collisions:,}")
+    log(f"  Seed names producing nothing:  {unparsed:,}")
+
+    cursor.execute("""
+        SELECT VARIANT_CLASS, COUNT(*) FROM generated_names
+        GROUP BY VARIANT_CLASS ORDER BY COUNT(*) DESC
+    """)
+    for variant_class, count in cursor.fetchall():
+        log(f"    {variant_class}: {count:,}")
+
+    if collisions:
+        log("  Sample collisions (generated form already used by another taxon):")
+        cursor.execute("SELECT SOURCE_NAME, GENERATED_NAME FROM generated_name_collisions LIMIT 5")
+        for source_name, candidate in cursor.fetchall():
+            log(f"    {source_name} -> {candidate}")
+
+    return stored
 
 
 def validate_import(conn: sqlite3.Connection):
@@ -419,6 +832,16 @@ def validate_import(conn: sqlite3.Connection):
     log(f"  - Direct match to taxa: {ukceh_direct_matched:,}")
     log(f"  - Resolved via names table: {ukceh_resolved_matched:,} ({ukceh_resolved_matched - ukceh_direct_matched:,} additional)")
 
+    # Generated names stats
+    cursor.execute("SELECT COUNT(*) FROM generated_names")
+    generated_count = cursor.fetchone()[0]
+    cursor.execute("SELECT COUNT(DISTINCT RECOMMENDED_TAXON_VERSION_KEY) FROM generated_names")
+    generated_taxa = cursor.fetchone()[0]
+    cursor.execute("SELECT COUNT(*) FROM generated_name_collisions")
+    collision_count = cursor.fetchone()[0]
+    log(f"Generated names table: {generated_count:,} variants across {generated_taxa:,} taxa")
+    log(f"  - Collisions discarded: {collision_count:,}")
+
     # Check linkage between names and taxa via recommended TVK
     cursor.execute("""
         SELECT COUNT(DISTINCT n.RECOMMENDED_TAXON_VERSION_KEY)
@@ -444,7 +867,7 @@ def create_utility_views(conn: sqlite3.Connection):
             'Species', 'Microspecies', 'Species hybrid', 'Species aggregate',
             'Intergeneric hybrid', 'Species sensu lato', 'Species sensu stricto'
         )
-        AND t.REDUNDANT_FLAG IS NULL OR t.REDUNDANT_FLAG = ''
+        AND (t.REDUNDANT_FLAG IS NULL OR t.REDUNDANT_FLAG = '')
     """)
     
     # View: All Latin synonyms for each recommended TVK
@@ -612,6 +1035,9 @@ def main():
         import_tsv_to_table(conn, INPUT_FILES["freshbase"], "freshbase")
         import_tsv_to_table(conn, INPUT_FILES["ukceh_freshwater"], "ukceh_freshwater")
         
+        # Generate name variants (gender endings + orthographic variants)
+        build_generated_names(conn)
+
         # Create utility views
         create_utility_views(conn)
         
