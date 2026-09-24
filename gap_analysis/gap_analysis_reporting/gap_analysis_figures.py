@@ -14,7 +14,9 @@ Requirements:
     pip install pandas matplotlib numpy
 
 Expects a CSV with at minimum these columns:
-    - species_status:  GREEN | AMBER | BLUE | ORANGE | RED | BLACK
+    - species_status:  valid_name | valid_and_synonym | synonym_only |
+                       shared_bin_interim | shared_bin_species | no_records
+                       (legacy GREEN/AMBER/BLUE/ORANGE/RED/BLACK also accepted)
     - bags_grade:      A | B | C | D | E | F
     - phylum_division: Taxonomic phylum
     - class:           Taxonomic class
@@ -39,22 +41,30 @@ import matplotlib.ticker as mticker
 # CONFIGURATION — edit these if your column names or categories differ
 # ═══════════════════════════════════════════════════════════════════════════════
 
-STATUS_ORDER = ["GREEN", "AMBER", "BLUE", "ORANGE", "RED", "BLACK"]
+STATUS_ORDER = [
+    "valid_name", "valid_and_synonym", "synonym_only",
+    "shared_bin_interim", "shared_bin_species", "no_records",
+]
 STATUS_COLORS = {
-    "GREEN":  "#2E7D32",
-    "AMBER":  "#F57F17",
-    "BLUE":   "#1565C0",
-    "ORANGE": "#E65100",
-    "RED":    "#C62828",
-    "BLACK":  "#333333",
+    "valid_name":         "#2E7D32",
+    "valid_and_synonym":  "#F57F17",
+    "synonym_only":       "#1565C0",
+    "shared_bin_interim": "#E65100",
+    "shared_bin_species": "#C62828",
+    "no_records":         "#333333",
 }
 STATUS_LABELS = {
-    "GREEN":  "Green – Only valid name has records",
-    "AMBER":  "Amber – Valid name & synonym(s) have records",
-    "BLUE":   "Blue – Only synonym(s), valid name absent",
-    "ORANGE": "Orange – BIN shared only with non-Linnaean names (interim ID conflict)",
-    "RED":    "Red – Taxonomic conflict (Linnaean name shares BIN)",
-    "BLACK":  "Black – No records found",
+    "valid_name":         "Valid name – Only valid name has records",
+    "valid_and_synonym":  "Valid + synonym – Valid name & synonym(s) have records",
+    "synonym_only":       "Synonym only – Valid name absent",
+    "shared_bin_interim": "Shared BIN (interim) – BIN shared only with interim/placeholder names",
+    "shared_bin_species": "Shared BIN (species) – BIN shared with another named species",
+    "no_records":         "No records found",
+}
+# Legacy traffic-light values from older gap analysis outputs
+LEGACY_STATUS_MAP = {
+    "GREEN": "valid_name", "AMBER": "valid_and_synonym", "BLUE": "synonym_only",
+    "ORANGE": "shared_bin_interim", "RED": "shared_bin_species", "BLACK": "no_records",
 }
 
 BAGS_ORDER = ["A", "B", "C", "D", "E", "F"]
@@ -199,7 +209,7 @@ def fig_summary(df):
             ax.annotate(
                 f"{count}\n({pct:.1f}%)",
                 xy=(0.75 * x, 0.75 * y), fontsize=7, ha="center", va="center",
-                fontweight="bold", color="#333" if s in ("AMBER", "ORANGE") else "white",
+                fontweight="bold", color="#333" if s in ("valid_and_synonym", "shared_bin_interim") else "white",
             )
 
     centre = plt.Circle((0, 0), 0.45, fc="white", ec="none", zorder=5)
@@ -278,7 +288,7 @@ def fig_coverage_heatmap(df, top_n=30):
     ct = ct.reindex(columns=STATUS_ORDER, fill_value=0)
     totals = ct.sum(axis=1)
 
-    has_records = ct.drop(columns="BLACK", errors="ignore").sum(axis=1)
+    has_records = ct.drop(columns="no_records", errors="ignore").sum(axis=1)
     pct_with_records = has_records / totals * 100
 
     # Top N by species richness, then sort ascending for horizontal bar
@@ -382,7 +392,8 @@ def main():
 
     # ── Load data ──
     print(f"Loading {args.input_csv} ...")
-    df = pd.read_csv(args.input_csv, low_memory=False)
+    sep = "\t" if args.input_csv.suffix.lower() in (".tsv", ".txt") else ","
+    df = pd.read_csv(args.input_csv, sep=sep, low_memory=False)
 
     # Validate required columns
     required = [COL_STATUS, COL_BAGS, COL_PHYLUM, COL_CLASS, COL_ORDER, COL_FAMILY]
@@ -391,6 +402,8 @@ def main():
         print(f"Error: Missing columns: {missing}", file=sys.stderr)
         print(f"Available columns: {list(df.columns)}", file=sys.stderr)
         sys.exit(1)
+
+    df[COL_STATUS] = df[COL_STATUS].replace(LEGACY_STATUS_MAP)
 
     print(f"  {len(df):,} species across {df[COL_PHYLUM].nunique()} phyla, "
           f"{df[COL_CLASS].nunique()} classes, {df[COL_ORDER].nunique()} orders, "

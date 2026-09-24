@@ -9,7 +9,7 @@ This tool analyzes the quality of DNA barcode reference data by:
 1. **Loading a target species list** — Taxa defined by valid names and their synonyms
 2. **Scanning records** — Finding all records matching each taxon's names
 3. **Analyzing BIN/OTU sharing** — Detecting taxonomic conflicts where different taxa share clusters
-4. **Assigning grades and status** — BAGS grades (A-F) and traffic light status (GREEN/AMBER/BLUE/ORANGE/RED/BLACK)
+4. **Assigning grades and status** — BAGS grades (A-F), a `species_status` code describing the main issue with each taxon's records, and an `issues` list flagging every problem found
 5. **Writing filtered records** — Exporting a subset of the records file containing only records in clusters relevant to the target taxa
 
 ## Key Concepts
@@ -173,7 +173,8 @@ The output file contains all input columns from the species list, plus:
 | `number_records` | Total records matching any name in the taxon |
 | `gb_records` | Records from the UK (where `country_iso=GB` or `Country` matches "United Kingdom") |
 | `bags_grade` | Quality grade: A, B, C, D, E, or F |
-| `species_status` | Traffic light status: GREEN, AMBER, BLUE, ORANGE, RED, or BLACK |
+| `species_status` | Primary issue with the taxon's records (one value): `valid_name`, `valid_and_synonym`, `synonym_only`, `shared_bin_interim`, `shared_bin_species` or `no_records` — see [Status Codes](#status-codes) |
+| `issues` | Semicolon-separated list of every issue flag that applies (empty if none) — see [Issue Flags](#issue-flags) |
 | `bin_uris` | Semicolon-separated list of distinct `bin_uri` values found for this taxon |
 | `otu_ids` | Semicolon-separated list of distinct `otu_id` values found for this taxon |
 | `other_names` | Semicolon-separated names sharing BIN/OTU but not in this taxon's name set |
@@ -199,18 +200,46 @@ The output path defaults to `<output_stem>_filtered_records.tsv` but can be set 
 | **E** | Conflict | Other taxa share the BIN/OTU |
 | **F** | No data | No records found (or records present but no cluster assignment) |
 
-### Traffic Light Status
+### Status Codes
 
-| Status | Colour | Meaning | Criteria |
-|--------|--------|---------|----------|
-| **GREEN** | 🟢 | Clean | Only valid name recorded, no conflicts |
-| **AMBER** | 🟡 | Nomenclatural mess | Both valid name AND synonym(s) recorded (needs cleanup) |
-| **BLUE** | 🔵 | Valid name absent | Only synonym(s) recorded, valid name missing from database |
-| **ORANGE** | 🟠 | Provisional conflict | BIN/OTU shared only with placeholder/provisional names (non-Linnaean: `sp.`, `cf.`, `aff.`, numeric codes, etc.) |
-| **RED** | 🔴 | Taxonomic conflict | BIN/OTU shared with at least one formally described species outside this taxon |
-| **BLACK** | ⚫ | No coverage | No records for this taxon |
+`species_status` holds one code per taxon describing the most important issue with its records. Rules are checked in the order below and the first match wins. The legacy colour each code replaces is shown for reference.
 
-**Note on ORANGE vs RED:** The script tests each external name sharing a BIN/OTU against a set of criteria for a valid Linnaean binomial (two-part name, no placeholder markers, no digits). If all sharing names are provisional/placeholder, the status is ORANGE; if any is a proper species name, the status is RED. Both cases receive BAGS grade **E**.
+| Status | Meaning | Criteria | Legacy colour |
+|--------|---------|----------|---------------|
+| `no_records` | No coverage | No records under the valid name or any synonym | BLACK |
+| `shared_bin_species` | Taxonomic conflict | BIN/OTU shared with at least one formally described species outside this taxon | RED |
+| `shared_bin_interim` | Provisional conflict | BIN/OTU shared only with placeholder/provisional names (non-Linnaean: `sp.`, `cf.`, `aff.`, numeric codes, etc.) | ORANGE |
+| `valid_and_synonym` | Nomenclatural mess | Both valid name AND synonym(s) recorded (needs cleanup) | AMBER |
+| `synonym_only` | Valid name absent | Only synonym(s) recorded, valid name missing from database | BLUE |
+| `valid_name` | Clean | Only valid name recorded, no BIN/OTU sharing | GREEN |
+
+**Note on shared_bin_species vs shared_bin_interim:** The script tests each external name sharing a BIN/OTU against a set of criteria for a valid Linnaean binomial (two-part name, no placeholder markers, no digits). If all sharing names are provisional/placeholder, the status is `shared_bin_interim`; if any is a proper species name, the status is `shared_bin_species`. Both cases receive BAGS grade **E**.
+
+### Issue Flags
+
+Because `species_status` holds only one value, a taxon with a BIN conflict *and* a synonym problem would only show the conflict. The `issues` column lists every problem found, independently of the status precedence, so nothing is hidden. Flags are written in the order below, separated by `;`. Taxa with no records have no flags.
+
+| Flag | Criteria |
+|------|----------|
+| `shared_bin_species` | A BIN/OTU is shared with a formally described species |
+| `shared_bin_interim` | A BIN/OTU is shared with a placeholder/provisional name |
+| `synonym_records` | Some records are under a synonym rather than the valid name |
+| `valid_name_absent` | Records exist, but none under the valid name |
+| `split_bins` | Records fall in more than one BIN/OTU |
+| `no_cluster` | Records exist, but none has a BIN/OTU assigned |
+| `few_records` | Fewer than 3 records |
+
+A clean `valid_name` taxon with a single BIN/OTU and 3+ records has an empty `issues` value.
+
+### Converting older outputs
+
+Outputs produced before these codes were introduced use colour values (GREEN, AMBER, BLUE, ORANGE, RED, BLACK). Convert them in place with:
+
+```bash
+python convert_legacy_status.py ../final_result/*.tsv
+```
+
+The converter also handles DToL (`dtol_status.py`) and mitogenome (`mito_status.py`) outputs, rebuilds the `issues` column as far as the old columns allow, and reclassifies pre-ORANGE RED rows that only share with placeholder names as `shared_bin_interim`. Synonym flags cannot be recovered for rows that share a BIN/OTU; re-run the analysis to populate those. Already-converted files are left unchanged.
 
 ### Decision Logic
 
@@ -220,30 +249,35 @@ The output path defaults to `<output_stem>_filtered_records.tsv` but can be set 
 ├────────────────────────────────────────────────────────────────┤
 │                                                                │
 │  Has records?                                                  │
-│  ├── NO  → Grade F, Status BLACK                              │
+│  ├── NO  → Grade F, no_records                                 │
 │  └── YES                                                       │
 │       │                                                        │
 │       ▼                                                        │
 │  Other names share BIN/OTU?                                    │
 │  ├── YES                                                       │
-│  │    ├── Any sharer is a Linnaean binomial? → Grade E, RED   │
-│  │    └── All sharers are placeholder names? → Grade E, ORANGE│
+│  │    ├── Any sharer is a Linnaean binomial?                   │
+│  │    │                   → Grade E, shared_bin_species        │
+│  │    └── All sharers are placeholder names?                   │
+│  │                        → Grade E, shared_bin_interim        │
 │  └── NO                                                        │
 │       │                                                        │
 │       ▼                                                        │
 │  Which names are recorded?                                     │
-│  ├── Valid + synonym(s) → Status AMBER                        │
-│  ├── Valid only         → Status GREEN                        │
-│  └── Synonym(s) only   → Status BLUE                         │
+│  ├── Valid + synonym(s) → valid_and_synonym                    │
+│  ├── Valid only         → valid_name                           │
+│  └── Synonym(s) only    → synonym_only                         │
 │       │                                                        │
 │       ▼                                                        │
 │  How many BIN/OTUs?                                            │
-│  ├── 0 BIN/OTUs (records exist but unassigned) → Grade F      │
-│  ├── 1 BIN/OTU                                                │
-│  │    ├── ≥11 records → Grade A                               │
-│  │    ├── 3–10 records → Grade B                              │
-│  │    └── <3 records  → Grade D                               │
-│  └── Multiple BIN/OTUs → Grade C                              │
+│  ├── 0 BIN/OTUs (records exist but unassigned) → Grade F       │
+│  ├── 1 BIN/OTU                                                 │
+│  │    ├── ≥11 records → Grade A                                │
+│  │    ├── 3–10 records → Grade B                               │
+│  │    └── <3 records  → Grade D                                │
+│  └── Multiple BIN/OTUs → Grade C                               │
+│                                                                │
+│  Issue flags are then added for every problem found,           │
+│  regardless of which branch set the status.                    │
 │                                                                │
 └────────────────────────────────────────────────────────────────┘
 ```
@@ -252,26 +286,27 @@ The output path defaults to `<output_stem>_filtered_records.tsv` but can be set 
 
 ### Example Scenarios
 
-| Taxon | BIN contains | Status | Grade | Explanation |
-|-------|--------------|--------|-------|-------------|
-| Valid: "Alpha vulgaris", Syn: "Alpha communis" | Only "Alpha vulgaris" (15 records) | GREEN | A | Clean, good coverage |
-| Valid: "Beta marina", Syn: "Beta aquatica" | Both "Beta marina" and "Beta aquatica" (8 records) | AMBER | B | Nomenclatural cleanup needed |
-| Valid: "Gamma riparia", Syn: "Gamma fluviatilis" | Only "Gamma fluviatilis" (5 records) | BLUE | B | Valid name not in BOLD |
-| Valid: "Delta palustris", Syn: none | "Delta palustris" + "Epsilon montanus" | RED | E | Taxonomic conflict with named species |
-| Valid: "Theta lacustris", Syn: none | "Theta lacustris" + "Theta sp. BOLD:AAB1234" | ORANGE | E | Conflict only with placeholder name |
-| Valid: "Zeta alpina", Syn: "Zeta montana" | No records | BLACK | F | No coverage |
-| Valid: "Eta borealis", Syn: none | "Eta borealis" in 3 different BINs | GREEN | C | Split across clusters |
+| Taxon | BIN contains | Status | Issues | Grade | Explanation |
+|-------|--------------|--------|--------|-------|-------------|
+| Valid: "Alpha vulgaris", Syn: "Alpha communis" | Only "Alpha vulgaris" (15 records) | `valid_name` | | A | Clean, good coverage |
+| Valid: "Beta marina", Syn: "Beta aquatica" | Both "Beta marina" and "Beta aquatica" (8 records) | `valid_and_synonym` | `synonym_records` | B | Nomenclatural cleanup needed |
+| Valid: "Gamma riparia", Syn: "Gamma fluviatilis" | Only "Gamma fluviatilis" (5 records) | `synonym_only` | `synonym_records;valid_name_absent` | B | Valid name not in BOLD |
+| Valid: "Delta palustris", Syn: none | "Delta palustris" + "Epsilon montanus" | `shared_bin_species` | `shared_bin_species` | E | Taxonomic conflict with named species |
+| Valid: "Theta lacustris", Syn: none | "Theta lacustris" + "Theta sp. BOLD:AAB1234" | `shared_bin_interim` | `shared_bin_interim` | E | Conflict only with placeholder name |
+| Valid: "Iota fusca", Syn: "Iota nigra" | Only "Iota nigra", in 2 BINs, one shared with "Kappa rufa" (2 records) | `shared_bin_species` | `shared_bin_species;synonym_records;valid_name_absent;split_bins;few_records` | E | Conflict, plus every other problem still flagged |
+| Valid: "Zeta alpina", Syn: "Zeta montana" | No records | `no_records` | | F | No coverage |
+| Valid: "Eta borealis", Syn: none | "Eta borealis" in 3 different BINs | `valid_name` | `split_bins` | C | Split across clusters |
 
 ### Example Output
 
 ```
-species           synonyms        kingdom   number_records  gb_records  bags_grade  species_status  bin_uris            otu_ids  other_names
-Alpha vulgaris    Alpha communis  Animalia  15              12          A           GREEN           BOLD:AAA0001
-Beta marina       Beta aquatica   Animalia  8               2           B           AMBER           BOLD:AAB0002
-Gamma riparia     Gamma fluv...   Animalia  5               0           B           BLUE            BOLD:AAC0003
-Delta palustris                   Animalia  12              8           E           RED             BOLD:AAD0004                 Epsilon montanus
-Theta lacustris                   Animalia  3               1           E           ORANGE          BOLD:AAE0005                 Theta sp. BOLD:AAE0005
-Zeta alpina       Zeta montana    Animalia  0               0           F           BLACK
+species           synonyms        kingdom   number_records  gb_records  bags_grade  species_status      issues                              bin_uris      otu_ids  other_names
+Alpha vulgaris    Alpha communis  Animalia  15              12          A           valid_name                                              BOLD:AAA0001
+Beta marina       Beta aquatica   Animalia  8               2           B           valid_and_synonym   synonym_records                     BOLD:AAB0002
+Gamma riparia     Gamma fluv...   Animalia  5               0           B           synonym_only        synonym_records;valid_name_absent   BOLD:AAC0003
+Delta palustris                   Animalia  12              8           E           shared_bin_species  shared_bin_species                  BOLD:AAD0004           Epsilon montanus
+Theta lacustris                   Animalia  3               1           E           shared_bin_interim  shared_bin_interim                  BOLD:AAE0005           Theta sp. BOLD:AAE0005
+Zeta alpina       Zeta montana    Animalia  0               0           F           no_records
 ```
 
 ## BOLD Mode Details
@@ -410,12 +445,13 @@ python gap_analysis.py \
     --bold
 
 # Step 3: Review results
-# Filter for problem taxa:
-# - RED status: taxonomic conflicts with named species — requires investigation
-# - ORANGE status: BIN shared with provisional names only — lower priority
-# - BLUE status: nomenclatural updates needed in BOLD (valid name absent)
-# - BLACK status: sampling gaps to fill
-# - AMBER status: synonym cleanup needed
+# Filter for problem taxa by species_status (or by any flag in issues):
+# - shared_bin_species: taxonomic conflicts with named species — requires investigation
+# - shared_bin_interim: BIN shared with provisional names only — lower priority
+# - synonym_only: nomenclatural updates needed in BOLD (valid name absent)
+# - no_records: sampling gaps to fill
+# - valid_and_synonym: synonym cleanup needed
+# - issues contains split_bins / few_records / no_cluster: coverage or clustering problems
 
 # Step 4: Visualise results (optional)
 # Use gap_analysis_reporting/gap_analysis_figures.py to produce publication-quality figures

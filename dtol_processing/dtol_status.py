@@ -47,13 +47,23 @@ DTOL_STAGE_ORDER = [
     'Submitted to BioSamples',
 ]
 
-# Mapping from DToL pipeline stage to a traffic-light label,
-# giving visual consistency with the barcode gap analysis panels.
-DTOL_STATUS_COLOURS = {
-    'Annotation Complete':    'GREEN',
-    'Assemblies - Submitted': 'BLUE',
-    'Raw Data - Submitted':   'AMBER',
-    'Submitted to BioSamples':'RED',
+# Mapping from DToL pipeline stage to the species_status code written
+# to the output (describes how far the taxon has progressed).
+STATUS_NOT_IN_DTOL = 'not_in_dtol'
+DTOL_STATUS_CODES = {
+    'Annotation Complete':    'annotation_complete',
+    'Assemblies - Submitted': 'assembly_submitted',
+    'Raw Data - Submitted':   'raw_data_submitted',
+    'Submitted to BioSamples':'biosample_submitted',
+}
+
+# Mapping from the legacy traffic-light values to the status codes above
+LEGACY_STATUS_MAP = {
+    'GREEN': 'annotation_complete',
+    'BLUE':  'assembly_submitted',
+    'AMBER': 'raw_data_submitted',
+    'RED':   'biosample_submitted',
+    'BLACK': STATUS_NOT_IN_DTOL,
 }
 
 
@@ -91,7 +101,7 @@ class TaxonResult:
     """DToL analysis results for a single UKSI taxon."""
     taxon: Taxon
     dtol_status: str = 'Not in DToL'
-    species_status: str = 'BLACK'
+    species_status: str = STATUS_NOT_IN_DTOL
     dtol_organism_name: str = ''
     dtol_common_name: str = ''
     dtol_insdc_ids: List[str] = field(default_factory=list)
@@ -320,8 +330,8 @@ def analyze_taxa(
             best_name, best_rec = matches[0]
 
             result.dtol_status = best_rec.current_status
-            result.species_status = DTOL_STATUS_COLOURS.get(
-                best_rec.current_status, 'BLACK'
+            result.species_status = DTOL_STATUS_CODES.get(
+                best_rec.current_status, STATUS_NOT_IN_DTOL
             )
             result.dtol_organism_name = best_rec.organism
             result.dtol_common_name = best_rec.common_name
@@ -442,7 +452,7 @@ def print_summary(results: List[TaxonResult]) -> None:
     from collections import Counter
 
     total = len(results)
-    colour_counts = Counter(r.species_status for r in results)
+    code_counts = Counter(r.species_status for r in results)
     status_counts = Counter(r.dtol_status for r in results)
 
     logging.info("=" * 60)
@@ -459,11 +469,11 @@ def print_summary(results: List[TaxonResult]) -> None:
     pct = (not_in / total * 100) if total else 0
     logging.info(f"  {'Not in DToL':30s}  {not_in:>6,}  ({pct:5.1f}%)")
     logging.info("")
-    logging.info("By status colour:")
-    for colour in ['GREEN', 'AMBER', 'BLUE', 'RED', 'BLACK']:
-        count = colour_counts.get(colour, 0)
+    logging.info("By species_status:")
+    for code in list(DTOL_STATUS_CODES.values()) + [STATUS_NOT_IN_DTOL]:
+        count = code_counts.get(code, 0)
         pct = (count / total * 100) if total else 0
-        logging.info(f"  {colour:10s}  {count:>6,}  ({pct:5.1f}%)")
+        logging.info(f"  {code:20s}  {count:>6,}  ({pct:5.1f}%)")
     logging.info("=" * 60)
 
 
@@ -482,12 +492,12 @@ Examples:
       --dtol-metadata download.csv \\
       --output dtol_gap_analysis.tsv
 
-Status colour mapping:
-  GREEN  = Annotation Complete (genome published)
-  AMBER  = Assemblies Submitted (assembly in progress)
-  BLUE   = Raw Data Submitted (sequencing done)
-  RED    = Submitted to BioSamples (sample registered)
-  BLACK  = Not in DToL pipeline
+species_status values:
+  annotation_complete  = Annotation Complete (genome published)
+  assembly_submitted   = Assemblies Submitted (assembly in progress)
+  raw_data_submitted   = Raw Data Submitted (sequencing done)
+  biosample_submitted  = Submitted to BioSamples (sample registered)
+  not_in_dtol          = Not in DToL pipeline
         """,
     )
     parser.add_argument(

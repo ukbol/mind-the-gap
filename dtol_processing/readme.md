@@ -66,7 +66,7 @@ The input species list with three columns appended:
 | Column | Description |
 |--------|-------------|
 | `dtol_status` | DToL pipeline stage (e.g., `Annotation Complete`) or `Not in DToL` |
-| `species_status` | Traffic-light colour: GREEN, BLUE, AMBER, RED, or BLACK |
+| `species_status` | Pipeline stage code: `annotation_complete`, `assembly_submitted`, `raw_data_submitted`, `biosample_submitted` or `not_in_dtol` |
 | `dtol_insdc_ids` | Semicolon-separated INSDC accessions from all matching records |
 
 ### Unmatched File (`{output_stem}_unmatched.tsv`)
@@ -85,13 +85,15 @@ DToL organisms that did not match any UKSI taxon, written alongside the main out
 
 Stages are ordered from furthest along to earliest entry:
 
-| Stage | Status Colour | Meaning |
+| Stage | `species_status` | Meaning |
 |-------|---------------|---------|
-| Annotation Complete | GREEN | Genome annotated and published |
-| Assemblies - Submitted | BLUE | Genome assembly submitted |
-| Raw Data - Submitted | AMBER | Raw sequencing data submitted |
-| Submitted to BioSamples | RED | Sample registered, sequencing pending |
-| Not in DToL | BLACK | Species not in the DToL pipeline |
+| Annotation Complete | `annotation_complete` | Genome annotated and published |
+| Assemblies - Submitted | `assembly_submitted` | Genome assembly submitted |
+| Raw Data - Submitted | `raw_data_submitted` | Raw sequencing data submitted |
+| Submitted to BioSamples | `biosample_submitted` | Sample registered, sequencing pending |
+| Not in DToL | `not_in_dtol` | Species not in the DToL pipeline |
+
+Older outputs using colour values (GREEN/BLUE/AMBER/RED/BLACK) can be converted with `gap_analysis/convert_legacy_status.py`.
 
 When multiple DToL records match a single UKSI taxon (e.g., via valid name and a synonym), the record at the furthest pipeline stage is used for the status, while INSDC IDs and ToL IDs are aggregated from all matches.
 
