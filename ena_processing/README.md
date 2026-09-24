@@ -89,7 +89,7 @@ The main output file contains all input species-list columns plus:
 | Column | Description |
 |--------|-------------|
 | `mitogenome_count` | Number of mitogenome accessions matching the taxon |
-| `species_status` | GREEN (mitogenome available) or BLACK (no mitogenome found) |
+| `species_status` | `mitogenome_present` (mitogenome available) or `no_mitogenome` (no mitogenome found) |
 | `mitogenome_accessions` | Semicolon-separated list of matching ENA accessions |
 
 ### Unmatched Records TSV
@@ -102,12 +102,14 @@ An additional file (`<output_stem>_unmatched.tsv`) is automatically written alon
 | `scientific_name` | Species name as recorded in ENA |
 | `tax_id` | NCBI taxonomy ID |
 
-## Status Colour Mapping
+## Status Codes
 
 | Status | Meaning |
 |--------|---------|
-| **GREEN** | Mitogenome(s) available in ENA |
-| **BLACK** | No mitogenome found in ENA |
+| `mitogenome_present` | Mitogenome(s) available in ENA |
+| `no_mitogenome` | No mitogenome found in ENA |
+
+Older outputs using GREEN/BLACK can be converted with `gap_analysis/convert_legacy_status.py`.
 
 ## Matching Logic
 
@@ -132,8 +134,8 @@ python mito_status.py \
 
 ```
 taxon_name        synonyms          kingdom   mitogenome_count  species_status  mitogenome_accessions
-Gammarus pulex    Gammarus foss...  Animalia  3                 GREEN           AB123456;CD789012;EF345678
-Baetis rhodani                      Animalia  0                 BLACK
+Gammarus pulex    Gammarus foss...  Animalia  3                 mitogenome_present  AB123456;CD789012;EF345678
+Baetis rhodani                      Animalia  0                 no_mitogenome
 ```
 
 ## Summary Statistics

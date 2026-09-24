@@ -60,12 +60,23 @@ class MitoRecord:
     tax_id: str
 
 
+# species_status codes written to the output
+STATUS_MITOGENOME_PRESENT = 'mitogenome_present'
+STATUS_NO_MITOGENOME = 'no_mitogenome'
+
+# Mapping from the legacy traffic-light values to the status codes above
+LEGACY_STATUS_MAP = {
+    'GREEN': STATUS_MITOGENOME_PRESENT,
+    'BLACK': STATUS_NO_MITOGENOME,
+}
+
+
 @dataclass
 class TaxonResult:
     """Mitogenome analysis results for a single taxon."""
     taxon: Taxon
     mitogenome_count: int = 0
-    species_status: str = 'BLACK'
+    species_status: str = STATUS_NO_MITOGENOME
     mitogenome_accessions: List[str] = field(default_factory=list)
     matched_names: Set[str] = field(default_factory=set)
 
@@ -262,7 +273,7 @@ def analyze_taxa(
         if result.mitogenome_accessions:
             matched_count += 1
             result.mitogenome_count = len(result.mitogenome_accessions)
-            result.species_status = 'GREEN'
+            result.species_status = STATUS_MITOGENOME_PRESENT
 
         results.append(result)
 
@@ -418,9 +429,9 @@ Examples:
       --mito-metadata mito_species_ena.tsv \\
       --output mito_gap_analysis.tsv
 
-Status colour mapping:
-  GREEN = Mitogenome(s) available in ENA
-  BLACK = No mitogenome found in ENA
+species_status values:
+  mitogenome_present = Mitogenome(s) available in ENA
+  no_mitogenome      = No mitogenome found in ENA
         """,
     )
     parser.add_argument(

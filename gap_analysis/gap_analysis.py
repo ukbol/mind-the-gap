@@ -6,7 +6,8 @@ This script performs taxon-centric gap analysis by:
 1. Loading a species list (taxa with valid names and synonyms)
 2. Scanning a records file to find all records matching each taxon's names
 3. Analyzing BIN/OTU sharing to detect taxonomic conflicts
-4. Assigning BAGS grades (A-F) and traffic light status (GREEN/AMBER/BLUE/ORANGE/RED/BLACK)
+4. Assigning BAGS grades (A-F), a primary species_status describing the main
+   issue with the taxon's records, and an issues list flagging every problem found
 
 Optimized for HPC environments with parallel processing support.
 
@@ -32,6 +33,59 @@ try:
     csv.field_size_limit(sys.maxsize)
 except OverflowError:
     csv.field_size_limit(2147483647)  # Windows compatibility
+
+
+# =============================================================================
+# STATUS AND ISSUE CODES
+# =============================================================================
+
+# Primary species_status values, one per taxon. Listed in order of precedence
+# (first matching rule wins); the legacy colour each replaces is in brackets.
+STATUS_NO_RECORDS = 'no_records'                  # (BLACK) no records under any name
+STATUS_SHARED_BIN_SPECIES = 'shared_bin_species'  # (RED) BIN/OTU shared with a named species
+STATUS_SHARED_BIN_INTERIM = 'shared_bin_interim'  # (ORANGE) BIN/OTU shared only with interim names
+STATUS_VALID_AND_SYNONYM = 'valid_and_synonym'    # (AMBER) records under valid name and synonym(s)
+STATUS_SYNONYM_ONLY = 'synonym_only'              # (BLUE) records only under synonym(s)
+STATUS_VALID_NAME = 'valid_name'                  # (GREEN) records only under the valid name
+
+STATUS_ORDER = [
+    STATUS_VALID_NAME, STATUS_SYNONYM_ONLY, STATUS_VALID_AND_SYNONYM,
+    STATUS_SHARED_BIN_INTERIM, STATUS_SHARED_BIN_SPECIES, STATUS_NO_RECORDS,
+]
+
+# Mapping from the legacy traffic-light values to the new status codes
+LEGACY_STATUS_MAP = {
+    'GREEN': STATUS_VALID_NAME,
+    'BLUE': STATUS_SYNONYM_ONLY,
+    'AMBER': STATUS_VALID_AND_SYNONYM,
+    'ORANGE': STATUS_SHARED_BIN_INTERIM,
+    'RED': STATUS_SHARED_BIN_SPECIES,
+    'BLACK': STATUS_NO_RECORDS,
+}
+
+# Issue flags, written ';'-joined to the issues column. Unlike species_status
+# these are not mutually exclusive: every issue that applies is flagged.
+ISSUE_SHARED_BIN_SPECIES = 'shared_bin_species'  # BIN/OTU shared with a named species
+ISSUE_SHARED_BIN_INTERIM = 'shared_bin_interim'  # BIN/OTU shared with an interim/placeholder name
+ISSUE_SYNONYM_RECORDS = 'synonym_records'        # some records are under a synonym
+ISSUE_VALID_NAME_ABSENT = 'valid_name_absent'    # records exist, none under the valid name
+ISSUE_SPLIT_BINS = 'split_bins'                  # records fall in more than one BIN/OTU
+ISSUE_NO_CLUSTER = 'no_cluster'                  # records exist but none has a BIN/OTU
+ISSUE_FEW_RECORDS = 'few_records'                # fewer than MIN_RECORDS_FOR_BAGS_B records
+
+ISSUE_ORDER = [
+    ISSUE_SHARED_BIN_SPECIES, ISSUE_SHARED_BIN_INTERIM, ISSUE_SYNONYM_RECORDS,
+    ISSUE_VALID_NAME_ABSENT, ISSUE_SPLIT_BINS, ISSUE_NO_CLUSTER, ISSUE_FEW_RECORDS,
+]
+
+# Record-count thresholds used for BAGS grades
+MIN_RECORDS_FOR_BAGS_A = 11
+MIN_RECORDS_FOR_BAGS_B = 3
+
+
+def format_issues(issues: Set[str]) -> str:
+    """Join issue flags in a stable order for output."""
+    return ';'.join(i for i in ISSUE_ORDER if i in issues)
 
 
 # =============================================================================
@@ -65,7 +119,8 @@ class TaxonResult:
     taxon: Taxon
     number_records: int = 0
     bags_grade: str = 'F'
-    species_status: str = 'BLACK'
+    species_status: str = STATUS_NO_RECORDS
+    issues: Set[str] = field(default_factory=set)  # All issue flags that apply
     other_names: List[str] = field(default_factory=list)
     bins_found: Set[str] = field(default_factory=set)
     names_recorded: Set[str] = field(default_factory=set)  # Which of taxon's names have records
@@ -682,10 +737,10 @@ def analyze_taxon(
         result.bin_uris.update(name_to_bin_uris.get(name, set()))
         result.otu_ids.update(name_to_otu_ids.get(name, set()))
     
-    # No records = Grade F, Status BLACK
+    # No records = Grade F, no_records (no issue flags: there is nothing to assess)
     if result.number_records == 0:
         result.bags_grade = 'F'
-        result.species_status = 'BLACK'
+        result.species_status = STATUS_NO_RECORDS
         return result
     
     # Step 2: Collect all BIN/OTUs for this taxon
@@ -703,45 +758,58 @@ def analyze_taxon(
     other_names = all_names_in_bins - taxon_names
     result.other_names = sorted(other_names)
     
-    # Step 4: Determine Status
-    if other_names:
-        # Check if any sharing names are proper Linnaean binomials
-        linnaean_sharers = [n for n in other_names if is_linnaean_name(n)]
-        if linnaean_sharers:
-            # Sharing with formally described species - true conflict
-            result.species_status = 'RED'
-            result.bags_grade = 'E'
-        else:
-            # Only sharing with placeholder/provisional names
-            result.species_status = 'ORANGE'
-            result.bags_grade = 'E'
-        return result
+    # Step 4: Flag every issue that applies
+    linnaean_sharers = [n for n in other_names if is_linnaean_name(n)]
+    if linnaean_sharers:
+        # Sharing with formally described species - true conflict
+        result.issues.add(ISSUE_SHARED_BIN_SPECIES)
+    if len(linnaean_sharers) < len(other_names):
+        # Sharing with placeholder/provisional names
+        result.issues.add(ISSUE_SHARED_BIN_INTERIM)
     
-    # No external names - check nomenclatural status
     valid_recorded = valid_name_lower in result.names_recorded
     synonym_recorded = bool(result.names_recorded - {valid_name_lower})
+    if synonym_recorded:
+        result.issues.add(ISSUE_SYNONYM_RECORDS)
+    if not valid_recorded:
+        result.issues.add(ISSUE_VALID_NAME_ABSENT)
     
-    if valid_recorded and synonym_recorded:
+    num_bins = len(result.bins_found)
+    if num_bins == 0:
+        result.issues.add(ISSUE_NO_CLUSTER)
+    elif num_bins > 1:
+        result.issues.add(ISSUE_SPLIT_BINS)
+    if result.number_records < MIN_RECORDS_FOR_BAGS_B:
+        result.issues.add(ISSUE_FEW_RECORDS)
+    
+    # Step 5: Determine primary status (BIN sharing takes precedence over
+    # nomenclature; the issues list keeps any synonym problems visible)
+    if ISSUE_SHARED_BIN_SPECIES in result.issues:
+        result.species_status = STATUS_SHARED_BIN_SPECIES
+    elif ISSUE_SHARED_BIN_INTERIM in result.issues:
+        result.species_status = STATUS_SHARED_BIN_INTERIM
+    elif valid_recorded and synonym_recorded:
         # Both valid and synonym(s) recorded - nomenclatural mess
-        result.species_status = 'AMBER'
+        result.species_status = STATUS_VALID_AND_SYNONYM
     elif valid_recorded:
         # Only valid name recorded - clean
-        result.species_status = 'GREEN'
+        result.species_status = STATUS_VALID_NAME
     else:
         # Only synonym(s) recorded - valid name absent
-        result.species_status = 'BLUE'
+        result.species_status = STATUS_SYNONYM_ONLY
     
-    # Step 5: Determine Grade based on BIN/OTU count and records
-    num_bins = len(result.bins_found)
-    
-    if num_bins == 0:
+    # Step 6: Determine Grade based on BIN/OTU sharing, count and records
+    if other_names:
+        # Any BIN/OTU sharing
+        result.bags_grade = 'E'
+    elif num_bins == 0:
         # Records exist but no cluster assignment
         result.bags_grade = 'F'
     elif num_bins == 1:
         # Single cluster
-        if result.number_records >= 11:
+        if result.number_records >= MIN_RECORDS_FOR_BAGS_A:
             result.bags_grade = 'A'
-        elif result.number_records >= 3:
+        elif result.number_records >= MIN_RECORDS_FOR_BAGS_B:
             result.bags_grade = 'B'
         else:
             result.bags_grade = 'D'
@@ -903,7 +971,7 @@ def write_results(
     logging.info(f"Writing results to {output_file}")
     
     # Define output columns: input columns first, then analysis columns
-    analysis_columns = ['number_records', 'gb_records', 'bags_grade', 'species_status', 'bin_uris', 'otu_ids', 'other_names']
+    analysis_columns = ['number_records', 'gb_records', 'bags_grade', 'species_status', 'issues', 'bin_uris', 'otu_ids', 'other_names']
     
     # Build fieldnames - input columns (excluding duplicates with analysis) + analysis
     output_columns = list(input_columns)
@@ -922,6 +990,7 @@ def write_results(
                 row['gb_records'] = result.gb_records
                 row['bags_grade'] = result.bags_grade
                 row['species_status'] = result.species_status
+                row['issues'] = format_issues(result.issues)
                 row['bin_uris'] = ';'.join(sorted(result.bin_uris))
                 row['otu_ids'] = ';'.join(sorted(result.otu_ids))
                 row['other_names'] = ';'.join(format_species_name(n) for n in result.other_names)
@@ -1098,11 +1167,22 @@ def print_summary(results: List[TaxonResult]) -> None:
         status_counts[r.species_status] += 1
     
     logging.info("Status Distribution:")
-    for status in ['GREEN', 'AMBER', 'BLUE', 'ORANGE', 'RED', 'BLACK']:
+    for status in STATUS_ORDER:
         count = status_counts.get(status, 0)
         pct = 100 * count / len(results) if results else 0
-        emoji = {'GREEN': '🟢', 'AMBER': '🟡', 'BLUE': '🔵', 'ORANGE': '🟠', 'RED': '🔴', 'BLACK': '⚫'}.get(status, '')
-        logging.info(f"  {status} {emoji}: {count:,} ({pct:.1f}%)")
+        logging.info(f"  {status}: {count:,} ({pct:.1f}%)")
+    
+    # Issue distribution (flags are not mutually exclusive)
+    issue_counts = defaultdict(int)
+    for r in results:
+        for issue in r.issues:
+            issue_counts[issue] += 1
+    
+    logging.info("Issue Flags (a taxon can have several):")
+    for issue in ISSUE_ORDER:
+        count = issue_counts.get(issue, 0)
+        pct = 100 * count / len(results) if results else 0
+        logging.info(f"  {issue}: {count:,} ({pct:.1f}%)")
     
     # Record coverage
     with_records = sum(1 for r in results if r.number_records > 0)

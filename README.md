@@ -125,17 +125,22 @@ The BAGS assessment assigns quality grades based on OTU clustering results:
 | E | Multiple species sharing same OTU (BIN sharing) |
 | F | No OTU assignment |
 
-## Traffic Light Status
+## Species Status and Issues
 
-The gap analysis assigns a traffic-light status to each taxon:
+The gap analysis describes what is wrong (if anything) with each taxon's records:
 
-| Status | Meaning |
-|--------|---------|
-| GREEN | Only valid name recorded, no conflicts |
-| AMBER | Both valid name and synonym(s) recorded (nomenclatural cleanup needed) |
-| BLUE | Only synonym(s) recorded, valid name missing from database |
-| RED | Names from outside the taxon share BIN/OTU (taxonomic conflict) |
-| BLACK | No records for this taxon |
+| `species_status` | Meaning |
+|------------------|---------|
+| `valid_name` | Only valid name recorded, no BIN/OTU sharing |
+| `valid_and_synonym` | Both valid name and synonym(s) recorded (nomenclatural cleanup needed) |
+| `synonym_only` | Only synonym(s) recorded, valid name missing from database |
+| `shared_bin_interim` | BIN/OTU shared only with placeholder/provisional names (`sp.`, `cf.`, numeric codes) |
+| `shared_bin_species` | BIN/OTU shared with another formally described species (taxonomic conflict) |
+| `no_records` | No records for this taxon |
+
+A separate `issues` column lists every problem found (`shared_bin_species`, `shared_bin_interim`, `synonym_records`, `valid_name_absent`, `split_bins`, `no_cluster`, `few_records`), so problems hidden by the single status value remain visible. See [gap_analysis/README.md](gap_analysis/README.md) for full criteria.
+
+DToL genome outputs use `annotation_complete`, `assembly_submitted`, `raw_data_submitted`, `biosample_submitted` and `not_in_dtol`; mitogenome outputs use `mitogenome_present` and `no_mitogenome`. Older colour-coded outputs can be converted with `gap_analysis/convert_legacy_status.py`.
 
 ## References
 
